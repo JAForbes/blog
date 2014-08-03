@@ -39,8 +39,10 @@
   }
 
   function loadDateFromCommits(file,commits){
-      var commit = commits[0];
-      file.created = commit.commit.author.date;
+      var created = _(commits).last();
+      var edited = _(commits).first();
+      file.created = created.commit.author.date;
+      file.edited = edited.commit.author.date;
       loaded_count++;
   }
 
