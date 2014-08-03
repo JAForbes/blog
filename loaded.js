@@ -101,12 +101,23 @@ function MainView(files){
   var postView = new PostView(files[0]);
 
   render();
+  loadPage()
+
+
 
   $el.find('.posts a').click(function(e){
     var href = $(this).attr('href');
     var id = href.replace('#/posts/','')
-    loadPost(id);
+    loadPage()
   });
+
+  function loadPage(){
+    var href = window.location.hash;
+    var id = href.replace('#/posts/','')
+
+
+    loadPost(id);
+  }
 
   function loadPost(id){
     var file = _(files).where({id:id})[0];
