@@ -103,13 +103,15 @@ function MainView(files){
   render();
   loadPage()
 
+  window.onhashchange = loadPage
 
-
-  $el.find('.posts a').click(function(e){
-    var href = $(this).attr('href');
-    var id = href.replace('#/posts/','')
-    loadPage()
-  });
+  function listen(){
+    $el.find('.posts a').click(function(e){
+      var href = $(this).attr('href');
+      var id = href.replace('#/posts/','')
+      console.log('click')
+    });
+  }
 
   function loadPage(){
     var href = window.location.hash;
@@ -145,5 +147,6 @@ function MainView(files){
 
   function render(){
     $el.html(template())
+    listen()
   }
 }
