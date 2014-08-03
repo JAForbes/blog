@@ -52,7 +52,6 @@ function PostView(file){
 
   var $el = $('<div>').addClass('post');
 
-  render();
 
   function loadBody(callback){
     if(!file.body){
@@ -102,7 +101,7 @@ function MainView(files){
   var $el = $('body');
 
   var listView = new ListView('Posts','posts',listItems(files));
-  var postView = new PostView(files[0]);
+  var postView = new PostView();
 
   render();
   loadPage()

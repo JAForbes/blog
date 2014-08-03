@@ -9,6 +9,10 @@ a:visited {color:black;}  /* visited link */
 a:hover {color:blue;}  /* mouse over link */
 a:active {color:black;}  /* selected link */
 
+li {
+  margin: 0.5em;
+}
+
 body {
   margin: 0;
 }
