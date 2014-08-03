@@ -11,6 +11,11 @@ a:active {color:black;}  /* selected link */
 
 li {
   margin: 0.5em;
+  list-style:none
+}
+ul {
+  margin: 0;
+  padding: 0;
 }
 
 body {
