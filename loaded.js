@@ -1,22 +1,14 @@
 function loaded(files){
 
-  console.log(files)
+  var views = new MainView(files);
 
-  var listItems = _(files).map(function(file){
-    return {
-      title: file.name.replace('.md',''),
-      url: file._links.git
-    };
-  })
-
-  console.log(listItems)
 
 }
 
 //accepts an array of items with a url and title property
-function ListView(items){
+function ListView(title, items){
 
-  var $el = $('<ul>');
+  var $el = $('<div>');
 
   render()
 
@@ -27,7 +19,10 @@ function ListView(items){
 
     }).join('')
 
-    return listItems
+    return [
+      h4(title),
+      ul(listItems)
+    ]
   }
 
   function render(){
@@ -36,13 +31,34 @@ function ListView(items){
 
   return {
     render: render,
-    $el: function(){ return $el }
+    $el: function(){ return $el },
   }
 
 
 }
 
-items = [{url:'http://www.google.com', title: 'Example Post'},{url:'http://www.google.com', title: 'Example Post'}]
+function MainView(files){
 
-var list = new ListView(items)
-list.$el().html()
+  var $el = $('body');
+
+  var listView = new ListView('Posts',listItems(files));
+  render();
+
+  function listItems(files){
+    return _(files).map(function(file){
+      return {
+        title: file.name.replace('.md',''),
+        url: file._links.git
+      };
+    })
+
+  }
+
+  function template(){
+    return listView.$el;
+  }
+
+  function render(){
+    $el.html(template())
+  }
+}
