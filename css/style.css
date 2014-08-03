@@ -1,0 +1,21 @@
+* {
+  font-family: helvetica;
+  box-sizing: border-box;
+
+}
+
+body {
+  margin: 0;
+}
+
+.posts {
+  width: 20%;
+  float:left;
+  padding: 1em;
+}
+
+.post {
+  width: 80%;
+  float:left;
+  padding: 2em;
+}

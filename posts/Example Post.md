@@ -1,4 +1,4 @@
-Test Post
+Example Post
 =========
 
 I want to test if I can integrate a local markdown file
@@ -19,7 +19,7 @@ You can make your page do whatever you want, inject any JS or CSS and even remov
 
 I've got a few projects that piggy back tumblr to great effect.
 
-[Zoe Appleseed](http://zoeappleseed.com)'s website is built on top of tumblr's API.  We built 
+[Zoe Appleseed](http://zoeappleseed.com)'s website is built on top of tumblr's API.  We built
 a custom page and gallery and pull her art from the tumblr api.  She can now update the content on
 her site by just tagging her posts "seed".  She doesn't have to learn HTML and I don't have to get involved to update her page.
 
@@ -40,5 +40,5 @@ Can I do this?
 
 Yes, I will open source this project.  And do a post on this very blog about how to make use of it.
 
-However, I am making a lot of assumptions to avoid the need for configuration files, so you might need to 
+However, I am making a lot of assumptions to avoid the need for configuration files, so you might need to
 play around with the code if your use case is different to mine.

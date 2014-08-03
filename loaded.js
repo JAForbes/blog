@@ -2,7 +2,7 @@ function loaded(files){
 
   addIds(files)
 
-  var views = new MainView(files);
+  var views = new MainView(_(files).reverse());
 
 }
 
@@ -18,9 +18,10 @@ function addIds(files){
 //accepts an array of items with title id property
 function ListView(title, endpoint, items){
 
-  var $el = $('<div>').addClass(title);
+  var $el = $('<div>').addClass(endpoint);
 
   render()
+
 
   function template(){
     var listItems = _(items).map(function(item){
@@ -63,7 +64,7 @@ function PostView(file){
         success:function(blob){
 
            file.body = marked.parse(blob)
-           render();
+           render()
            callback()
 
         }
@@ -74,7 +75,10 @@ function PostView(file){
   }
 
   function template(){
-    return file.body;
+    var mo = moment(file.created);
+    var pretty = b('Posted')+': '+mo.fromNow()
+
+    return file.body + p({class:'datestamp'},pretty)
   }
 
   function update(_file,callback){
@@ -102,14 +106,12 @@ function MainView(files){
 
   render();
   loadPage()
-
   window.onhashchange = loadPage
 
   function listen(){
     $el.find('.posts a').click(function(e){
       var href = $(this).attr('href');
       var id = href.replace('#/posts/','')
-      console.log('click')
     });
   }
 
@@ -123,9 +125,10 @@ function MainView(files){
 
   function loadPost(id){
     var file = _(files).where({id:id})[0];
-    if(file){
-      postView.update(file,render);
+    if(!file){
+      file = files[0]
     }
+    postView.update(file,render);
   }
 
   function listItems(files){
