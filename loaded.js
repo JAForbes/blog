@@ -26,7 +26,7 @@ function ListView(title, endpoint, items){
   function template(){
     var listItems = _(items).map(function(item){
 
-      return li( a({href:'#/'+endpoint+'/'+item.id},item.title))
+      return li( a({href:'#/'+endpoint+'/'+item.id},item.title,div({class:'tiny'},'('+item.created+')')))
 
     }).join('')
 
@@ -135,6 +135,7 @@ function MainView(files){
       return {
         title: file.name.replace('.md',''),
         id: file.id,
+        created: moment(file.created).fromNow()
       };
     })
 
