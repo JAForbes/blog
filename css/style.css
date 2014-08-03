@@ -26,10 +26,15 @@ body {
   margin: 0;
 }
 
-.posts {
+.sidebar{
   width: 30%;
   float:left;
   padding: 1em;
+}
+.bio img {
+  border-radius: 100%;
+  width:50%;
+  margin-left:25%;
 }
 
 .post {

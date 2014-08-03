@@ -1,8 +1,8 @@
 Pulling Datestamps from commits and formatting them with moment.js
 ==================================================================
 
-Date stamps are working.  I tried to use [John Resig's pretty date script](http://ejohn.org/blog/javascript-pretty-date/)
-, which is pretty nice, but is only suited for twitter-like situations, because the longest description it has is 'n weeks ago'.
+Date stamps are working.  I tried using [John Resig's pretty date script](http://ejohn.org/blog/javascript-pretty-date/)
+, which is pretty nice, but is only suited for twitter-like situations, because the longest description it uses is 'n weeks ago'.
 
 So I googled some more and found [moment.js](http://momentjs.com/), which is mind blowingly good.  Reminds me of Python's date support.
 

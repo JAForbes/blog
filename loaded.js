@@ -16,9 +16,9 @@ function addIds(files){
 
 
 //accepts an array of items with title id property
-function ListView(title, endpoint, items){
+function ListView(endpoint, items){
 
-  var $el = $('<div>').addClass(endpoint);
+  var $el = $('<ul>').addClass(endpoint);
 
   render()
 
@@ -26,14 +26,15 @@ function ListView(title, endpoint, items){
   function template(){
     var listItems = _(items).map(function(item){
 
-      return li( a({href:'#/'+endpoint+'/'+item.id},item.title,div({class:'tiny'},'('+item.created+')')))
+      return li(
+        a({href:'#/'+endpoint+'/'+item.id},
+          item.title,div({class:'tiny'},'('+item.created+')')
+        )
+      )
 
     }).join('')
 
-    return [
-      h4(title),
-      ul(listItems)
-    ]
+    return listItems;
   }
 
   function render(){
@@ -45,6 +46,23 @@ function ListView(title, endpoint, items){
     $el: function(){ return $el },
   }
 
+
+}
+
+function BioView(src){
+
+  var $el = $('<div>').addClass('bio');
+
+  $el.append([
+    img({src:src}),
+    p("Hi!  I'm James!  I am a programmer and a musician.")
+  ]);
+
+  return {
+    $el: function(){
+      return $el;
+    }
+  }
 
 }
 
@@ -100,7 +118,8 @@ function MainView(files){
 
   var $el = $('body');
 
-  var listView = new ListView('Posts','posts',listItems(files));
+  var bioView = new BioView('https://pbs.twimg.com/profile_images/378800000542057580/361d3e72fd5f7d7f2a2b60885e6fd157.jpeg');
+  var listView = new ListView('posts',listItems(files));
   var postView = new PostView();
 
   render();
@@ -142,8 +161,14 @@ function MainView(files){
   }
 
   function template(){
+    var $sidebar = $('<div class="sidebar">').append([
+      bioView.$el(),
+      listView.$el()
+
+    ]);
+
     return [
-      listView.$el(),
+      $sidebar,
       postView.$el()
     ];
   }
