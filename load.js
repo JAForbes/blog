@@ -32,8 +32,6 @@
             isFinished(loaded_count,files.length) && loaded(files)
           }
         })
-
-
       })
 
   }
