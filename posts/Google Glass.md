@@ -13,7 +13,7 @@ Like all fringe technology, there is a lot to be excited, and scared about.
 
 Glass will be great for documentarians, home movies, historical records, and lots of other stuff.
 
-But what most interests me.  Combined with streaming services, Google Glass will create a new kind of embedded media broadcast.  Citizens, on the sideless of conflict, unrest and oppression will be able to share their eyes with billions of people instantly.  I am excited that the audience of these broadcasts will evaporate silent crimes.
+But what most interests me.  Combined with streaming services, Google Glass will create a new kind of embedded media broadcast.  Citizens, on the sidelines of conflict, unrest and oppression will be able to share their eyes with billions of people instantly.  I am excited that the audience of these broadcasts may evaporate silent crimes.
 
 And I know Google sees that as the future.  And that is why they bought Twitch.tv.  And that is why I am also afraid.   I am scared about those recordings sitting on Google's servers, being automatically shared with ad partners.  I am afraid that society will become so accepting of being filmed by their peers, that they will accept and expect to be filmed by their governments.
 

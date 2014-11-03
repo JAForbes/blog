@@ -3,7 +3,7 @@ function loaded(files){
   addIds(files)
 
   var views = new MainView(_(files).reverse());
-
+  window.files = files;
 }
 
 
@@ -49,6 +49,81 @@ function ListView(endpoint, items){
 
 }
 
+function CommentView(src){
+  var $el = $('<div>').addClass('comment');
+
+  $el.append([
+    p({class:'relevance hidden'}, 'Comment Relevance: 0%'),
+    textarea(),
+    div({class:'commenter'},
+      p('Name:'),
+      input({type:'text'})
+    )
+
+  ]);
+
+  function wordList(text){
+    punctuation = /(\.|"|'|,|:|;|!|\(|\)|\?)/g
+    words = text
+      .toLowerCase()
+      .replace(/'s/g,'')
+      .replace(punctuation,'')
+      .replace('-',' ')
+      .split(/\s/)
+    //remove filler words
+    words = _(words).filter(function(word){
+      return word.length > 4;
+    })
+    words = _(words).map(function(word){
+      return word.slice(0,5); //take the beginning of words, then you can match google with googled
+    })
+    return words
+  }
+
+  function relevance(comment,post){
+
+    var commentWords = wordList(comment)
+    var postWords = wordList(post)
+
+    var nWordsInCommon = _(commentWords).intersection(postWords).length;
+
+    return nWordsInCommon/commentWords.length
+  }
+
+  $(document).keyup(function(e){
+
+      if(e.target == $el.find('textarea')[0]){
+
+        var comment = $el.find('textarea').val();
+        var post = $('.post').text()
+
+        var percantage = relevance(comment,post);
+        var $relevance = $el.find('.relevance');
+
+        percantage = _(percantage).isNumber() && percantage || 0;
+
+        if(comment.length > 0){
+          $relevance
+            .removeClass('hidden')
+            .text('Comment Relevance: '+Math.floor(percantage*100)+'%')
+        }
+
+
+
+      }
+
+  })
+
+
+
+  return {
+    $el: function(){
+      return $el;
+    }
+  }
+
+}
+
 function BioView(src){
 
   var $el = $('<div>').addClass('bio');
@@ -69,7 +144,7 @@ function BioView(src){
 function PostView(file){
 
   var $el = $('<div>').addClass('post');
-
+  var commentView = new CommentView();
 
   function loadBody(callback){
     if(!file.body){
@@ -95,7 +170,7 @@ function PostView(file){
     var mo = moment(file.created);
     var pretty = b('Posted')+': '+mo.fromNow()
 
-    return file.body + p({class:'datestamp'},pretty)
+    return [file.body,p({class:'datestamp'},pretty),commentView.$el()]
   }
 
   function update(_file,callback){
@@ -104,7 +179,7 @@ function PostView(file){
   }
 
   function render(){
-    $el.html(template());
+    $el.empty().append(template());
   }
 
   return {
@@ -164,7 +239,6 @@ function MainView(files){
     var $sidebar = $('<div class="sidebar">').append([
       bioView.$el(),
       listView.$el()
-
     ]);
 
     return [
