@@ -3,7 +3,7 @@ function List(posts){
 	return '<ul class="posts">' +
 		posts
 		.map(function(post){
-			return '<a href="#'+post.path.replace('.md','')+'">'+ post.name.replace('.md','') +'</a>' +
+			return '<a href="#'+post.path.replace('.md','')+'">'+ post.name +'</a>' +
 			'<div class="tiny">' +moment(post.created).fromNow() + '</div>'
 		})
 		.map(function(anchor){
