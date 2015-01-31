@@ -1,7 +1,7 @@
 Custom Domain Name hosting via Github Pages
 ===========================================
 
-After much tinkering with DNS settings I finally got this project to be served from [](james-forbes.com).
+After much tinkering with DNS settings I finally got this project to be served via github pages.
 
 A bonus, all my other github repositories that use gh-pages (which is most of them) are being served at the same address.
 
