@@ -1,5 +1,5 @@
 Example Post
-=========
+============
 
 I want to test if I can integrate a local markdown file
 with a tumblr blog.
@@ -42,3 +42,4 @@ Yes, I will open source this project.  And do a post on this very blog about how
 
 However, I am making a lot of assumptions to avoid the need for configuration files, so you might need to
 play around with the code if your use case is different to mine.
+
