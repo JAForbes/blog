@@ -9,6 +9,7 @@ pre {
   border-radius: 0.3em;
   border: solid 1px #CCC;
 }
+
 p code {
   background-color: #EEE;
   padding: 0.05em;
@@ -67,6 +68,7 @@ body {
   width: 30%;
   float:left;
   padding: 1em;
+  position: fixed;
 }
 .bio img {
   border-radius: 100%;
@@ -76,6 +78,7 @@ body {
 
 .post {
   width: 70%;
-  float:left;
+  position: absolute;
+  left: 30%;
   padding: 2em;
 }
