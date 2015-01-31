@@ -10,6 +10,11 @@ posts = [
 		"created":"2015-01-19T06:27:37.705Z"
 	},
 	{
+		"name": "A practical example using Ramda: Scraping",
+		"path": "posts/ramdaScrape.md",
+		"created":"2015-01-08T02:38:59.976Z"
+	},
+	{
 		"name": "Pulling Date Stamps from Commits",
 		"path": "posts/Pulling Date Stamps from Commits.md",
 		"created": "2014-08-03T11:31:29Z"
