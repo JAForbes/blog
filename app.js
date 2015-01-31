@@ -3,7 +3,7 @@ function List(posts){
 	return '<ul class="posts">' +
 		posts
 		.map(function(post){
-			return '<a href="#'+post.path+'">'+ post.name+'</a>' +
+			return '<a href="#'+post.path.replace('.md','')+'">'+ post.name.replace('.md','') +'</a>' +
 			'<div class="tiny">' +moment(post.created).fromNow() + '</div>'
 		})
 		.map(function(anchor){
@@ -29,7 +29,7 @@ function Bio(){
 function LoadPost(path){
 	path = path.replace('#','')
 	
-	$.get(path)
+	$.get(path+'.md')
 	.then(_.identity)
 	.then(marked)
 	.then(PostBody)
