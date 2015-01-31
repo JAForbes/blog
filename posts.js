@@ -5,6 +5,11 @@ posts = [
 		"created": "2015-01-31T03:37:30.456Z"
 	},
 	{
+		"name": "Reduce: the genome of algorithms.",
+		"path":"posts/reduce.md",
+		"created":"2015-01-19T06:27:37.705Z"
+	},
+	{
 		"name": "Pulling Date Stamps from Commits",
 		"path": "posts/Pulling Date Stamps from Commits.md",
 		"created": "2014-08-03T11:31:29Z"
