@@ -45,8 +45,8 @@ posts = [
 		"created": "2014-08-03T10:25:53Z"
 	},
 	{
-		"name": "Example Post",
-		"path": "posts/Example Post.md",
+		"name": "Blog Project",
+		"path": "posts/Blog Project.md",
 		"created": "2014-08-03T03:08:14Z"
 	}
 ]
