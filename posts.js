@@ -15,6 +15,11 @@ posts = [
 		"created":"2015-01-08T02:38:59.976Z"
 	},
 	{
+		"name": "Currying vs Hurrying",
+		"path": "posts/Currying vs Hurrying.md",
+		"created": "2014-11-12T11:18:49.210Z"
+	},
+	{
 		"name": "Grokking Lodash",
 		"path": "posts/grokDash.md",
 		"created": "2014-11-22T08:56:20.959Z"
