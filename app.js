@@ -37,7 +37,7 @@ function LoadPost(path){
 
 $(function(){
 
-	path = window.location.hash || '#'+posts[0].path
+	path = window.location.hash || '#'+posts[0].path.replace('.md','')
 	LoadPost(path)
 
 	$(
