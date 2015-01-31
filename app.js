@@ -37,8 +37,7 @@ function LoadPost(path){
 
 $(function(){
 
-	path = window.location.hash || '#'+posts[0].path.replace('.md','')
-	LoadPost(path)
+	
 
 	$(
 		'<div class="sidebar">'+
@@ -50,4 +49,7 @@ $(function(){
 		var path = $(this).attr('href')
 		LoadPost(path)
 	})
+	
+	path = window.location.hash || '#'+posts[0].path.replace('.md','')
+	LoadPost(path)
 })
