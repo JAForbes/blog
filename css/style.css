@@ -82,3 +82,7 @@ body {
   left: 30%;
   padding: 2em;
 }
+.posts {
+  overflow-y : scroll;
+  height: 50vh;
+}
