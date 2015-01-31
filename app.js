@@ -26,7 +26,20 @@ function Bio(){
 	'</div>'
 }
 
+function LoadPost(path){
+	path = path.replace('#','')
+	
+	$.get(path)
+	.then(_.identity)
+	.then(marked)
+	.then(PostBody)
+}
+
 $(function(){
+
+	path = window.location.hash || '#'+posts[0].path
+	LoadPost(path)
+
 	$(
 		'<div class="sidebar">'+
 		Bio() +
@@ -34,10 +47,7 @@ $(function(){
 		'</div>'
 	).appendTo('body')
 	$('.posts a').click(function(){
-		var path = $(this).attr('href').replace('#','')
-		$.get(path)
-	  .then(_.identity)
-		.then(marked)
-		.then(PostBody)
+		var path = $(this).attr('href')
+		LoadPost(path)
 	})
 })
