@@ -8,14 +8,14 @@ function List(posts){
 		})
 		.map(function(anchor){
 			return '<li>'+anchor+'</li>'
-		}).join('') + 
+		}).join('') +
 	"</ul>"
 }
 
 function PostBody(html){
 	//remove last post if it existed
 	$('.post').remove()
-	
+
 	$('<div class="post">'+html+'</div>').appendTo('body')
 }
 
@@ -28,7 +28,7 @@ function Bio(){
 
 function LoadPost(path){
 	path = path.replace('#','')
-	
+
 	$.get(path+'.md')
 	.then(_.identity)
 	.then(marked)
@@ -37,7 +37,7 @@ function LoadPost(path){
 
 $(function(){
 
-	
+
 
 	$(
 		'<div class="sidebar">'+
@@ -49,7 +49,9 @@ $(function(){
 		var path = $(this).attr('href')
 		LoadPost(path)
 	})
-	
-	path = window.location.hash || '#'+posts[0].path.replace('.md','')
-	LoadPost(path)
+	window.onhashchange = function(){
+		path = window.location.hash || '#'+posts[0].path.replace('.md','')
+		LoadPost(path)
+	}
+	window.onhashchange()
 })
