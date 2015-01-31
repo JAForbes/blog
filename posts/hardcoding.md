@@ -1,5 +1,5 @@
-Hardcoding is better than Generics
-==================================
+Hardcoding is better than generic coding
+========================================
 
 The one thing I have struggled most with over the years, is deprogramming
 all the Java nonsense that was stuffed into my head at University.
