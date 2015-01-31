@@ -33,6 +33,13 @@ function LoadPost(path){
 	.then(_.identity)
 	.then(marked)
 	.then(PostBody)
+	.then(syntaxHighlighting)
+}
+
+function syntaxHighlighting(){
+	$('pre code').each(function(i, block) {
+	    hljs.highlightBlock(block);
+	});
 }
 
 $(function(){
