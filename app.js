@@ -93,7 +93,7 @@ $(function(){
 			LoadPost(path)
 		}
 	}
-	//initDisqus('jaforbes',window.onhashchange)
+	initDisqus('jaforbes',window.onhashchange)
 
 
 })
