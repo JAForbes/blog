@@ -64,6 +64,7 @@ function resetDisqus(disqus_thread){
 	    this.page.identifier = id
 	    this.page.url = window.location.href;
 	    this.page.category_id = id
+	    this.page.title = $('h1').text()
 	    console.log(this)
 	  }
 	});
