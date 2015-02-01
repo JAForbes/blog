@@ -13,10 +13,11 @@ function List(posts){
 }
 
 function PostBody(html){
-	//remove last post if it existed
-	$('.post').remove()
-
-	$('<div class="post">'+html+'</div>').appendTo('body')
+	if(!$('.post')[0]){
+		$('<div class="post"><div class="content"></div></div>')
+			.appendTo('body')
+	}
+	$('.post .content').empty().html('<div class="content">'+html+'</div>')
 }
 
 function Bio(){
@@ -30,11 +31,12 @@ function LoadPost(path){
 	path = path.replace('#','')
 
 	$.get(path+'.md')
-	.then(_.identity)
-	.then(marked)
-	.then(PostBody)
-	.then(syntaxHighlighting)
+		.then(_.identity)
+		.then(marked)
+		.then(PostBody)
+		.then(syntaxHighlighting)
 }
+
 
 function syntaxHighlighting(){
 	$('pre code').each(function(i, block) {
@@ -56,9 +58,15 @@ $(function(){
 		var path = $(this).attr('href')
 		LoadPost(path)
 	})
+	window.location.hash = window.location.hash || posts[0].path.replace('.md','')
+
 	window.onhashchange = function(){
-		path = window.location.hash || '#'+posts[0].path.replace('.md','')
-		LoadPost(path)
+		var path = window.location.hash
+		if(path.indexOf('post') > -1){
+			LoadPost(path)
+		}
 	}
 	window.onhashchange()
+
+
 })
