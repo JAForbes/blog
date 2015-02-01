@@ -16,13 +16,11 @@ function initializeDisqus(
 	thread_parent,
 	disqus_shortname,
 	disqus_identifier,
-	disqus_category_id,
 	disqus_url,
 	disqus_title
 ){
 	window.disqus_shortname = disqus_shortname
 	window.disqus_identifier = disqus_identifier
-	window.disqus_category_id = disqus_category_id
 	window.disqus_url = disqus_url
 	window.disqus_title = disqus_title
 
