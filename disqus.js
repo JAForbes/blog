@@ -8,7 +8,12 @@ var thread_element = document.createElement('div')
 
 function disqusted(){
 	killDisqus()
-    initializeDisqus.bind(null,thread_element).apply(null,arguments)
+	try {
+		initializeDisqus.bind(null,thread_element).apply(null,arguments)
+	} catch (e) {
+		console.log(e)
+	}
+
 }
 
 function initializeDisqus(
