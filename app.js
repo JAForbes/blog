@@ -62,6 +62,7 @@ function resetDisqus(disqus_thread){
 	  config: function () {
 	    this.page.identifier = ($('h1')[0] || $('h2')[0]).id;
 	    this.page.url = window.location.href;
+	    this.page.title = this.page.identifier;
 	  }
 	});
 }
