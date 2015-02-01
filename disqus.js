@@ -25,8 +25,15 @@ function initializeDisqus(
 	disqus_title
 ){
 
+	window.disqus_shortname = disqus_shortname
+	window.disqus_identifier = disqus_identifier
+	window.disqus_url = disqus_url
+	window.disqus_titl = disqus_title
+
 	thread_parent.appendChild(thread_element)
+
 	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+
 	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
 	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 
