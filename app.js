@@ -3,7 +3,7 @@ function List(posts){
 	return '<ul class="posts">' +
 		posts
 		.map(function(post){
-			return '<a href="#'+post.path.replace('.md','')+'">'+ post.name +'</a>' +
+			return '<a href="#!'+post.path.replace('.md','')+'">'+ post.name +'</a>' +
 			'<div class="tiny">' +moment(post.created).fromNow() + '</div>'
 		})
 		.map(function(anchor){
@@ -28,7 +28,7 @@ function Bio(){
 }
 
 function LoadPost(path){
-	path = path.replace('#','')
+	path = path.replace('#!','')
 	var disqus_thread = $('#disqus_thread')[0]
 
 	$.get(path+'.md')
@@ -55,15 +55,17 @@ function initDisqus(disqus_shortname,done){
 }
 
 function resetDisqus(disqus_thread){
+	var id = window.location.hash.replace('#!posts/','')
 	$('.post').append(disqus_thread)
 	disqus_thread.style.display = 'block';
 	DISQUS.reset({
 	  reload: true,
 	  config: function () {
-	    this.page.identifier = ($('h1')[0] || $('h2')[0]).id;
+	    this.page.identifier = id
 	    this.page.url = window.location.href;
-	    this.page.title = this.page.identifier;
-	    this.category_id = this.page.identifier
+	    this.page.title = $('h1')[0].innerText;
+	    this.page.category_id = id
+	    //this.forum = id
 	    console.log(this)
 	  }
 	});
@@ -87,7 +89,7 @@ $(function(){
 		var path = $(this).attr('href')
 		LoadPost(path)
 	})
-	window.location.hash = window.location.hash || posts[0].path.replace('.md','')
+	window.location.hash = window.location.hash || '!'+posts[0].path.replace('.md','')
 
 	window.onhashchange = function(){
 		var path = window.location.hash
