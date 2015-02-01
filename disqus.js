@@ -28,7 +28,7 @@ function initializeDisqus(
 	window.disqus_shortname = disqus_shortname
 	window.disqus_identifier = disqus_identifier
 	window.disqus_url = disqus_url
-	window.disqus_titl = disqus_title
+	window.disqus_title = disqus_title
 
 	thread_parent.appendChild(thread_element)
 
