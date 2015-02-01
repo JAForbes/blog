@@ -16,7 +16,7 @@ posts = [
 	},
 	{
 		"name": "Currying vs Hurrying",
-		"path": "posts/Currying vs Hurrying.md",
+		"path": "posts/CurryingHurrying.md",
 		"created": "2014-11-12T11:18:49.210Z"
 	},
 	{
@@ -31,27 +31,27 @@ posts = [
 	},
 	{
 		"name": "Hosting via gh-pages",
-		"path": "posts/Hosting via gh-pages.md",
+		"path": "posts/HostingGhPages.md",
 		"created": "2014-11-03T23:44:08Z"
 	},
 	{
 		"name": "Google Glass",
-		"path": "posts/Google Glass.md",
+		"path": "posts/GoogleGlass.md",
 		"created": "2014-08-03T23:52:20Z"
 	},
 	{
 		"name": "Pulling Date Stamps from Commits",
-		"path": "posts/Pulling Date Stamps from Commits.md",
+		"path": "posts/DateStamps.md",
 		"created": "2014-08-03T11:31:29Z"
 	},
 	{
 		"name": "No Tumblr But All is Well",
-		"path": "posts/No Tumblr But All is Well.md",
+		"path": "posts/NoTumblr.md",
 		"created": "2014-08-03T10:25:53Z"
 	},
 	{
 		"name": "Blog Project",
-		"path": "posts/Blog Project.md",
+		"path": "posts/BlogProject.md",
 		"created": "2014-08-03T03:08:14Z"
 	}
 ]

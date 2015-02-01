@@ -63,9 +63,7 @@ function resetDisqus(disqus_thread){
 	  config: function () {
 	    this.page.identifier = id
 	    this.page.url = window.location.href;
-	    this.page.title = $('h1')[0].innerText;
 	    this.page.category_id = id
-	    //this.forum = id
 	    console.log(this)
 	  }
 	});
