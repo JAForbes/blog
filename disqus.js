@@ -19,10 +19,6 @@ function initializeDisqus(
 	disqus_url,
 	disqus_title
 ){
-	window.disqus_shortname = disqus_shortname
-	window.disqus_identifier = disqus_identifier
-	window.disqus_url = disqus_url
-	window.disqus_title = disqus_title
 
 	thread_parent.appendChild(thread_element)
 	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
