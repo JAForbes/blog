@@ -85,10 +85,6 @@ $(function(){
 		List(posts) +
 		'</div>'
 	).appendTo('body')
-	$('.posts a').click(function(){
-		var path = $(this).attr('href')
-		LoadPost(path)
-	})
 	window.location.hash = window.location.hash || '!'+posts[0].path.replace('.md','')
 
 	window.onhashchange = function(){
@@ -97,7 +93,7 @@ $(function(){
 			LoadPost(path)
 		}
 	}
-	initDisqus('jaforbes',window.onhashchange)
+	//initDisqus('jaforbes',window.onhashchange)
 
 
 })
