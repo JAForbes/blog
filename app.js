@@ -29,14 +29,42 @@ function Bio(){
 
 function LoadPost(path){
 	path = path.replace('#','')
+	var disqus_thread = $('#disqus_thread')[0]
 
 	$.get(path+'.md')
 		.then(_.identity)
 		.then(marked)
 		.then(PostBody)
 		.then(syntaxHighlighting)
+		.then(resetDisqus.bind(null,disqus_thread))
 }
 
+function initDisqus(disqus_shortname,done){
+	var disqus_thread = document.createElement('div')
+		disqus_thread.style.display = 'none';
+		disqus_thread.id = 'disqus_thread'
+
+	document.body.appendChild(disqus_thread)
+
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = false;
+
+	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+	dsq.onload = done
+}
+
+function resetDisqus(disqus_thread){
+	$('.post').append(disqus_thread)
+	disqus_thread.style.display = 'block';
+	DISQUS.reset({
+	  reload: true,
+	  config: function () {
+	    this.page.identifier = ($('h1')[0] || $('h2')[0]).id;
+	    this.page.url = window.location.href;
+	  }
+	});
+}
 
 function syntaxHighlighting(){
 	$('pre code').each(function(i, block) {
@@ -45,8 +73,6 @@ function syntaxHighlighting(){
 }
 
 $(function(){
-
-
 
 	$(
 		'<div class="sidebar">'+
@@ -66,7 +92,7 @@ $(function(){
 			LoadPost(path)
 		}
 	}
-	window.onhashchange()
+	initDisqus('jaforbes',window.onhashchange)
 
 
 })
