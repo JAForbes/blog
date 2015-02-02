@@ -63,11 +63,23 @@ body {
   padding: 1em;
   position: fixed;
 }
-.bio img {
-  border-radius: 100%;
-  width:50%;
-  margin-left:25%;
-}
+/*http://www.maxdesign.com.au/articles/center/ */
+
+  body {
+    text-align: center;
+  }
+  .bio img
+  {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    max-width:150px;
+    text-align: left;
+    border-radius: 100%;
+  }
+  .posts,.post,.bio p{
+    text-align: left;
+  }
 
 .post {
   width: 70%;
