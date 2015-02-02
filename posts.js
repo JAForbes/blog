@@ -2,7 +2,8 @@ posts = [
 	{
 		"name": "Hardcoding is great",
 		"path": "posts/hardcoding.md",
-		"created": "2015-01-31T03:37:30.456Z"
+		"created": "2015-01-31T03:37:30.456Z",
+		"twitter": "561485078140698625"
 	},
 	{
 		"name": "Reduce: the genome of algorithms.",

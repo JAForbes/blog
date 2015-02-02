@@ -12,12 +12,25 @@ function List(posts){
 	"</ul>"
 }
 
+function TwitterDiscussion(post){
+	if(post.twitter){
+		console.log(post)
+		twttr.widgets.createTweet(
+			post.twitter,
+			$('.post .content')[0],
+			{
+				theme: 'light'
+			}
+		);	
+	}
+}
+
 function PostBody(html){
 	if(!$('.post')[0]){
 		$('<div class="post"><div class="content"></div></div>')
 			.appendTo('body')
 	}
-	$('.post .content').empty().html('<div class="content">'+html+'</div>')
+	$('.post .content').empty().html(html)
 }
 
 function Bio(){
@@ -29,45 +42,14 @@ function Bio(){
 
 function LoadPost(path){
 	path = path.replace('#!','')
-	var disqus_thread = $('#disqus_thread')[0]
-
+	
+	var post = _.findWhere(posts,{path: path+'.md'})
 	$.get(path+'.md')
 		.then(_.identity)
 		.then(marked)
 		.then(PostBody)
 		.then(syntaxHighlighting)
-		.then(resetDisqus.bind(null,disqus_thread))
-}
-
-function initDisqus(disqus_shortname,done){
-	var disqus_thread = document.createElement('div')
-		disqus_thread.style.display = 'none';
-		disqus_thread.id = 'disqus_thread'
-
-	document.body.appendChild(disqus_thread)
-
-	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = false;
-
-	dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-
-	dsq.onload = done
-}
-
-function resetDisqus(disqus_thread){
-	var id = window.location.hash.replace('#!posts/','')
-	$('.post').append(disqus_thread)
-	disqus_thread.style.display = 'block';
-	DISQUS.reset({
-	  reload: true,
-	  config: function () {
-	    this.page.identifier = id
-	    this.page.url = window.location.href;
-	    this.page.category_id = id
-	    this.page.title = $('h1').text()
-	    console.log(this)
-	  }
-	});
+		.then(TwitterDiscussion.bind(null,post))
 }
 
 function syntaxHighlighting(){
@@ -92,7 +74,7 @@ $(function(){
 			LoadPost(path)
 		}
 	}
-	initDisqus('jamesaforbes',window.onhashchange)
-
+	
+	window.onhashchange()
 
 })
