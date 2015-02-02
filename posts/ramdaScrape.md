@@ -1,10 +1,9 @@
 General Practicality of Ramda and Functional Techniques
 =======================================================
 
-Ramda is a functional Javascript utility library.  It is extremely useful for reducing complexity of involved tasks by allowing
-for composition of small functions into larger ones, and by encourage a flow of data instead of global state.
+Ramda is a functional Javascript utility library.  It is extremely useful for reducing complexity of involved tasks by allowing for composition of small functions into larger ones.  Ramda encourages a flow of data instead of storing global state for later use.
 
-There are many demonstrations of Ramda, but most of them are very pie in the sky, and don't use actual data.  So this demonstration will ensure our data is real, we will scrape it from the internet.
+There are many demonstrations of Ramda, but most of them are very pie in the sky, and don't use actual data.  This demonstration will ensure our data is real, we will scrape it from the internet!
 
 At a later stage, I'd like to take the output data from this exercise, as input for another demonstration of Ramda's prowess at data processing.
 
@@ -13,6 +12,9 @@ Presidents from Wikipedia
 
 We are going to use Ramda, Promise, Cheerio and Request in nodejs to parse Wikipedia into an array of data on United States presidents.
 
+I've purposely picked scraping instead of consuming an API, because it tends to get messy.  You are making multiple asynchronous requests, and you have callbacks, and you have to parse data, and aggregate it.  
+
+When this turns out to be 50 lines of easy to read and edit Javascript, I will have succeeded in my mission.
 
 Setting up the Project
 ----------------------
