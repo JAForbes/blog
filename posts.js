@@ -18,7 +18,8 @@ posts = [
 	{
 		"name": "Currying vs Hurrying",
 		"path": "posts/CurryingHurrying.md",
-		"created": "2014-11-12T11:18:49.210Z"
+		"created": "2014-11-12T11:18:49.210Z",
+		"twitter": "562211746882928641"
 	},
 	{
 		"name": "Grokking Lodash",
