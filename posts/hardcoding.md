@@ -1,4 +1,4 @@
-Hardcoding is better than generic coding
+Hardcoding, better than generic coding
 ========================================
 
 The one thing I have struggled most with over the years, is deprogramming

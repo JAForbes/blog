@@ -36,7 +36,7 @@ function PostBody(html){
 function Bio(){
 	return '<div class="bio">'+
 		'<img src="img/bio.jpeg"/>'+
-		'<p>' +"Hi!  I'm James!  I am a programmer and a musician."+'</p>' +
+		'<p>' +"Hi!  I'm James! Programmer and a musician."+'</p>' +
 	'</div>'
 }
 

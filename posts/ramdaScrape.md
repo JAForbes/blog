@@ -1,8 +1,6 @@
 General Practicality of Ramda and Functional Techniques
 =======================================================
 
-![](http://ramda.jcphillipps.com/logo/ramdaFilled_200x235.png)
-
 Ramda is a functional Javascript utility library.  It is extremely useful for reducing complexity of involved tasks by allowing for composition of small functions into larger ones.  Ramda encourages a flow of data instead of storing global state for later use.
 
 There are many demonstrations of Ramda, but most of them are very pie in the sky, and don't use actual data.  This demonstration will ensure our data is real, we will scrape it from the internet!

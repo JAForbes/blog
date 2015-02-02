@@ -58,10 +58,12 @@ body {
 }
 
 .sidebar{
+  position:absolute;
+  top:2%;
+  left:4%;
   width: 30%;
   float:left;
   padding: 1em;
-  position: fixed;
 }
 /*http://www.maxdesign.com.au/articles/center/ */
 
@@ -70,6 +72,7 @@ body {
   }
   .bio img
   {
+    margin-bottom:1em;
     margin-left: auto;
     margin-right: auto;
     width: 50%;
@@ -77,17 +80,27 @@ body {
     text-align: left;
     border-radius: 100%;
   }
-  .posts,.post,.bio p{
+  .posts,.post{
     text-align: left;
+    margin-bottom: 1em;
   }
-
 .post {
-  width: 70%;
+  width: 60%;
   position: absolute;
-  left: 30%;
+  left: 37%;
   padding: 2em;
 }
+.post h1{
+  margin-bottom: 2em;
+}
 .posts {
-  overflow-y : scroll;
-  height: 50vh;
+  margin-top: 2em;
+  background-color: #EEE;
+  padding: 0.5em;
+}
+.bio {
+  position: relative;
+  left: 10%;
+  width: 80%;
+  top: 10%;
 }
