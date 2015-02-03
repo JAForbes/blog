@@ -18,7 +18,7 @@ a:active {color:black;}  /* selected link */
   font-size: 0.8em;
   margin-top: 0.2em;
 }
-li {
+.posts li {
   margin: 0.5em;
   list-style:none
 }
