@@ -61,10 +61,39 @@ input.reduce(function(results,value){
 },[]) //=> [0,3,6,9]
 ```
 
+An aside:
+>This may not seem like a big win at first.  But it _really_ is.  Reduce gives us
+all the control we need to implement any procedure.  But it doesn't give us control we don't need.
+
+>`reduce` is a mathematical construct.  We are trying to reduce the input to values that divide evenly by three.
+
+>How the computer chooses to iterate over an array, is not relevant in most cases.  
+In the for loop, we are manually creating the `results`, the counting variable `i`, the while condition, and the increment amount.
+And by manually telling the computer how to iterate, we introduce _many_ possibilities of error.
+
+>But, the real value of using `reduce` is not reducing error.  
+The real value in `reduce` is that it is the ultimate programming building block of algorithms.
+
+>Any iteration algorithm can be constructed in terms of `reduce`. Reduce is the genome of algorithms
+
+>That is what I am going to demonstrate in this post.
+
+
 What the hell?
 --------------
 
-What is going on here?  To explain, let's first look at two other native JavaScript methods; `forEach` and `map`.
+What is going on here?  Perhaps it seems a little unfamiliar and cumbersome.
+
+To explain, let's first look at two other native JavaScript methods; `forEach` and `map`.
+
+`forEach` is the functional cousin of the for loop.  And therefore, should be the most familiar.
+
+`map` is just like `forEach` but it automatically constructs an array for us.  And we'll see how
+useful that can be.
+
+`reduce` is just like `map` and `forEach`, but it lets us determine, _where_, _what_ and _when_ we store.
+
+Reduce will change how you think about programming and algorithms.  It allows you to write simpler maintainable code.
 
 ###Array::forEach
 
@@ -102,7 +131,7 @@ store some results we need to make sure to set up those results before hand.
 
 This doesn't seem like a big deal, but it is.  It means we can't easily use this function elsewhere.
 The function we constructed relies on some external variable called `results`.
-
+ 
 ###Array::map
 
 `map` solves this problem elegantly, by automatically adding the result of your function to an array.
@@ -273,10 +302,16 @@ filter(divisibleByThree,input) //=> [0,3,6,9]
 
 The journey so far
 ------------------
+You are still here!  We've come a long way.  But maybe we have come so far that
+we have forgotten how this all began.
 
-So we have gone from for loops to filters.  Let's review the transformaton.
+We have gone from for loops to filters.  We have equivalent functionality,
+one expresses the problem in terms of counting variables and while conditions.
 
-To be fair, we will let the for loop use our condition function.
+The other in almost mathematical precision.
+
+To be fair, we will let the for loop use our condition function.  But by comparing
+them, hopefully we can see how valuable `reduce` has been for us today.
 
 ```js
 var results = []
@@ -328,13 +363,18 @@ In my opinion, this is all we do in programming anyway.
   
 ```
 
+Imagine doing the above in a for loop.  And then deciding to change one of the steps
+later.  Would it be as simple as commenting out a line?
+
 Flexibility
 -----------
 
-Reduce is so flexible, you can define any iterator function in terms of it.
+`reduce` is so flexible, you can define any iterator function in terms of it.
 
-As an exercise for the reader.  Go to the [lodash docs](https://lodash.com/docs)
+If you would like to try out some of this reduce space wizardy, you could go to the [lodash docs](https://lodash.com/docs)
 and try to write your own version of any of the Array functions using `reduce`.
+
+A few good ones to try out: `unique`, `compact`, `flatten`.
 
 You'll probably uncover a lot of common patterns, and understand your own code
 more than ever before.
@@ -344,7 +384,7 @@ Control
 
 I hope this helped explain why Reduce is so powerful and why it is worth getting comfortable with.
 
-Reduce gives you all the control necessary to implement any iteration algorithm, and allows you to skip a lot of ceremonial variable declarations.
+`reduce` gives you all the control necessary to implement any iteration algorithm, and allows you to skip a lot of ceremonial variable declarations.
 
 It allows you to build complex systems via simply plugging together lego brick functions like `divisiblyByThree`.  It also lets you write your
 programs as pipes of transforming data.  They are easier to edit, understand and make programming better for everyone!
