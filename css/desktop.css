@@ -1,0 +1,13 @@
+.sidebar{
+	position:absolute;
+	top:2%;
+	left:4%;
+	width: 30%;
+	padding: 1em;
+}
+.post {
+	width: 60%;
+	position: absolute;
+	left: 37%;
+	padding: 2em;
+}

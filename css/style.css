@@ -1,7 +1,6 @@
 * {
   font-family: helvetica;
   box-sizing: border-box;
-
 }
 code:not(.hljs) {
     background: #333;
@@ -31,40 +30,10 @@ body {
   margin: 0;
 }
 
-.comment textarea{
-  width: 100%;
-  line-height: 1em;
-  height: 6em;
-}
-
 .hidden {
   opacity: 0;
 }
 
-.commenter {
-  margin-top: 1em;
-}
-.comment p {
-  float: left;
-  line-height: 2em;
-  padding:0;
-  margin:0;
-}
-.comment input {
-  margin-left: 1em;
-  float:left;
-  line-height: 2em;
-  padding:0;
-}
-
-.sidebar{
-  position:absolute;
-  top:2%;
-  left:4%;
-  width: 30%;
-  float:left;
-  padding: 1em;
-}
 /*http://www.maxdesign.com.au/articles/center/ */
 
   body {
@@ -84,12 +53,6 @@ body {
     text-align: left;
     margin-bottom: 1em;
   }
-.post {
-  width: 60%;
-  position: absolute;
-  left: 37%;
-  padding: 2em;
-}
 .post h1{
   margin-bottom: 2em;
 }
@@ -103,4 +66,8 @@ body {
   left: 10%;
   width: 80%;
   top: 10%;
+}
+.phone-menu-nav {
+  display: none;
+  user-select: none
 }

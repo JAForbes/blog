@@ -16,5 +16,7 @@
     "url": "https://github.com/JAForbes/JAForbes.github.io/issues"
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
-  "dependencies": {}
+  "dependencies": {
+    "jquery": "^2.1.3"
+  }
 }
