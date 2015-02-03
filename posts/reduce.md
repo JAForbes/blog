@@ -337,7 +337,7 @@ As an exercise for the reader.  Go to the [lodash docs](https://lodash.com/docs)
 and try to write your own version of any of the Array functions using `reduce`.
 
 You'll probably uncover a lot of common patterns, and understand your own code
-more than every before.
+more than ever before.
 
 Control
 -------
