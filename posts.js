@@ -8,7 +8,8 @@ posts = [
 	{
 		"name": "Reduce: the genome of algorithms.",
 		"path":"posts/reduce.md",
-		"created":"2015-01-19T06:27:37.705Z"
+		"created":"2015-01-19T06:27:37.705Z",
+		"twitter": "562415491541516290"
 	},
 	{
 		"name": "A practical example using Ramda: Scraping",
