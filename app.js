@@ -21,13 +21,13 @@ function TwitterDiscussion(post){
 			{
 				theme: 'light'
 			}
-		);	
+		);
 	}
 }
 
 function PhoneNav(){
 	return (
-		"<div class='phone-menu-nav'>"+
+		"<div class='phone-menu-nav noselect'>"+
 			"<p>&#9776;</p>"+
 		"</div>"
 	)
@@ -50,7 +50,7 @@ function Bio(){
 
 function LoadPost(path){
 	path = path.replace('#!','')
-	
+
 	var post = _.findWhere(posts,{path: path+'.md'})
 	$.get(path+'.md')
 		.then(_.identity)
@@ -62,7 +62,7 @@ function LoadPost(path){
 
 function syntaxHighlighting(){
 	$('pre code').each(function(i, block) {
-	    hljs.highlightBlock(block);
+			hljs.highlightBlock(block);
 	});
 }
 
@@ -70,7 +70,7 @@ function SidebarTransitions(){
 	var $phoneNav = $('.phone-menu-nav')
 	if( $phoneNav.css('display') != 'none' ){
 		var menuY = 0;
-		
+
 		$phoneNav.click(function(){
 			var $sidebar = $('.sidebar')
 			if( $sidebar.hasClass('show') ){
@@ -121,9 +121,17 @@ $(function(){
 			LoadPost(path)
 		}
 	}
-	
+
 	window.onhashchange()
-	SidebarTransitions()
-	
+
+	// media queries don't activate immediately on iphone 3gs
+	// no idea why
+	setTimeout(function(){
+		SidebarTransitions()
+	},1000)
+
+
+
+
 
 })
