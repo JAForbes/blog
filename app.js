@@ -1,4 +1,3 @@
-log = console.log.bind(console)
 function List(posts){
 	return '<ul class="posts">' +
 		posts
@@ -14,7 +13,6 @@ function List(posts){
 
 function TwitterDiscussion(post){
 	if(post.twitter){
-		console.log(post)
 		twttr.widgets.createTweet(
 			post.twitter,
 			$('.post .content')[0],
@@ -101,10 +99,11 @@ function SidebarTransitions(){
 	$('a').click(function(){
 		document.body.scrollTop = 0;
 		$('.sidebar').removeClass('show')
+		window.scrollTop = 0
 	})
 }
 
-$(function(){
+onPageReady = function(){
 
 	$(
 		'<div class="sidebar">'+
@@ -130,8 +129,6 @@ $(function(){
 		SidebarTransitions()
 	},1000)
 
+}
 
-
-
-
-})
+$(onPageReady)
