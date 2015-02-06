@@ -66,7 +66,7 @@ function syntaxHighlighting(){
 
 function SidebarTransitions(){
 	var $phoneNav = $('.phone-menu-nav')
-	if( $phoneNav.css('display') != 'none' ){
+
 		var menuY = 0;
 
 		$phoneNav.click(function(){
@@ -95,7 +95,7 @@ function SidebarTransitions(){
 			requestAnimationFrame(onFrame)
 		}
 		onFrame()
-	}
+	
 	$('a').click(function(){
 		document.body.scrollTop = 0;
 		$('.sidebar').removeClass('show')
