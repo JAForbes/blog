@@ -14,7 +14,8 @@ posts = [
 	{
 		"name": "A practical example using Ramda: Scraping",
 		"path": "posts/ramdaScrape.md",
-		"created":"2015-01-08T02:38:59.976Z"
+		"created":"2015-01-08T02:38:59.976Z",
+		"twitter": "564380935437578240"
 	},
 	{
 		"name": "Currying vs Hurrying",
