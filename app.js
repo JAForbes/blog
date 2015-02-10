@@ -152,14 +152,7 @@ update = function(){
 							m('img[src="img/bio.jpeg"]'),
 							m('p',"Hi! I'm James!  Programmer and a musician")
 						]),
-						m('ul.posts', { config: function(el, isInit){
-								if(isInit){
-									console.log('hello')
-									$('pre code').each(function(i, block) {
-										hljs.highlightBlock(block);
-									});
-								}
-							}},
+						m('ul.posts',
 							posts.map(function(post){
 								return m('li',[
 									m('a',{href:"#"+post.path.replace('.md','') }, post.name),
@@ -168,10 +161,15 @@ update = function(){
 							})
 						)
 					]),
-					m('div.post', [
+					m('div.post', {config: function(el,isInit){
+						isInit ||	$('pre code').each(function(i, block) {
+							hljs.highlightBlock(block);
+						});
+
+					}}, [
 						POST,
 						m('div', {config:function(el, isInit){
-							isInit && el.appendChild(TWITTER)
+							isInit || el.appendChild(TWITTER)
 						}})
 					])
 				])
