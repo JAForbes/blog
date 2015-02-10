@@ -62,7 +62,7 @@ update = function(){
 					})
 					.then(function(){
 						if( post.twitter ){
-							temp = document.createElement('div');
+							var temp = document.createElement('div');
 							twttr.widgets.createTweet(
 								post.twitter,
 								temp,
