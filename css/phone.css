@@ -1,13 +1,21 @@
 /* Easier to read */
-	body { font-size: 1.3em; }
+	body {
+		font-size: 1.3em;
+		overflow: hidden;
+	}
 	p { line-height: 2em; }
-
 
 .post {
 	position: absolute;
-	width: 90%;
-	left: 5%;
-	top: 5em;
+	width: 100%;
+	left: 0%;
+
+	height: 100%;
+	overflow-y: scroll;
+}
+h1 {
+	/* Stop the header from clipping the menu button */
+	max-width: 80%;
 }
 
 .sidebar {
@@ -17,11 +25,24 @@
 	-o-transition: left 0.5s ease;
 	transition: left 0.5s ease;
 
-	position: absolute;
+	position: fixed;
 	width: 100%;
+	top: 0;
 	left: -100%;
 	z-index: 1;
 	background-color: white;
+	height: 100%;
+	overflow-y: scroll;
+}
+.bio {
+	top: 1em;
+	position: relative;
+	margin-bottom: 2em;
+}
+.posts {
+	top: 1em;
+	position: relative;
+	text-align: center;
 }
 .sidebar.show {
 	-webkit-transition: left 0.5s ease;
@@ -29,9 +50,6 @@
 	-o-transition: left 0.5s ease;
 	transition: left 0.5s ease;
 	left: 0;
-}
-.posts {
-	text-align: center;
 }
 .phone-menu-nav {
 	display: block;
