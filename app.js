@@ -12,11 +12,12 @@ var POST_IS_PENDING = false;
 var POST;
 var TWITTER;
 var lastPath;
+
 update = function(){
 	if(document.body){
+		var path = window.location.hash.replace('#','') || posts[0].path.replace('.md','')
+		if( path.indexOf('posts') > -1 ){
 
-		if( window.location.hash.indexOf('posts') > -1 ){
-			var path = window.location.hash.replace('#','')
 			var post = _.findWhere(posts,{path: path+'.md'})
 
 
