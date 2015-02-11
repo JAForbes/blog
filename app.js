@@ -1,3 +1,8 @@
+hideSidebar = function(){
+	document.querySelector('.post').scrollTop = 0
+	toggleSidebar()
+}
+
 toggleSidebar = function(){
 	var sidebar = document.querySelector('.sidebar');
 	if( sidebar.className.indexOf('show') > -1 ){
@@ -7,8 +12,8 @@ toggleSidebar = function(){
 	}
 }
 
-var POST_IS_READY = false;
-var POST_IS_PENDING = false;
+var POST_IS_READY = 0;
+var POST_IS_PENDING = 0;
 var POST;
 var TWITTER;
 var lastPath;
@@ -20,8 +25,15 @@ update = function(){
 
 			var post = _.findWhere(posts,{path: path+'.md'})
 
+			if(POST_IS_READY == 2){
+				var blocks = document.querySelectorAll('pre code')
+				for(var i = 0; i < blocks.length; i++){
+					hljs.highlightBlock(blocks[i]);
+				}
+			}
 
 			if(path == lastPath && POST_IS_READY){
+				POST_IS_READY++
 				m.render(document.body,[
 					m('div.sidebar',[
 						m('div.bio',[
@@ -31,34 +43,28 @@ update = function(){
 						m('ul.posts',
 							posts.map(function(post){
 								return m('li',[
-									m('a',{href:"#"+post.path.replace('.md','') }, post.name),
+									m('a',{href:"#"+post.path.replace('.md',''), onclick: hideSidebar}, post.name),
 									m('div.tiny', moment(post.created).fromNow() )
 								])
 							})
 						),
 						m('.phone-menu-nav.noselect', m('p',{onclick: toggleSidebar },"☰"))
 					]),
-					m('div.post', {config: function(el,isInit){
-						isInit ||	$('pre code').each(function(i, block) {
-							hljs.highlightBlock(block);
-						});
-
-					}}, [
+					m('div.post', [
 						POST,
-						m('div', {config:function(el, isInit){
-							isInit || el.appendChild(TWITTER)
+						m('div', {config: function(el, isInit){
+							isInit || TWITTER && el.appendChild(TWITTER)
 						}})
 					])
 				])
 
-			} else if(!POST_IS_PENDING) {
+			} else if(path != lastPath && !POST_IS_PENDING) {
 				POST_IS_PENDING = true;
 				m.request({method:'GET', url: post.path, deserialize: marked })
-					.then(m.trust)
 					.then(function(content){
-						POST = content;
-						POST_IS_READY = true;
-						POST_IS_PENDING = false;
+						POST = m.trust(content)
+						POST_IS_READY = 1;
+						POST_IS_PENDING = 0;
 					})
 					.then(function(){
 						if( post.twitter ){
@@ -72,9 +78,9 @@ update = function(){
 							)
 							TWITTER = temp.children[0]
 						}
+
 					})
 			}
-
 
 		}
 		lastPath = path

@@ -1,12 +1,12 @@
 * {
-  font-family: helvetica;
-  box-sizing: border-box;
+	font-family: helvetica;
+	box-sizing: border-box;
 }
 code:not(.hljs) {
-    background: #333;
-    border-radius: 0.3em;
-    padding: 0.2em;
-    color: #66d9ef;
+		background: #333;
+		border-radius: 0.3em;
+		padding: 0.2em;
+		color: #66d9ef;
 }
 a {color:black;}      /* unvisited link */
 a:visited {color:black;}  /* visited link */
@@ -14,68 +14,72 @@ a:hover {color:blue;}  /* mouse over link */
 a:active {color:black;}  /* selected link */
 
 .tiny {
-  font-size: 0.8em;
-  margin-top: 0.2em;
+	font-size: 0.8em;
+	margin-top: 0.2em;
 }
 .posts li {
-  margin: 0.5em;
-  list-style:none
+	margin: 0.5em;
+	list-style:none
 }
 ul {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-  margin: 0;
+	margin: 0;
 }
 
 .hidden {
-  opacity: 0;
+	opacity: 0;
 }
 
 /*http://www.maxdesign.com.au/articles/center/ */
 
-  body {
-    text-align: center;
-  }
-  .bio img
-  {
-    margin-bottom:1em;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    max-width:150px;
-    text-align: left;
-    border-radius: 100%;
-  }
-  .posts,.post{
-    text-align: left;
-    margin-bottom: 1em;
-  }
+	body {
+		text-align: center;
+	}
+	.bio img
+	{
+		margin-bottom:1em;
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+		max-width:150px;
+		text-align: left;
+		border-radius: 100%;
+	}
+	.posts,.post{
+		text-align: left;
+		margin-bottom: 1em;
+	}
 .post h1{
-  margin-bottom: 2em;
+	margin-bottom: 2em;
+}
+.post {
+	padding: 1em;
 }
 .posts {
-  margin-top: 2em;
-  background-color: #EEE;
-  padding: 0.5em;
+	margin-top: 2em;
+	background-color: #EEE;
+	padding: 0.5em;
 }
 .bio {
-  position: relative;
-  left: 10%;
-  width: 80%;
-  top: 10%;
+	position: relative;
+	left: 10%;
+	width: 80%;
+	top: 10%;
 }
 .phone-menu-nav {
-  display: none;
-  user-select: none
+	padding: 1em;
+	display: none;
+	user-select: none
 }
 .noselect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
