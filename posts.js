@@ -1,5 +1,10 @@
 posts = [
 	{
+		"name": "Self currying function",
+		"path": "posts/selfCurrying.md",
+		"created": "2015-06-08T01:38:58.538Z"
+	},
+	{
 		"name": "Hardcoding is great",
 		"path": "posts/hardcoding.md",
 		"created": "2015-01-31T03:37:30.456Z",
