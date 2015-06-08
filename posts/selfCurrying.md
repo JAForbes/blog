@@ -1,3 +1,6 @@
+Self Curried Functions
+======================
+
 Manually specifying the behaviour of your function given the nature of its received arguments.
 
 ```js
