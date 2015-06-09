@@ -43,6 +43,7 @@ function Bio(){
 	return '<div class="bio">'+
 		'<img src="img/bio.jpeg"/>'+
 		'<p>' +"Hi!  I'm James! Programmer and a musician."+'</p>' +
+		'<a href="https://twitter.com/james_a_forbes"> (Twitter) </a>' + 
 	'</div>'
 }
 
