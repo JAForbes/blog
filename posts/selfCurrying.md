@@ -20,7 +20,7 @@ distance({x:3, y:0}, {x:0, y: 4}) //=> 5
 distance() //=> function distance(){ ... }
 ```
 
-The distance function could be written equivalently as:
+The a more traditional currying approach could be written equivalently as:
 
 ```js
 distance = _.curry(function distance(a, b){
@@ -30,6 +30,8 @@ distance = _.curry(function distance(a, b){
   return Math.sqrt( dx * dx + dy * dy )
 })
 ```
+
+###Pros / Cons
 
 The more traditional approach keeps the function intent separate from the currying implmentation.  This is definitely an advantage in most contexts.  But the self currying approach has its own advantages.
 
