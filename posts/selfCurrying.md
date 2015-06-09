@@ -40,9 +40,7 @@ The more traditional approach keeps the function intent separate from the curryi
 - No dependencies on external libraries
 - Custom behaviour depending on arguments passed
 
-The first three advantages are pretty obvious.  The fourth option however seems like an idea looking for a practical application.
-
-One such application could be returning a distance of `Infinity` when no arguments are received.
+The first three advantages are pretty obvious.  The fourth option however seems like an idea that lacks a practical application.  A practical use case could be returning a distance of `Infinity` when no arguments are received.
 
 ```js
 distance = function distance(a, b){
