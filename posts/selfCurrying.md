@@ -47,8 +47,11 @@ Cons:
 - Less robust.
 - Possibly suprising behaviour
 - Reduced clarity
+ 
+###Why custom currying behaviour
 
-The first three advantages are pretty obvious.  The fourth option however seems like an idea that lacks a practical application.  A practical use case could be returning a distance of `Infinity` when no arguments are received.
+At first glance, custom currying behaviour could seem like an idea that lacks a practical application.  
+However, a practical use case could be returning a distance of `Infinity` when no arguments are received.
 
 ```js
 distance = function distance(a, b){
@@ -63,4 +66,4 @@ distance = function distance(a, b){
 }
 ```
 
-This may violate the principle of least suprise though.  So at the end of the day this may just be a neat party trick, or useful when rapidly prototyping.  
+Now the distance function as a similar behaviour to `_.min() //=> Infinity`.  This may violate the principle of least suprise.  So at the end of the day this may just be a neat party trick, or useful when rapidly prototyping.
