@@ -48,7 +48,7 @@ Cons:
 - Possibly suprising behaviour
 - Reduced clarity
  
-###Why custom currying behaviour
+###Custom currying behaviour
 
 At first glance, custom currying behaviour could seem like an idea that lacks a practical application.  
 However, a practical use case could be returning a distance of `Infinity` when no arguments are received.
