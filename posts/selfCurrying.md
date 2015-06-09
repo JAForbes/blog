@@ -66,4 +66,10 @@ distance = function distance(a, b){
 }
 ```
 
-Now the distance function as a similar behaviour to `_.min() //=> Infinity`.  This may violate the principle of least suprise.  So at the end of the day this may just be a neat party trick, or useful when rapidly prototyping.
+Now the distance function has a similar behaviour to `_.min() //=> Infinity`.  This may violate the principle of least suprise though.
+
+###Conclusion
+
+At the end of the day this may just be a neat party trick, or useful when rapidly prototyping.  Hopefully in sharing it, this technique could be useful to someone.  It may even shed some light on what currying is, and how it works.
+
+Thanks for reading.
