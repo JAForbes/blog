@@ -20,7 +20,7 @@ distance({x:3, y:0}, {x:0, y: 4}) //=> 5
 distance() //=> function distance(){ ... }
 ```
 
-The a more traditional currying approach could be written equivalently as:
+A more traditional approach to currying could be written equivalently as:
 
 ```js
 distance = _.curry(function distance(a, b){
