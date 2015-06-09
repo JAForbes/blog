@@ -2,7 +2,8 @@ posts = [
 	{
 		"name": "Self currying function",
 		"path": "posts/selfCurrying.md",
-		"created": "2015-06-08T01:38:58.538Z"
+		"created": "2015-06-08T01:38:58.538Z",
+		"twitter": "608189844146122752"
 	},
 	{
 		"name": "Hardcoding is great",
