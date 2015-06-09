@@ -35,14 +35,14 @@ distance = _.curry(function distance(a, b){
 
 The more traditional approach keeps the function intent separate from the currying implmentation.  This is definitely an advantage in most contexts.  But the self currying approach has its own advantages.
 
-Pros: 
+####Pros: 
 
 - Explict behaviour
 - Easier to debug
 - No dependencies on external libraries
 - Custom behaviour depending on arguments passed
 
-Cons:
+####Cons:
 
 - Less robust.
 - Possibly suprising behaviour
