@@ -19,3 +19,40 @@ distance({x:3, y:0}, {x:0, y: 4}) //=> 5
 
 distance() //=> function distance(){ ... }
 ```
+
+The distance function could be written equivalently as:
+
+```js
+distance = _.curry(function distance(a, b){
+  var dx = b.x - a.x
+  var dy = b.y - a.y
+
+  return Math.sqrt( dx * dx + dy * dy )
+})
+```
+
+The more traditional approach keeps the function intent separate from the currying implmentation.  This is definitely an advantage in most contexts.  But the self currying approach has its own advantages.
+
+- Explict behaviour
+- Easier to debug
+- No dependencies on external libraries
+- Custom behaviour depending on arguments passed
+
+The first three advantages are pretty obvious.  The fourth option however seems like an idea looking for a practical application.
+
+One such application could be returning a distance of `Infinity` when no arguments are received.
+
+```js
+distance = function distance(a, b){
+  //if(!a) return distance
+  if(!a) return Infinity
+  
+  if(!b) return distance.bind(null, a)
+  var dx = b.x - a.x
+  var dy = b.y - a.y
+
+  return Math.sqrt( dx * dx + dy * dy )
+}
+```
+
+This may violate the principle of least suprise though.  So at the end of the day this may just be a neat party trick, or useful when rapidly prototyping.  
