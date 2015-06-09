@@ -35,10 +35,18 @@ distance = _.curry(function distance(a, b){
 
 The more traditional approach keeps the function intent separate from the currying implmentation.  This is definitely an advantage in most contexts.  But the self currying approach has its own advantages.
 
+Pros: 
+
 - Explict behaviour
 - Easier to debug
 - No dependencies on external libraries
 - Custom behaviour depending on arguments passed
+
+Cons:
+
+- Less robust.
+- Possibly suprising behaviour
+- Reduced clarity
 
 The first three advantages are pretty obvious.  The fourth option however seems like an idea that lacks a practical application.  A practical use case could be returning a distance of `Infinity` when no arguments are received.
 
