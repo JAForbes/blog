@@ -45,11 +45,6 @@ posts = [
 		"created": "2014-11-03T23:44:08Z"
 	},
 	{
-		"name": "Things to Keep In Mind",
-		"path": "https://raw.githubusercontent.com/JAForbes/thingstokeepinmind/master/readme.md",
-		"created" : "2014-09-06T03:08:14Z"
-	},
-	{
 		"name": "Google Glass",
 		"path": "posts/GoogleGlass.md",
 		"created": "2014-08-03T23:52:20Z"
