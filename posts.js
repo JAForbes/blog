@@ -1,5 +1,10 @@
 posts = [
 	{
+		"name": "Philosophies.  Not Frameworks.",
+		"path": "posts/philosophies-vs-frameworks.md",
+		"created": "2015-10-17T01:38:58.538Z"
+	},
+	{
 		"name": "Self currying function",
 		"path": "posts/selfCurrying.md",
 		"created": "2015-06-08T01:38:58.538Z",
