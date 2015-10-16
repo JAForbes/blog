@@ -2,7 +2,8 @@ posts = [
 	{
 		"name": "Philosophies.  Not Frameworks.",
 		"path": "posts/philosophies-vs-frameworks.md",
-		"created": "2015-10-16T22:38:58.538Z"
+		"created": "2015-10-16T22:38:58.538Z",
+		"twitter": "655150395614892034"
 	},
 	{
 		"name": "Self currying function",
