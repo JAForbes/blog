@@ -41,9 +41,12 @@ function PostBody(html){
 
 function Bio(){
 	return '<div class="bio">'+
-		'<img src="img/bio.jpeg"/>'+
-		'<p>' +"Hi!  I'm Someone! This is a bio.  Good day!"+'</p>' +
+		'<img src="https://pbs.twimg.com/profile_images/571253075579396096/_csqQudw.jpeg"/>'+
+		'<p> Hi! I\'m James Forbes.</p>' +
+		'<p><a href="https://babyx.bandcamp.com/"> (Band Music) </a></p>' +
+		'<p><a href="https://soundcloud.com/gazevectors/sets/impossible-lake"> (Solo Music) </a></p>' +
 		'<p><a href="https://twitter.com/james_a_forbes"> (Twitter) </a></p>' + 
+		'<p><a href="http://canyon.itch.io/"> (Games) </a></p>' +
 		'<p><a href="https://github.com/JAForbes"> (GitHub) </a></p>' + 
 	'</div>'
 }
