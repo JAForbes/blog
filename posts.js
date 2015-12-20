@@ -1,5 +1,17 @@
 posts = [
 	{
+		"name": "Philosophies.  Not Frameworks.",
+		"path": "posts/philosophies-vs-frameworks.md",
+		"created": "2015-10-16T22:38:58.538Z",
+		"twitter": "655150395614892034"
+	},
+	{
+		"name": "Self currying function",
+		"path": "posts/selfCurrying.md",
+		"created": "2015-06-08T01:38:58.538Z",
+		"twitter": "608189844146122752"
+	},
+	{
 		"name": "Hardcoding is great",
 		"path": "posts/hardcoding.md",
 		"created": "2015-01-31T03:37:30.456Z",
@@ -14,7 +26,8 @@ posts = [
 	{
 		"name": "A practical example using Ramda: Scraping",
 		"path": "posts/ramdaScrape.md",
-		"created":"2015-01-08T02:38:59.976Z"
+		"created":"2015-01-08T02:38:59.976Z",
+		"twitter": "564380935437578240"
 	},
 	{
 		"name": "Currying vs Hurrying",
