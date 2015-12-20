@@ -112,16 +112,20 @@ onPageReady = function(){
 		'</div>'+
 		PhoneNav()
 	).appendTo('body')
-	window.location.hash = window.location.hash || '!'+posts[0].path.replace('.md','')
 
-	window.onhashchange = function(){
+    function onhashchange(){
 		var path = window.location.hash
 		if(path.indexOf('post') > -1){
 			LoadPost(path)
 		}
 	}
+    
+    window.location.hash.indexOf('posts') > -1 && onhashchange()
+    window.location.hash = window.location.hash || '!'+posts[0].path.replace('.md','')
+    
+    window.onhashchange = onhashchange
 
-	window.onhashchange()
+	
 
 	// media queries don't activate immediately on iphone 3gs
 	// no idea why
