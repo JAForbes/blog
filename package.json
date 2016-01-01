@@ -17,7 +17,12 @@
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
-    "bluebird": "^2.9.6",
-    "jquery": "^2.1.3"
+    "flyd": "^0.2.0",
+    "lodash": "^3.10.1",
+    "snabbdom": "^0.2.8"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "uglifyjs": "^2.4.10"
   }
 }

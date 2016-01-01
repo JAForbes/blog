@@ -1,143 +1,83 @@
-function List(posts){
-	return '<ul class="posts">' +
-		posts
-		.map(function(post){
-			return '<a href="#!'+post.path.replace('.md','')+'">'+ post.name +'</a>' +
-			'<div class="tiny">' +moment(post.created).fromNow() + '</div>'
-		})
-		.map(function(anchor){
-			return '<li>'+anchor+'</li>'
-		}).join('') +
-	"</ul>"
-}
-
-function TwitterDiscussion(post){
-	if(post.twitter){
-		twttr.widgets.createTweet(
-			post.twitter,
-			$('.post .content')[0],
-			{
-				theme: 'light'
-			}
-		);
+var _ = {
+	pipe: require('lodash/function/flow'),
+	get: require('lodash/utility/property'),
+	add: function(a, b){
+		return a + b
+	},
+	multiply: function(a, b){
+		return a * b
 	}
 }
 
-function PhoneNav(){
-	return (
-		"<div class='phone-menu-nav noselect'>"+
-			"<p>&#9776;</p>"+
-		"</div>"
-	)
+var f = require('flyd')
+	f.lift = require('flyd/module/lift')
+
+var snabbdom = require('snabbdom');
+var patch = snabbdom.init([ // Init patch function with choosen modules
+  require('snabbdom/modules/class'), // makes it easy to toggle classes
+  require('snabbdom/modules/props'), // for setting properties on DOM elements
+  require('snabbdom/modules/style'), // handles styling on elements with support for animations
+  require('snabbdom/modules/eventlisteners'), // attaches event listeners
+]);
+
+var h = require('snabbdom/h')
+
+//v = value stream
+var v = f.stream
+
+var mount = require('./mycle')
+
+//takes a stream of views and creates a new view stream div wrapper
+function div_deps(deps){
+	return f.combine(function(){
+		return h('div', deps.map(function(d){ return d() }))
+	}, deps)
 }
 
-function PostBody(html){
-	if(!$('.post')[0]){
-		$('<div class="post"><div class="content"></div></div>')
-			.appendTo('body')
-	}
-	$('.post .content').empty().html(html)
-}
+function input(label, stream){
+	var oninput = _.pipe(_.get('target.value'), Number, stream)
 
-function Bio(){
-	return '<div class="bio">'+
-		'<img src="https://pbs.twimg.com/profile_images/571253075579396096/_csqQudw.jpeg"/>'+
-		'<p> Hi! I\'m James Forbes.</p>' +
-		'<p><a href="https://babyx.bandcamp.com/"> (Band Music) </a></p>' +
-		'<p><a href="https://soundcloud.com/gazevectors/sets/impossible-lake"> (Solo Music) </a></p>' +
-		'<p><a href="https://twitter.com/james_a_forbes"> (Twitter) </a></p>' + 
-		'<p><a href="http://canyon.itch.io/"> (Games) </a></p>' +
-		'<p><a href="https://github.com/JAForbes"> (GitHub) </a></p>' + 
-	'</div>'
-}
-
-function LoadPost(path){
-	path = path.replace('#!','')
-
-	var post = _.findWhere(posts,{path: path+'.md'})
-	$.get(path+'.md')
-		.then(_.identity)
-		.then(marked)
-		.then(PostBody)
-		.then(syntaxHighlighting)
-		.then(TwitterDiscussion.bind(null,post))
-}
-
-function syntaxHighlighting(){
-	$('pre code').each(function(i, block) {
-			hljs.highlightBlock(block);
-	});
-}
-
-function SidebarTransitions(){
-	var $phoneNav = $('.phone-menu-nav')
-
-		var menuY = 0;
-
-		$phoneNav.click(function(){
-			var $sidebar = $('.sidebar')
-			if( $sidebar.hasClass('show') ){
-				$('.sidebar').removeClass('show')
-			} else {
-				$('.sidebar').css({
-					top: window.scrollY
+	return stream.map(function(){
+		return h('p', [
+			h('label', [
+				label,
+				h('input', {
+					props: { type:'number', value: stream() },
+					on: { input: oninput }
 				})
-				$('.sidebar').addClass('show')
-				menuY = window.scrollY
-			}
-		})
-		onFrame = function(){
-			var h = $('.sidebar').height()
-			var Y = window.scrollY
-			var H = window.innerHeight
-			if( $('.sidebar').hasClass('show') ){
-				if( Y > menuY + h-H) {
-					document.body.scrollTop = menuY + h-H
-				} else if (Y < menuY) {
-					document.body.scrollTop = menuY
-				}
-			}
-			requestAnimationFrame(onFrame)
-		}
-		onFrame()
-	
-	$('a').click(function(){
-		document.body.scrollTop = 0;
-		$('.sidebar').removeClass('show')
-		window.scrollTop = 0
+			])
+		])
 	})
 }
 
-onPageReady = function(){
-
-	$(
-		'<div class="sidebar">'+
-		Bio() +
-		List(posts) +
-		'</div>'+
-		PhoneNav()
-	).appendTo('body')
-
-    function onhashchange(){
-		var path = window.location.hash
-		if(path.indexOf('post') > -1){
-			LoadPost(path)
-		}
-	}
-    
-    window.location.hash.indexOf('posts') > -1 && onhashchange()
-    window.location.hash = window.location.hash || '!'+posts[0].path.replace('.md','')
-    
-    window.onhashchange = onhashchange
-
-	
-
-	// media queries don't activate immediately on iphone 3gs
-	// no idea why
-	setTimeout(function(){
-		SidebarTransitions()
-	},1000)
-
+function display(label, stream){
+	return stream.map( function(){
+		return h('p', label+stream())
+	})
 }
 
-$(onPageReady)
+//state streams
+var a = v(1)
+var b = v(2)
+var sum = f.lift(_.add, a, b)
+var product = f.lift(_.multiply, a, b)
+
+//child view streams
+var input_a = input('a: ', a)
+var input_b = input('b: ', b)
+var display_sum = display('a + b: ', sum)
+var display_product = display('a * b: ', product)
+
+//parent view streams
+var inputs = div_deps([input_a, input_b])
+var displays = div_deps([display_sum, display_product])
+
+//root view
+var view = div_deps([inputs, displays])
+
+function start(){
+	mount(patch, document.body, view)
+}
+
+document.readyState === "complete" ? start() :
+document.addEventListener('DOMContentLoaded', start)
