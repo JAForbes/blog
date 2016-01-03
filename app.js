@@ -58,6 +58,7 @@ function sidebar(posts){
 				h('a', {
 					props: { href: href },
 					on: { click: function(e){
+						scrollBy(0, -scrollY)
 						url(href)
 						e.preventDefault()
 					} }
