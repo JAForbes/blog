@@ -8,6 +8,10 @@ var patch = snabbdom.init([ // Init patch function with choosen modules
   require('snabbdom/modules/eventlisteners'), // attaches event listeners
 ]);
 
+
+var url = require('./framework/router')('search')
+var begin = require('./framework/begin')
+
 var marked = require('marked')
 
 require('fetch-polyfill')
@@ -29,8 +33,6 @@ var f = require('flyd')
 	f.dropRepeats = require('flyd/module/droprepeats').dropRepeats
 
 var combine = f.lift
-var router = require('./router')
-var url = router('search')
 
 if(window.location.hostname == 'localhost'){
 	global.f = f
@@ -43,8 +45,6 @@ var h = require('snabbdom/h')
 
 //v = value stream
 var v = f.stream
-
-var begin = require('./begin')
 
 var iso8601 = function(time){
 	return new Date(time).toISOString().slice(0,10)
@@ -61,7 +61,7 @@ function sidebar(posts){
 					props: { href: href },
 					on: { click: function(e){
 						scrollBy(0, -scrollY)
-						url(href)
+						url('/' + href)
 						e.preventDefault()
 					} }
 				}, [ post.name ]),
@@ -119,7 +119,7 @@ function postsComponent(v){
 	.then(postsCache)
 	.then(function(){
 		if( url().indexOf('posts') == -1){
-			url(posts()[0].path.replace('.md',''))
+			url('/'+posts()[0].path.replace('.md',''))
 		}
 	})
 
@@ -139,15 +139,18 @@ function postsComponent(v){
 	return view
 }
 
-function appstart(){
-	var domstream = f.dropRepeats(url).map(function(url){
-		if(url)
-		//match paths and choose which component to mount
-		return postsComponent
-	})
-	begin(patch, v(container), domstream)
+function simpleComponent(v){
+	return v(
+		h('h1', 'Simple')
+	)
 }
 
+var component = f.dropRepeats(url).map(function(url){
+	if( url == '/simple' ){
+		return simpleComponent
+	} else {
+		return postsComponent
+	}
+})
 
-document.readyState === "complete" ? appstart() :
-document.addEventListener('DOMContentLoaded', appstart)
+begin(patch, v(container), component)
