@@ -20,6 +20,7 @@
     "fetch-polyfill": "^0.8.2",
     "flyd": "^0.2.0",
     "lodash": "^3.10.1",
+    "marked": "^0.3.5",
     "snabbdom": "^0.2.8"
   },
   "devDependencies": {

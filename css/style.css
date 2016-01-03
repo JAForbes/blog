@@ -48,7 +48,8 @@ body {
     margin-bottom:1em;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 10vw;
+	height: 10vw;
     max-width:150px;
     text-align: left;
     border-radius: 100%;
@@ -64,6 +65,8 @@ body {
   margin-top: 2em;
   background-color: #EEE;
   padding: 0.5em;
+  min-height: 100px;
+  width: 100%;
 }
 .bio {
   position: relative;

@@ -8,6 +8,8 @@ var patch = snabbdom.init([ // Init patch function with choosen modules
   require('snabbdom/modules/eventlisteners'), // attaches event listeners
 ]);
 
+var marked = require('marked')
+
 require('fetch-polyfill')
 
 var R = {
@@ -95,32 +97,51 @@ function bio(){
 	])
 }
 
-var posts = v([])
+var postsCache = v([])
 
 function postsComponent(v){
+	console.log('postsComponent')
 
+	var postBody = v("")
+
+	if( url().indexOf('posts') > -1){
+		fetch(url()+'.md').then(function(response){
+			return response.text()
+		})
+		.then(marked)
+		.then(postBody)
+	}
+	var posts = v(postsCache())
 	fetch('posts.json').then(function(response){
 		return response.json()
 	})
 	.then(posts)
+	.then(postsCache)
 	.then(function(){
 		if( url().indexOf('posts') == -1){
 			url(posts()[0].path.replace('.md',''))
 		}
 	})
 
-	var view = posts.map(function(posts){
-		return h('div', { class: { sidebar: true } }, [
-			bio(),
-			sidebar(posts)
+	var view = combine(function(posts, postBody){
+		return h('div', { class: { container: true }}, [
+			h('div', { class: { sidebar: true } }, [
+				bio(),
+				sidebar(posts),
+			]),
+			h('div', {
+				class: { post: true },
+				props: { innerHTML: postBody }
+			})
 		])
-	})
+	}, posts, postBody)
 
 	return view
 }
 
 function appstart(){
 	var domstream = f.dropRepeats(url).map(function(url){
+		if(url)
 		//match paths and choose which component to mount
 		return postsComponent
 	})
