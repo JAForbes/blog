@@ -29,10 +29,9 @@ var R = {
 }
 
 var f = require('flyd')
-	f.lift = require('flyd/module/lift')
-	f.dropRepeats = require('flyd/module/droprepeats').dropRepeats
+var unique = require('flyd/module/droprepeats').dropRepeats
 
-var combine = f.lift
+var combine = require('flyd/module/lift')
 
 if(window.location.hostname == 'localhost'){
 	global.f = f
@@ -119,6 +118,7 @@ function postsComponent(v){
 	.then(postsCache)
 	.then(function(){
 		if( url().indexOf('posts') == -1){
+			console.log('showing default post')
 			url('/'+posts()[0].path.replace('.md',''))
 		}
 	})
@@ -145,8 +145,20 @@ function simpleComponent(v){
 	)
 }
 
-var component = f.dropRepeats(url).map(function(url){
-	if( url == '/simple' ){
+function nestedComponent(v){
+	var existing = simpleComponent(v)
+
+	return v(
+		h('div', [
+			simpleComponent(v)(),
+			existing()
+		])
+	)
+}
+var component = unique(url).map(function(url){
+	if( url == '/nested' ){
+		return nestedComponent
+	} else if( url == '/simple' ){
 		return simpleComponent
 	} else {
 		return postsComponent

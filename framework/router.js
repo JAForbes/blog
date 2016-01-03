@@ -12,7 +12,7 @@ function mode_to_char(mode){
 }
 
 function currentPath(mode, mode_char){
-	window.location[mode()].replace(mode_char(), "")
+	return window.location[mode()].replace(mode_char(), "")
 }
 
 function router(options){
