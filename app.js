@@ -12,8 +12,10 @@ var _ = {
 
 var f = require('flyd')
 	f.lift = require('flyd/module/lift')
+	f.dropRepeats = require('flyd/module/droprepeats').dropRepeats
+
 var combine = f.lift
-var url = require('./router')()
+var url = require('./router')('search')
 
 if(window.location.hostname == 'localhost'){
 	global.f = f
@@ -35,7 +37,7 @@ var h = require('snabbdom/h')
 //v = value stream
 var v = f.stream
 
-var mount = require('./mycle')
+var mount = require('./mount')
 
 //takes a stream of views and creates a new view stream div wrapper
 function div_deps(deps){
@@ -67,17 +69,75 @@ function display(label, stream){
 }
 
 function start(){
-	// var history = require('history').createHistory()
-	// var location = v()
-	// var hash = location.map(_.get('hash'))
-	// var search = location.map(_.get('search'))
+	var domstream = f.dropRepeats(url).map(function(url){
+		//match paths and choose which component to mount
+		if(url.indexOf('time') > -1){
+			return timeComponent
+		} else if( url.indexOf('default') > -1) {
+			return defaultComponent
+		}
+	})
+	begin(domstream)
+}
 
-	// f.on(console.log.bind(console), location)
-	// f.on(console.log.bind(console), hash)
-	// f.on(console.log.bind(console), search)
-	// history.listen(location)
+function begin(domstream){
+	var source = v()
+	var olddom = v(document.body)
 
-	mount(patch, document.body, Welcome())
+	f.on(function(newdom){
+		if( newdom ){
+			console.log('newdom', newdom)
+			//kill streams of old component
+			source(true)
+
+			//kill the kill stream
+			source.end(true)
+
+			//create a new source for the component
+			//it will be manually ended
+			//but it can also end if the olddom is ended
+			source = f.endsOn(olddom.end, v())
+
+			function scoped(value){
+				return f.endsOn(source, v(value))
+			}
+
+			mount(patch, olddom, newdom(scoped) )
+		}
+	}, domstream)
+
+	return olddom
+}
+
+
+function timeComponent(v){
+	console.log('timeComponent', v+"")
+	var time = v()
+	var onsecond = function(){
+		console.log('onsecond')
+		time(new Date().getTime())
+	}
+
+
+	var interval_id = setInterval(onsecond,1000)
+	f.on(function(){
+		clearInterval(interval_id)
+	}, time.end)
+	var view = time.map(function(){
+		return h('div', [
+			h('p', 'time: '+ time())
+		])
+	})
+	onsecond()
+	return view
+}
+
+function defaultComponent(v){
+	return v(
+		h('div', [
+			h('h1', 'Default')
+		])
+	)
 }
 
 function Welcome(){
@@ -103,13 +163,6 @@ function Welcome(){
 
 	return view
 }
-
-
-var mode = v('search')
-var mode_char = mode.map(function(mode){
-  return mode == 'search' ? '?' : '#'
-})
-
 
 document.readyState === "complete" ? start() :
 document.addEventListener('DOMContentLoaded', start)

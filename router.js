@@ -1,7 +1,10 @@
 var f = require('flyd')
+	f.dropRepeats = require('flyd/module/droprepeats').dropRepeats
+
 var v = f.stream
 
 var I = function(v){ return v }
+
 function mode_to_char(mode){
 	return {
 		pathname: '/', search: '?', hash: '#'
@@ -16,15 +19,17 @@ module.exports = function router(options){
 	var popstate = v()
 
 	//external getter setter stream for pushing state
-	var url = popstate.map(I)
+	var external_url = f.dropRepeats(popstate.map(I))
+	var url = f.dropRepeats(external_url)
 
 	//make all streams end when url ends
 	//so the outside world can end the stream
-	f.endsOn(url, popstate)
-	f.endsOn(url, mode)
+	f.endsOn(url.end, popstate)
+	f.endsOn(url.end, mode)
 
 	//if its from the backbutton, do not push state
 	f.on(function(url){
+		console.log('on', popstate(), url)
 		if(popstate() != url){
 			history.pushState({}, '', mode_char() + url)
 		}
@@ -38,5 +43,5 @@ module.exports = function router(options){
 	//initial state push
 	onpopstate()
 
-	return url
+	return external_url
 }
