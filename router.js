@@ -10,6 +10,11 @@ function mode_to_char(mode){
 		pathname: '/', search: '?', hash: '#'
 	}[mode]
 }
+
+function currentPath(mode, mode_char){
+	window.location[mode()].replace(mode_char(), "")
+}
+
 module.exports = function router(options){
 	options = options || {}
 	var mode = v(options.mode || 'search')
@@ -29,8 +34,7 @@ module.exports = function router(options){
 
 	//if its from the backbutton, do not push state
 	f.on(function(url){
-		console.log('on', popstate(), url)
-		if(popstate() != url){
+		if(currentPath(mode, mode_char) != url){
 			history.pushState({}, '', mode_char() + url)
 		}
 	}, url)

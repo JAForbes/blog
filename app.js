@@ -86,7 +86,6 @@ function begin(domstream){
 
 	f.on(function(newdom){
 		if( newdom ){
-			console.log('newdom', newdom)
 			//kill streams of old component
 			source(true)
 
@@ -111,10 +110,8 @@ function begin(domstream){
 
 
 function timeComponent(v){
-	console.log('timeComponent', v+"")
 	var time = v()
 	var onsecond = function(){
-		console.log('onsecond')
 		time(new Date().getTime())
 	}
 
