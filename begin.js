@@ -1,0 +1,32 @@
+var f = require('flyd')
+var v = f.stream
+var mount = require('./mount')
+
+function begin(patch, olddom, domstream){
+	var source = v()
+
+	f.on(function(newdom){
+		if( newdom ){
+			//kill streams of old component
+			source(true)
+
+			//kill the kill stream
+			source.end(true)
+
+			//create a new source for the component
+			//it will be manually ended
+			//but it can also end if the olddom is ended
+			source = f.endsOn(olddom.end, v())
+
+			function scoped(value){
+				return f.endsOn(source, v(value))
+			}
+
+			mount(patch, olddom, newdom(scoped) )
+		}
+	}, domstream)
+
+	return olddom
+}
+
+module.exports = begin

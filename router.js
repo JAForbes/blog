@@ -15,7 +15,7 @@ function currentPath(mode, mode_char){
 	window.location[mode()].replace(mode_char(), "")
 }
 
-module.exports = function router(options){
+function router(options){
 	options = options || {}
 	var mode = v(options.mode || 'search')
 	var mode_char = mode.map(mode_to_char)
@@ -49,3 +49,4 @@ module.exports = function router(options){
 
 	return external_url
 }
+module.exports = router

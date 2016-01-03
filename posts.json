@@ -1,4 +1,4 @@
-posts = [
+[
 	{
 		"name": "Philosophies.  Not Frameworks.",
 		"path": "posts/philosophies-vs-frameworks.md",
