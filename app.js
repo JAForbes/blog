@@ -10,10 +10,10 @@ var patch = snabbdom.init([ // Init patch function with choosen modules
 
 require('fetch-polyfill')
 
-var _ = {
+var R = {
 	pipe: require('lodash/function/flow'),
 	get: require('lodash/utility/property'),
-	constant: require('lodash/utility/constant'),
+	always: require('lodash/utility/constant'),
 	add: function(a, b){
 		return a + b
 	},
@@ -32,7 +32,7 @@ var url = router('search')
 
 if(window.location.hostname == 'localhost'){
 	global.f = f
-	global._ = _
+	global._ = R
 	global.v = f.stream
 	global.url = url
 }
@@ -83,12 +83,13 @@ function bio(){
 		h('img', { props: {src: 'http://pbs.twimg.com/profile_images/571253075579396096/_csqQudw.jpeg'} }),
 		h('p', 'Hi I\'m James Forbes.'),
 		h('div',
-			links.map(function(link){
-				return h('a', { props: { href: link.href }}, link.text)
-			})
-			.map(function(a){
-				return h('p', [a])
-			})
+			links
+				.map(function(link){
+					return h('a', { props: { href: link.href }}, link.text)
+				})
+				.map(function(a){
+					return h('p', [a])
+				})
 		)
 	])
 }
@@ -101,6 +102,11 @@ function postsComponent(v){
 		return response.json()
 	})
 	.then(posts)
+	.then(function(){
+		if( url().indexOf('posts') == -1){
+			url(posts()[0].path.replace('.md',''))
+		}
+	})
 
 	var view = posts.map(function(posts){
 		return h('div', { class: { sidebar: true } }, [
