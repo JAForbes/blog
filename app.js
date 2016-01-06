@@ -1,5 +1,9 @@
 /* global fetch */
 /* global container */
+window.onerror = alert
+
+global.Promise = require('es6-promise').Promise
+
 var snabbdom = require('snabbdom');
 var patch = snabbdom.init([ // Init patch function with choosen modules
   require('snabbdom/modules/class'), // makes it easy to toggle classes
@@ -14,7 +18,9 @@ var begin = require('./framework/begin')
 var fromEvent = require('./framework/streamFromEvent')
 var marked = require('marked')
 
-require('fetch-polyfill')
+
+require('fetch-ie8')
+
 
 var R = {
 	pipe: require('ramda/src/pipe'),
