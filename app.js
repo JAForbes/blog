@@ -11,31 +11,29 @@ var patch = snabbdom.init([ // Init patch function with choosen modules
 
 var url = require('./framework/router')('search')
 var begin = require('./framework/begin')
-
+var fromEvent = require('./framework/streamFromEvent')
 var marked = require('marked')
 
 require('fetch-polyfill')
 
 var R = {
-	pipe: require('lodash/function/flow'),
-	get: require('lodash/utility/property'),
-	always: require('lodash/utility/constant'),
-	add: function(a, b){
-		return a + b
-	},
-	multiply: function(a, b){
-		return a * b
-	}
+	pipe: require('ramda/src/pipe'),
+	pipeP: require('ramda/src/pipeP'),
+	invoker: require('ramda/src/invoker'),
+	prop: require('ramda/src/prop'),
+	partial: require('ramda/src/partial'),
+	identity: require('ramda/src/identity')
 }
+var I = R.identity
 
 var f = require('flyd')
 var unique = require('flyd/module/droprepeats').dropRepeats
-
+var filter = require('flyd/module/filter')
 var combine = require('flyd/module/lift')
 
 if(window.location.hostname == 'localhost'){
 	global.f = f
-	global._ = R
+	global.R = R
 	global.v = f.stream
 	global.url = url
 }
@@ -51,18 +49,20 @@ var iso8601 = function(time){
 
 function sidebar(posts){
 
-	return h('ul', { class: { posts: true } },
+	return h('ul', { class: { posts: true} },
 		posts.map(function(post){
 			var href = post.path.replace('.md', '')
 
 			return h('li', { key: href }, [
 				h('a', {
 					props: { href: href },
-					on: { click: function(e){
-						scrollBy(0, -scrollY)
-						url('/' + href)
-						e.preventDefault()
-					} }
+					on: {
+						click: function(e){
+							scrollBy(0, -scrollY)
+							url('/' + href)
+							e.preventDefault()
+						}
+					}
 				}, [ post.name ]),
 				h('div', { class: { tiny: true} },
 					iso8601(post.created)
@@ -82,7 +82,7 @@ function bio(){
 	]
 
 	return h('div', { props: { className: 'bio' }}, [
-		h('img', { props: {src: 'http://pbs.twimg.com/profile_images/571253075579396096/_csqQudw.jpeg'} }),
+		h('img', { props: {src: 'img/bio.jpeg'} }),
 		h('p', 'Hi I\'m James Forbes.'),
 		h('div',
 			links
@@ -96,45 +96,82 @@ function bio(){
 	])
 }
 
+function toggle(stream){
+	return stream(!stream())
+}
+
+function phoneNav(show_sidebar$){
+	return h('div', {
+		class: { 'phone-menu-nav': true, noselect: true },
+		on: { click: [toggle, show_sidebar$] },
+	}, [
+		h('p', { props: { innerHTML: '&#9776;' } } )
+	])
+}
+
 var postsCache = v([])
 
 function postsComponent(v){
-	console.log('postsComponent')
 
-	var postBody = v("")
+	var show_sidebar = v(false)
+	var text = R.invoker(0, 'text')
+	var fetchBlogHTML = R.pipeP(fetch,text,marked)
 
-	if( url().indexOf('posts') > -1){
-		fetch(url()+'.md').then(function(response){
-			return response.text()
-		})
-		.then(marked)
-		.then(postBody)
+	var markdown_url = v()
+
+	if(url().indexOf('posts') > -1){
+		markdown_url( url() + '.md')
 	}
+
+	var postBody = f.map(fetchBlogHTML, markdown_url)
+		postBody("")
+
+	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	var posts = v(postsCache())
+
 	fetch('posts.json').then(function(response){
 		return response.json()
 	})
-	.then(posts)
-	.then(postsCache)
-	.then(function(){
-		if( url().indexOf('posts') == -1){
-			console.log('showing default post')
-			url('/'+posts()[0].path.replace('.md',''))
-		}
+		.then(posts)
+		.then(postsCache)
+		.then(function(){
+			if( url().indexOf('posts') == -1){
+				console.log('showing default post')
+				url('/'+posts()[0].path.replace('.md',''))
+			}
+		})
+
+	var scrollY = fromEvent('scroll', v, function(){
+		return window.scrollY
 	})
 
-	var view = combine(function(posts, postBody){
+
+	var hidden_scrollY = f.scan(function(old){
+		return show_sidebar() ? old : scrollY()
+	}, 0, f.merge(scrollY, show_sidebar))
+
+	var model = [posts, postBody, show_sidebar, scrollY].reduce(f.merge, v())
+
+
+	var view = model.map(function(){
 		return h('div', { class: { container: true }}, [
-			h('div', { class: { sidebar: true } }, [
+			h('div', {
+					class: { sidebar: true, show: show_sidebar() },
+					style: {
+						transition: '1s',
+						transform: 'translate(0px, '+ hidden_scrollY() +'px)'
+					}
+				}, [
 				bio(),
-				sidebar(posts),
+				sidebar(posts()),
 			]),
 			h('div', {
 				class: { post: true },
-				props: { innerHTML: postBody }
-			})
+				props: { innerHTML: postBody() }
+			}),
+			phoneNav(show_sidebar)
 		])
-	}, posts, postBody)
+	})
 
 	return view
 }

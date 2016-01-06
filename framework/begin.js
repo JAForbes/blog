@@ -18,8 +18,8 @@ function begin(patch, olddom, domstream){
 			//but it can also end if the olddom is ended
 			source = f.endsOn(olddom.end, v())
 
-			function scoped(value){
-				return f.endsOn(source, v(value))
+			function scoped(){
+				return f.endsOn(source, v.apply(null, arguments))
 			}
 
 			mount(patch, olddom, newdom(scoped) )

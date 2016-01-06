@@ -19,8 +19,8 @@
   "dependencies": {
     "fetch-polyfill": "^0.8.2",
     "flyd": "^0.2.0",
-    "lodash": "^3.10.1",
     "marked": "^0.3.5",
+    "ramda": "^0.19.1",
     "snabbdom": "^0.2.8"
   },
   "devDependencies": {
