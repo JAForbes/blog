@@ -56,7 +56,6 @@ body {
   }
   .posts,.post{
     text-align: left;
-    margin-bottom: 1em;
   }
 .post h1{
   margin-bottom: 2em;
@@ -73,6 +72,7 @@ body {
   left: 10%;
   width: 80%;
   top: 10%;
+  padding: 1em;
 }
 .phone-menu-nav {
   display: none;

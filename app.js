@@ -141,26 +141,13 @@ function postsComponent(v){
 			}
 		})
 
-	var scrollY = fromEvent('scroll', v, function(){
-		return window.scrollY
-	})
-
-
-	var hidden_scrollY = f.scan(function(old){
-		return show_sidebar() ? old : scrollY()
-	}, 0, f.merge(scrollY, show_sidebar))
-
-	var model = [posts, postBody, show_sidebar, scrollY].reduce(f.merge, v())
+	var model = [posts, postBody, show_sidebar].reduce(f.merge, v())
 
 
 	var view = model.map(function(){
 		return h('div', { class: { container: true }}, [
 			h('div', {
 					class: { sidebar: true, show: show_sidebar() },
-					style: {
-						transition: '1s',
-						transform: 'translate(0px, '+ hidden_scrollY() +'px)'
-					}
 				}, [
 				bio(),
 				sidebar(posts()),
