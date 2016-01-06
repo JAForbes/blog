@@ -13,7 +13,7 @@ Real Problems
 To demonstrate the usefulness of these libraries, I'll try to make each example's scenario as realistic as possible - to ease the transition from learning to practical use.
 
 
-####`_.defer`: call a function, after all the other functions have finished being called.
+#### `_.defer`: call a function, after all the other functions have finished being called.
 
 
 ```javascript

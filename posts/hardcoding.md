@@ -11,7 +11,7 @@ by trying to save myself work in the future.
 So as an affirmation of the clarity that can be found by _hard_ coding.  Let's
 do a code review of this website.
 
-###Sidebar
+### Sidebar
 
 
 I have just rewritten the equivalent functionality of this website in 40 mins.  It
@@ -46,7 +46,7 @@ It took about 3 minutes to write.  And it works wonderfully.  And I will write a
 when I need different functionality.
 
 
-###Blog Meta Data
+### Blog Meta Data
 
 `List()` is easy to understand, but where does the input data come from.  What is `posts`?
 
@@ -87,7 +87,7 @@ posts = [
 When I publish a new post I'll just fill in this file myself. That means I have fine control over post dates,
 I don't have to make any network requests and the website is easier to review via source control.
 
-###Rendering the Blog Post
+### Rendering the Blog Post
 
 So the blog post meta data is hard coded.  But how is it rendered?
 
@@ -123,7 +123,7 @@ The `_.identity` is just a quick hack to prevent `$.get`'s extra arguments from 
 
 Because I am using markdown, I don't need a front end for editing blog posts.  I just use any old text editor.
 
-###Routes and Initialisation
+### Routes and Initialisation
 
 I've nearly shown you the entire source for the site.  All that is left is initializing the page and handling
 routes.

@@ -12,12 +12,13 @@ code, pre {
 }
 .post {
 	top: 0px;
-    position: absolute;
-    left: 0px;
-    padding: 2em;
-    overflow-y: scroll;
+	position: absolute;
+	left: 0px;
+	padding: 2em;
+	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
-    height: 100vh;
+	height: 100vh;
+	min-width: 100vw;
 	max-width: 100vw;
 }
 
@@ -29,7 +30,8 @@ code, pre {
 	transition: left 0.5s ease;
 
 	position: absolute;
-	width: 100%;
+
+	min-width: 100%;
 	z-index: 1;
 	background-color: white;
 	top: 0px;
@@ -68,22 +70,3 @@ code, pre {
 	height: 40px;
 	line-height: 40px;
 }
-/*.phone-menu-nav {
-	display: block;
-	position: fixed;
-	top: 0;
-	right : 0;
-	text-align: right;
-	z-index: 2;
-	float:right;
-	width:10px;
-}
-.phone-menu-nav p {
-	margin-right: 1em;
-	padding-left: 0.5em;
-	padding-right: 0.5em;
-	float:right;
-	box-shadow: 1px 2px 10px #DDD;
-	border-radius: 0.3em;
-	font-size: 1.1em;
-}*/

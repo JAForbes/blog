@@ -12,11 +12,23 @@ var patch = snabbdom.init([ // Init patch function with choosen modules
   require('snabbdom/modules/eventlisteners'), // attaches event listeners
 ]);
 
+var hljs = require('highlight.js')
 
 var url = require('./framework/router')('search')
 var begin = require('./framework/begin')
 var fromEvent = require('./framework/streamFromEvent')
 var marked = require('marked')
+
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
 
 
 require('fetch-ie8')
@@ -164,7 +176,17 @@ function postsComponent(v){
 			]),
 			h('div', {
 				class: { post: true },
-				props: { innerHTML: postBody() }
+				props: { innerHTML: postBody() },
+				hook: {
+					update: function(vnode){
+						Array.from(document.querySelectorAll('pre,code')).forEach(function(el){
+
+							hljs.highlightBlock(el)
+						})
+
+
+					}
+				}
 			}),
 			phoneNav(show_sidebar)
 		])

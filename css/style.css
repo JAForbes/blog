@@ -1,17 +1,24 @@
+
+@font-face {
+  font-family: "Inconsolata";
+  src: url(../font/Inconsolata-Regular.ttf) format("truetype");
+}
+h1 { font-family: "Inconsolata", sans-serif; }
+
 * {
   font-family: helvetica;
   box-sizing: border-box;
 }
-.hljs {
-  font-family: "Lucida Console"
+code span {
+  font-family: "Inconsolata", sans-serif;
 }
+/*
 code:not(.hljs) {
   background: #EEE;
   border-radius: 0.3em;
   padding: 0.2em;
-  color: #000000;
   padding: 0;
-}
+}*/
 a {color:black;}      /* unvisited link */
 a:visited {color:black;}  /* visited link */
 a:hover {color:blue;}  /* mouse over link */

@@ -20,6 +20,7 @@
     "es6-promise": "^3.0.2",
     "fetch-ie8": "^1.4.0",
     "flyd": "^0.2.0",
+    "highlight.js": "^9.0.0",
     "marked": "^0.3.5",
     "ramda": "^0.19.1",
     "snabbdom": "^0.2.8"

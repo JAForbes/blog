@@ -33,7 +33,7 @@ var denominator = 3
 
 for(var i = 0; i < input.length; i++){
   var divisibleByThree = input[i] % denominator == 0
-  
+
   if(divisibleByThree){
     results.push(input[i])
   }
@@ -50,14 +50,14 @@ var input = [0,1,2,3,4,5,6,7,8,9]
 var denominator = 3
 
 input.reduce(function(results,value){
-  
+
   divisibleByThree = value % denominator == 0
-  
+
   if(divisibleByThree){
     results.push(value)
   }
   return results
-  
+
 },[]) //=> [0,3,6,9]
 ```
 
@@ -67,11 +67,11 @@ all the control we need to implement any procedure.  But it doesn't give us cont
 
 >`reduce` is a mathematical construct.  We are trying to reduce the input to values that divide evenly by three.
 
->How the computer chooses to iterate over an array, is not relevant in most cases.  
+>How the computer chooses to iterate over an array, is not relevant in most cases.
 In the for loop, we are manually creating the `results`, the counting variable `i`, the while condition, and the increment amount.
 And by manually telling the computer how to iterate, we introduce _many_ possibilities of error.
 
->But, the real value of using `reduce` is not reducing error.  
+>But, the real value of using `reduce` is not reducing error.
 The real value in `reduce` is that it is the ultimate programming building block of algorithms.
 
 >Any iteration algorithm can be constructed in terms of `reduce`. Reduce is the genome of algorithms
@@ -95,7 +95,7 @@ useful that can be.
 
 Reduce will change how you think about programming and algorithms.  It allows you to write simpler maintainable code.
 
-###Array::forEach
+### Array::forEach
 
 ```js
 
@@ -107,22 +107,22 @@ var input = [0,1,2,3,4,5,6,7,8,9]
 var denominator = 3
 
 input.forEach(function(value){
-  
+
   divisibleByThree = value % denominator == 0
   if(divisibleByThree){
-    
+
     //We've met our if condition
     //Now we can push the matching value into our results
-    results.push(value) 
-      
+    results.push(value)
+
   }
-  
+
 })
 
 results //=> [0,3,6,9]
 ```
 
-`forEach` is some sugar on top of a for loop.  It will call some function 
+`forEach` is some sugar on top of a for loop.  It will call some function
 as many times as there are items in your array.  And it will pass each
 item in your array to that function.
 
@@ -131,8 +131,8 @@ store some results we need to make sure to set up those results before hand.
 
 This doesn't seem like a big deal, but it is.  It means we can't easily use this function elsewhere.
 The function we constructed relies on some external variable called `results`.
- 
-###Array::map
+
+### Array::map
 
 `map` solves this problem elegantly, by automatically adding the result of your function to an array.
 
@@ -153,24 +153,24 @@ And now we need to filter them out.
 
 ```js
 input.map(function(value){
-  
+
   divisibleByThree = value % denominator == 0
   if(divisibleByThree){
-    
+
     //We've met our if condition
     //By simply returning it, it is added to our results
     return value
-    
+
   }
-  
+
 }) //=> [0,undefined,undefined,3,undefined,undefined,6,undefined,undefined,9]
 ```
 
-###Control
+### Control
 
 
 At this point `forEach` may seem like a good option.  But then we are right
-back to writing functions that we can't reuse.  
+back to writing functions that we can't reuse.
 
 We need more control over the internals of our iteration.  But we don't want to
 rely on external variables, because then we can't easily reuse our functions.
@@ -188,16 +188,16 @@ whereTheyAreStored = []
 //the second argument is the current value of the array, just like map/forEach
 
 input.reduce(function(whereTheyAreStored, value){
-  
+
   //when to store
   if(condition) {
       //what we store
-      whereTheyAreStored.push(value)  
+      whereTheyAreStored.push(value)
   }
-  
+
   //return our storage so the next function can use it
   return whereTheyAreStored;
-  
+
 },whereTheyAreStored)
 
 ```
@@ -211,7 +211,7 @@ From there you can pair it back down.
 Where were we?
 --------------
 
-We were trying to find all the values in a given array, that divide evenly by 
+We were trying to find all the values in a given array, that divide evenly by
 three.  Let's take another look at the `reduce` example I gave at the top of this
 post.
 
@@ -221,14 +221,14 @@ var input = [0,1,2,3,4,5,6,7,8,9]
 var denominator = 3
 
 input.reduce(function(results,value){
-  
+
   divisibleByThree = value % denominator == 0
-  
+
   if(divisibleByThree){
     results.push(value)
   }
   return results
-  
+
 },[]) //=> [0,3,6,9]
 ```
 
@@ -263,14 +263,14 @@ And it will be magical!
 
 filter = function(condition,input){
   return input.reduce(function(results,value){
-    
+
     if(condition(value)){
-      
+
       results.push(value)
     }
     return results
   },[])
-    
+
 }
 
 ```
@@ -320,7 +320,7 @@ var input = [0,1,2,3,4,5,6,7,8,9]
 for(var i = 0; i < input.length; i++){
 
   var value = input[i]
-  
+
   if(divisibleByThree(value)){
     results.push(value)
   }
@@ -339,7 +339,7 @@ for writing code in the second style are:
 1. Purity: no dependencies.
 2. Composition: plug our functions together like lego!
 
-###Purity
+### Purity
 We can reuse our `divisiblyByThree` function anywhere.  It has no dependencies!
 
 If we wanted to have an array of booleans we could use `map` instead of filter.
@@ -348,7 +348,7 @@ If we wanted to have an array of booleans we could use `map` instead of filter.
 input.map(divisibleByThree) //=> [true,false,false,true, ...]
 ```
 
-###Composition
+### Composition
 
 We can use the output of one function as the input to another function.
 In my opinion, this is all we do in programming anyway.
@@ -359,8 +359,8 @@ In my opinion, this is all we do in programming anyway.
   .map(multiplyByTen)  //=> [0,30,60,90]
   .map(String) //=> ["0","30","60","90"]
   .join(" --- ") //=> "0 --- 30 --- 60 --- 90"
-  
-  
+
+
 ```
 
 Imagine doing the above in a for loop.  And then deciding to change one of the steps
