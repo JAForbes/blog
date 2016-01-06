@@ -9,7 +9,7 @@ h1 { font-family: "Inconsolata", sans-serif; }
   font-family: helvetica;
   box-sizing: border-box;
 }
-code span {
+code, code span {
   font-family: "Inconsolata", sans-serif;
 }
 /*
