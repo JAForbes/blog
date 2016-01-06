@@ -22,7 +22,8 @@ var R = {
 	invoker: require('ramda/src/invoker'),
 	prop: require('ramda/src/prop'),
 	partial: require('ramda/src/partial'),
-	identity: require('ramda/src/identity')
+	identity: require('ramda/src/identity'),
+	tap: require('ramda/src/tap')
 }
 var I = R.identity
 
@@ -48,8 +49,8 @@ var iso8601 = function(time){
 }
 
 function sidebar(posts){
-
-	return h('ul', { class: { posts: true} },
+	console.log('sidebar: ', typeof posts)
+	return h('ul', { class: { posts: true}, key: 'posts-list' },
 		posts.map(function(post){
 			var href = post.path.replace('.md', '')
 
@@ -132,8 +133,10 @@ function postsComponent(v){
 	fetch('posts.json').then(function(response){
 		return response.json()
 	})
-		.then(posts)
-		.then(postsCache)
+		.then(R.pipe(
+			R.tap(posts),
+			postsCache
+		))
 		.then(function(){
 			if( url().indexOf('posts') == -1){
 				console.log('showing default post')
@@ -145,8 +148,9 @@ function postsComponent(v){
 
 
 	var view = model.map(function(){
-		return h('div', { class: { container: true }}, [
+		return h('div', { key: 'container', class: { container: true }}, [
 			h('div', {
+					key: 'sidebar',
 					class: { sidebar: true, show: show_sidebar() },
 				}, [
 				bio(),
