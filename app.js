@@ -34,7 +34,9 @@ var R = {
 	partial: require('ramda/src/partial'),
 	identity: require('ramda/src/identity'),
 	tap: require('ramda/src/tap'),
-	once: require('ramda/src/once')
+	once: require('ramda/src/once'),
+	path: require('ramda/src/path'),
+	when: require('ramda/src/when')
 }
 var I = R.identity
 
@@ -128,6 +130,15 @@ function throttleMerge(s1, s2, s3, etc){
 	return aftersilence(0, head.reduce(f.merge, tail))
 }
 
+function redrawHook(callback){
+	return {
+		insert: callback,
+		update: function(_, newNode){
+			callback(newNode)
+		}
+	}
+}
+
 var postsCache = v([])
 
 function postsComponent(v){
@@ -168,37 +179,37 @@ function postsComponent(v){
 			}
 		})
 
-	var twitter_container = v()
-	var id = Math.random().toString(32)
+	var setupTwitter = R.once(function(node){
 
-	var setupTwitter = R.once(function(){
-		console.log(id)
-		twitter_container().elm.innerHTML = ""
+		node.elm.innerHTML = ""
 
 		return twttr.widgets.createTweet(
 			post().twitter,
-			twitter_container().elm,
+			node.elm,
 			{ theme: 'light' }
 		)
 	})
 
-	f.on(function(){
+	var highlightCode = R.once(function(){
+		Array.from(document.querySelectorAll('pre code')).forEach(hljs.highlightBlock)
+	})
 
-		if( (twitter_container() || {}).elm && post().twitter && (postBody() || {}).length ){
-			setupTwitter()
-		}
+	var highlightHook =
+		redrawHook(
+			R.when(
+				R.path(['elm','children','length']),
+				highlightCode
+			)
+		)
 
-	}, f.merge(twitter_container, postBody))
+	var twitterHook =
+		redrawHook(
+			R.when(function(){
+				return post().twitter
+			}, setupTwitter)
+		)
 
 	var model = throttleMerge(show_sidebar, posts, postBody, post)
-
-	function domMagic(){
-		//highlight code
-		Array.from(document.querySelectorAll('pre code')).forEach(hljs.highlightBlock)
-		var vdom = arguments.length == 2 ? arguments[1] : arguments[0]
-
-		//insert twitter card
-	}
 
 	var view = model.map(function(){
 
@@ -214,20 +225,12 @@ function postsComponent(v){
 				class: { post: true },
 			}, [
 				h('div', {
-					props: { innerHTML: postBody() },
-					hook: {
-						insert: domMagic,
-						update: domMagic
-					}
+					props: { innerHTML: postBody() || "" },
+					hook: highlightHook
 				}),
 				h('div', {
 					class: { twitter_container: true },
-					hook: {
-						insert: twitter_container,
-						update: function(_, newdom){
-							twitter_container(newdom)
-						}
-					}
+					hook: twitterHook
 				})
 			]),
 			phoneNav(show_sidebar)
