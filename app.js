@@ -1,3 +1,4 @@
+/* global twttr */
 /* global fetch */
 /* global container */
 window.onerror = alert
@@ -58,7 +59,6 @@ var iso8601 = function(time){
 }
 
 function sidebar(posts){
-	console.log('sidebar: ', typeof posts)
 	return h('ul', { class: { posts: true}, key: 'posts-list' },
 		posts.map(function(post){
 			var href = post.path.replace('.md', '')
@@ -123,7 +123,7 @@ function throttleMerge(s1, s2, s3, etc){
 	var streams = Array.from(arguments);
 	var head = streams.slice(0,-1)
 	var tail = streams.slice(-1)[0]
-	return aftersilence(60, head.reduce(f.merge, tail))
+	return aftersilence(0, head.reduce(f.merge, tail))
 }
 
 var postsCache = v([])
@@ -145,6 +145,14 @@ function postsComponent(v){
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	var posts = v(postsCache())
 
+	var post = posts.map(function(posts){
+		var murl = markdown_url()
+		for(var i = 0; i < posts.length; i++){
+			if( '/'+posts[i].path == murl ) return posts[i]
+		}
+		return {}
+	})
+
 	fetch('posts.json').then(function(response){
 		return response.json()
 	})
@@ -154,15 +162,43 @@ function postsComponent(v){
 		))
 		.then(function(){
 			if( url().indexOf('posts') == -1){
-				console.log('showing default post')
 				url('/'+posts()[0].path.replace('.md',''))
 			}
 		})
 
 	// framework:
-	var model = throttleMerge(show_sidebar, posts, postBody)
+	var model = throttleMerge(show_sidebar, posts, postBody, post)
+
+	function insertTwitterCard(){
+		var vdom = arguments.length == 2 ? arguments[1] : arguments[0]
+
+		if(post().twitter){
+			twttr.widgets.createTweet(
+				post().twitter,
+				vdom.elm,
+				{ theme: 'light'}
+			)
+		}
+	}
+
+	function domMagic(){
+		//highlight code
+		Array.from(document.querySelectorAll('pre code')).forEach(hljs.highlightBlock)
+		var vdom = arguments.length == 2 ? arguments[1] : arguments[0]
+
+		//insert twitter card
+		Array.from(document.getElementsByClassName('twitter-tweet')).forEach(R.invoker(0, 'remove'))
+		if(post().twitter){
+			twttr.widgets.createTweet(
+				post().twitter,
+				vdom.elm,
+				{ theme: 'light'}
+			)
+		}
+	}
 
 	var view = model.map(function(){
+
 		return h('div', { key: 'container', class: { container: true }}, [
 			h('div', {
 					key: 'sidebar',
@@ -175,14 +211,8 @@ function postsComponent(v){
 				class: { post: true },
 				props: { innerHTML: postBody() },
 				hook: {
-					update: function(vnode){
-						Array.from(document.querySelectorAll('pre,code')).forEach(function(el){
-
-							hljs.highlightBlock(el)
-						})
-
-
-					}
+					insert: domMagic,
+					update: domMagic
 				}
 			}),
 			phoneNav(show_sidebar)
