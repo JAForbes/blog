@@ -1,3 +1,4 @@
+/* global window */
 /* global twttr */
 /* global fetch */
 /* global container */
@@ -32,7 +33,8 @@ var R = {
 	prop: require('ramda/src/prop'),
 	partial: require('ramda/src/partial'),
 	identity: require('ramda/src/identity'),
-	tap: require('ramda/src/tap')
+	tap: require('ramda/src/tap'),
+	once: require('ramda/src/once')
 }
 var I = R.identity
 
@@ -166,20 +168,29 @@ function postsComponent(v){
 			}
 		})
 
-	// framework:
-	var model = throttleMerge(show_sidebar, posts, postBody, post)
+	var twitter_container = v()
+	var id = Math.random().toString(32)
 
-	function insertTwitterCard(){
-		var vdom = arguments.length == 2 ? arguments[1] : arguments[0]
+	var setupTwitter = R.once(function(){
+		console.log(id)
+		twitter_container().elm.innerHTML = ""
 
-		if(post().twitter){
-			twttr.widgets.createTweet(
-				post().twitter,
-				vdom.elm,
-				{ theme: 'light'}
-			)
+		return twttr.widgets.createTweet(
+			post().twitter,
+			twitter_container().elm,
+			{ theme: 'light' }
+		)
+	})
+
+	f.on(function(){
+
+		if( (twitter_container() || {}).elm && post().twitter && (postBody() || {}).length ){
+			setupTwitter()
 		}
-	}
+
+	}, f.merge(twitter_container, postBody))
+
+	var model = throttleMerge(show_sidebar, posts, postBody, post)
 
 	function domMagic(){
 		//highlight code
@@ -187,14 +198,6 @@ function postsComponent(v){
 		var vdom = arguments.length == 2 ? arguments[1] : arguments[0]
 
 		//insert twitter card
-		Array.from(document.getElementsByClassName('twitter-tweet')).forEach(R.invoker(0, 'remove'))
-		if(post().twitter){
-			twttr.widgets.createTweet(
-				post().twitter,
-				vdom.elm,
-				{ theme: 'light'}
-			)
-		}
 	}
 
 	var view = model.map(function(){
@@ -209,12 +212,24 @@ function postsComponent(v){
 			]),
 			h('div', {
 				class: { post: true },
-				props: { innerHTML: postBody() },
-				hook: {
-					insert: domMagic,
-					update: domMagic
-				}
-			}),
+			}, [
+				h('div', {
+					props: { innerHTML: postBody() },
+					hook: {
+						insert: domMagic,
+						update: domMagic
+					}
+				}),
+				h('div', {
+					class: { twitter_container: true },
+					hook: {
+						insert: twitter_container,
+						update: function(_, newdom){
+							twitter_container(newdom)
+						}
+					}
+				})
+			]),
 			phoneNav(show_sidebar)
 		])
 	})
