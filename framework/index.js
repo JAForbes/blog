@@ -46,3 +46,9 @@ h.route = function(container, url, router){
 var f = require('flyd')
 h.merge = f.merge
 h.stream = f.stream
+
+h.withAttr = function(prop, stream){
+	return function(e){
+		return stream(e.target[prop])
+	}
+}

@@ -1,6 +1,8 @@
 ?Framework?
 ===========
 
+Small, Versatile, Capable MVI framework at < 16kb
+
 Features
 --------
 
@@ -13,6 +15,7 @@ Features
 - Tiny
 - Intuitive
 - A router that is just a stream of urls.
+- Customizable Router
 
 Inspiration
 -----------
@@ -29,57 +32,71 @@ Quick start
 A simple ?Framework? app
 
 ```js
+var h = require('./framework')
 
-var h = require('?framework?/patch')
-var patch = require('?framework?/patch')
-var begin = require('?framework?/begin')
-var url$ = require('?framework?/router')('search')
-var v = require('?framework?/stream')
+global.url = h.url('search')
 
-var f = require('?framework?)
+function Component(v){
 
-var dom$ = f.stream(document.body)
+	//v() lets you create streams
+	var a = v(0)
+	var b = v(1)
 
-function HomePage( v ){
+	//your view reacts to any changes to your model
+	var model = h.merge(a,b)
 
-	//streams created with v will automatically be
-	//garbage collected when the component is unmounted
+	var view = model.map(function(){
 
-	var mousex = f.fromEvent('mousemove', v, function(e){
-		return e.clientX
-	})
-
-	var text = v("")
-
-	//merge many streams to create a reactive model
-	var model$ = f.merge(mousex, text)
-
-	//when your model changes your view will be updated
-	var view$ = model.map(function(){
 		return h('div', [
-			h('input', {
-				attr: { type:'text' },
-				on: { input: f.withAttr('value', text) },
-				value: text()
-			},
-			h('p','mouse x' + mousex())
+			//you can separate concerns
+			//and arbitarily nest views and models
+			labeled_input('a: ', a),
+			labeled_input('b: ', b),
+
+			//a() and b() are streams
+			//but they are also functions
+			//here we call them to get a value
+			//but you can also call them to set a value
+			h('p', 'Sum of a + b',
+				Number(a()) + Number(b())
+			)
 		])
+
 	})
 
-	//render your view
-	return view$
+	return view
 }
 
-// url$ is a stream of paths
-// it uses the history api behind the scenes and supports 3 modes
-// hash, search and path
-var component$ = url$.map(function(url){
+// your views are just another
+// representation of state
+// you can identify patterns and create useful abstraction
+function labeled_input(label, stream){
+	return h('label', [
+		label,
 
-	// we could switch components here based on the url value
-	return HomePage
+		//the virtual dom library is snabbdom
+		//an extremely light weight vdom library
+		h('input', {
+
+			// here we are creating <input type="number">
+			// with an event handler oninput, and setting the value
+			// to the current value of the stream
+			props: { type: 'number', value: stream() },
+			on: { input: h.withAttr('value', stream) }
+		})
+	])
+}
+
+
+//There is a built in router, but you can roll your own
+//just write a function that accepts a url stream as input
+//and returns a component
+var router = h.router('/home', {
+	'/home' : Component
 })
 
-//start your app
-begin(patch, dom$, component$)
+// all v() streams will be garbage collected
+// when your component is unmounted
+h.route(container, url, router)
 
 ```
