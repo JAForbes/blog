@@ -18,8 +18,8 @@ code, pre {
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 	height: 100vh;
-	min-width: 100vw;
-	max-width: 100vw;
+	min-width: 100%;
+	max-width: 100%;
 }
 
 .sidebar {
@@ -30,7 +30,7 @@ code, pre {
 	transition: left 0.5s ease;
 
 	position: absolute;
-
+	width: 100%;
 	min-width: 100%;
 	z-index: 1;
 	background-color: white;

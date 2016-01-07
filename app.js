@@ -12,6 +12,8 @@ var patch = snabbdom.init([ // Init patch function with choosen modules
   require('snabbdom/modules/eventlisteners'), // attaches event listeners
 ]);
 
+if (!Array.from) Array.from = require('array-from');
+
 var hljs = require('highlight.js')
 
 var url = require('./framework/router')('search')

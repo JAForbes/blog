@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
+    "array-from": "^2.0.2",
     "es6-promise": "^3.0.2",
     "fetch-ie8": "^1.4.0",
     "flyd": "^0.2.0",
