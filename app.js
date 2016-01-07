@@ -39,6 +39,7 @@ var f = require('flyd')
 var unique = require('flyd/module/droprepeats').dropRepeats
 var filter = require('flyd/module/filter')
 var combine = require('flyd/module/lift')
+var aftersilence = require('flyd/module/aftersilence')
 
 if(window.location.hostname == 'localhost'){
 	global.f = f
@@ -118,6 +119,13 @@ function phoneNav(show_sidebar$){
 	])
 }
 
+function throttleMerge(s1, s2, s3, etc){
+	var streams = Array.from(arguments);
+	var head = streams.slice(0,-1)
+	var tail = streams.slice(-1)[0]
+	return aftersilence(60, head.reduce(f.merge, tail))
+}
+
 var postsCache = v([])
 
 function postsComponent(v){
@@ -133,7 +141,6 @@ function postsComponent(v){
 	}
 
 	var postBody = f.map(fetchBlogHTML, markdown_url)
-		postBody("")
 
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	var posts = v(postsCache())
@@ -152,8 +159,8 @@ function postsComponent(v){
 			}
 		})
 
-	var model = [posts, postBody, show_sidebar].reduce(f.merge, v())
-
+	// framework:
+	var model = throttleMerge(show_sidebar, posts, postBody)
 
 	var view = model.map(function(){
 		return h('div', { key: 'container', class: { container: true }}, [
