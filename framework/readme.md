@@ -6,6 +6,7 @@ Small, Versatile, Capable MVI framework at < 16kb
 Features
 --------
 
+- Persistent function state without closures or classes!
 - Automatic destruction of streams on component change
 - Components as streams
 - Simple tiny API
@@ -34,8 +35,6 @@ A simple ?Framework? app
 ```js
 var h = require('./framework')
 
-global.url = h.url('search')
-
 function Component(v){
 
 	//v() lets you create streams
@@ -45,7 +44,16 @@ function Component(v){
 	//your view reacts to any changes to your model
 	var model = h.merge(a,b)
 
-	var view = model.map(function(){
+	//this is an example of creating a child view stream
+	var display = model.map(function(){
+		return h('p', 'Sum of a + b',
+			Number(a()) + Number(b())
+		)
+	})
+
+	//display depends on a + b and view depends on display
+	//therefore whenever a or b change, how view is updated
+	var view = display.map(function(){
 
 		return h('div', [
 			//you can separate concerns
@@ -53,13 +61,11 @@ function Component(v){
 			labeled_input('a: ', a),
 			labeled_input('b: ', b),
 
-			//a() and b() are streams
-			//but they are also functions
-			//here we call them to get a value
+			//display is a stream
+			//but but also a getter/setter function
+			//here we call display to get the latest value
 			//but you can also call them to set a value
-			h('p', 'Sum of a + b',
-				Number(a()) + Number(b())
-			)
+			display()
 		])
 
 	})
@@ -94,6 +100,12 @@ function labeled_input(label, stream){
 var router = h.router('/home', {
 	'/home' : Component
 })
+
+//this is a stream of urls
+//it uses the history api behind the scenes
+//it supports 3 modes hash/search/pathname
+// (pathname requires server support)
+var url = h.url('search')
 
 // all v() streams will be garbage collected
 // when your component is unmounted
