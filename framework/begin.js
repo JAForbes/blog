@@ -1,8 +1,9 @@
 var f = require('flyd')
 var v = f.stream
 var mount = require('./mount')
+var h = require('.')
 
-function begin(patch, olddom, domstream){
+function begin(olddom, domstream){
 	var source = v()
 
 	f.on(function(newdom){
@@ -21,8 +22,7 @@ function begin(patch, olddom, domstream){
 			function scoped(){
 				return f.endsOn(source, v.apply(null, arguments))
 			}
-
-			mount(patch, olddom, newdom(scoped) )
+			mount(h.patch, olddom, newdom(scoped) )
 		}
 	}, domstream)
 

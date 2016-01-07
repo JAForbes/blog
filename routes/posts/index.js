@@ -169,7 +169,7 @@ function PostsModel(v, postsCache){
 
 	var markdown_url = v()
 
-	if(url().indexOf('posts') > -1){
+	if(url().indexOf('posts/') > -1){
 		markdown_url( url() + '.md')
 	}
 
@@ -194,7 +194,7 @@ function PostsModel(v, postsCache){
 			postsCache
 		))
 		.then(function(){
-			if( url().indexOf('posts') == -1){
+			if( url().indexOf('posts/') == -1){
 				url('/'+posts()[0].path.replace('.md',''))
 			}
 		})
