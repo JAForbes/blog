@@ -131,7 +131,7 @@ function toggle(stream){
 	return stream(!stream())
 }
 
-function PhoneNav(show_sidebar$){
+function PhoneNav(v, show_sidebar$){
 	return show_sidebar$.map(function(){
 		return h('div', {
 			class: { 'phone-menu-nav': true, noselect: true },
@@ -157,8 +157,6 @@ function redrawHook(callback){
 		}
 	}
 }
-
-var postsCache = v([])
 
 function Twitter(v, post){
 
@@ -206,7 +204,9 @@ function Post(v, postBody, post){
 
 	var twitter = Twitter(v, post)
 
-	var view = function(){
+	var model = f.merge(postBody, post);
+
+	var view = model.map(function(){
 		return h('div', {
 			class: { post: true },
 		}, [
@@ -217,13 +217,12 @@ function Post(v, postBody, post){
 			}),
 			twitter()
 		])
-	}
+	})
 
 	return view
 }
 
-function PostsComponent(v){
-
+function PostsModel(v, postsCache){
 	var show_sidebar = v(false)
 	var text = R.invoker(0, 'text')
 	var fetchBlogHTML = R.pipeP(fetch,text,marked)
@@ -260,15 +259,29 @@ function PostsComponent(v){
 			}
 		})
 
-	var model = throttleMerge(show_sidebar, posts, postBody, post)
+	return {
+		postBody: postBody,
+		post: post,
+		posts: posts,
+		show_sidebar: show_sidebar
+	}
+}
+
+var postsCache = v([])
+
+function PostsContainerView(v){
+
+	var model = PostsModel(v, postsCache)
 
 	var views = {
-		post: Post(v, postBody, post),
-		sidebar: Sidebar(v, posts, show_sidebar),
-		phoneNav: PhoneNav(show_sidebar)
+		post: Post(v, model.postBody, model.post),
+		sidebar: Sidebar(v, model.posts, model.show_sidebar),
+		phoneNav: PhoneNav(v, model.show_sidebar)
 	}
 
-	var view = model.map(function(){
+	var subviews = throttleMerge(views.sidebar, views.post, views.phoneNav)
+
+	var view = subviews.map(function(){
 		return h('div', { class: { container: true }}, [
 			views.sidebar(),
 			views.post(),
@@ -301,7 +314,7 @@ var component = unique(url).map(function(url){
 	} else if( url == '/simple' ){
 		return simpleComponent
 	} else {
-		return PostsComponent
+		return PostsContainerView
 	}
 })
 
