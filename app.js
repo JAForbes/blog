@@ -86,6 +86,23 @@ function sidebar(posts){
 	)
 }
 
+function Sidebar(v, posts, show_sidebar){
+
+	var model = f.merge(posts, show_sidebar)
+
+	var view = model.map(function(){
+		return h('div', {
+				key: 'sidebar',
+				class: { sidebar: true, show: show_sidebar() },
+			}, [
+			bio(),
+			sidebar(posts()),
+		])
+	})
+
+	return view;
+}
+
 function bio(){
 	var links = [
 		{ href: 'https://babyx.bandcamp.com/', text: 'Band Music' },
@@ -114,13 +131,15 @@ function toggle(stream){
 	return stream(!stream())
 }
 
-function phoneNav(show_sidebar$){
-	return h('div', {
-		class: { 'phone-menu-nav': true, noselect: true },
-		on: { click: [toggle, show_sidebar$] },
-	}, [
-		h('p', { props: { innerHTML: '&#9776;' } } )
-	])
+function PhoneNav(show_sidebar$){
+	return show_sidebar$.map(function(){
+		return h('div', {
+			class: { 'phone-menu-nav': true, noselect: true },
+			on: { click: [toggle, show_sidebar$] },
+		}, [
+			h('p', { props: { innerHTML: '&#9776;' } } )
+		])
+	})
 }
 
 function throttleMerge(s1, s2, s3, etc){
@@ -141,7 +160,69 @@ function redrawHook(callback){
 
 var postsCache = v([])
 
-function postsComponent(v){
+function Twitter(v, post){
+
+	var setupTwitter = R.once(function(node){
+
+		node.elm.innerHTML = ""
+
+		return twttr.widgets.createTweet(
+			post().twitter,
+			node.elm,
+			{ theme: 'light' }
+		)
+	})
+
+	var twitterHook =
+		redrawHook(
+			R.when(function(){
+				return post().twitter
+			}, setupTwitter)
+		)
+
+	var view = function(){
+		return h('div', {
+			key: 'twitter-view',
+			hook: twitterHook
+		})
+	}
+
+	return view;
+}
+
+function Post(v, postBody, post){
+
+	var highlightCode = R.once(function(){
+		Array.from(document.querySelectorAll('pre code')).forEach(hljs.highlightBlock)
+	})
+
+	var highlightHook =
+		redrawHook(
+			R.when(
+				R.path(['elm','children','length']),
+				highlightCode
+			)
+		)
+
+	var twitter = Twitter(v, post)
+
+	var view = function(){
+		return h('div', {
+			class: { post: true },
+		}, [
+			h('div', {
+				key: 'post-view',
+				props: { innerHTML: postBody() || "" },
+				hook: highlightHook
+			}),
+			twitter()
+		])
+	}
+
+	return view
+}
+
+function PostsComponent(v){
 
 	var show_sidebar = v(false)
 	var text = R.invoker(0, 'text')
@@ -179,61 +260,19 @@ function postsComponent(v){
 			}
 		})
 
-	var setupTwitter = R.once(function(node){
-
-		node.elm.innerHTML = ""
-
-		return twttr.widgets.createTweet(
-			post().twitter,
-			node.elm,
-			{ theme: 'light' }
-		)
-	})
-
-	var highlightCode = R.once(function(){
-		Array.from(document.querySelectorAll('pre code')).forEach(hljs.highlightBlock)
-	})
-
-	var highlightHook =
-		redrawHook(
-			R.when(
-				R.path(['elm','children','length']),
-				highlightCode
-			)
-		)
-
-	var twitterHook =
-		redrawHook(
-			R.when(function(){
-				return post().twitter
-			}, setupTwitter)
-		)
-
 	var model = throttleMerge(show_sidebar, posts, postBody, post)
 
-	var view = model.map(function(){
+	var views = {
+		post: Post(v, postBody, post),
+		sidebar: Sidebar(v, posts, show_sidebar),
+		phoneNav: PhoneNav(show_sidebar)
+	}
 
-		return h('div', { key: 'container', class: { container: true }}, [
-			h('div', {
-					key: 'sidebar',
-					class: { sidebar: true, show: show_sidebar() },
-				}, [
-				bio(),
-				sidebar(posts()),
-			]),
-			h('div', {
-				class: { post: true },
-			}, [
-				h('div', {
-					props: { innerHTML: postBody() || "" },
-					hook: highlightHook
-				}),
-				h('div', {
-					class: { twitter_container: true },
-					hook: twitterHook
-				})
-			]),
-			phoneNav(show_sidebar)
+	var view = model.map(function(){
+		return h('div', { class: { container: true }}, [
+			views.sidebar(),
+			views.post(),
+			views.phoneNav()
 		])
 	})
 
@@ -262,7 +301,7 @@ var component = unique(url).map(function(url){
 	} else if( url == '/simple' ){
 		return simpleComponent
 	} else {
-		return postsComponent
+		return PostsComponent
 	}
 })
 
