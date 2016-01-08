@@ -13,7 +13,6 @@ Features
 - Modular: Ramda, Snabbdom, Flyd
 - Fast: Snabbdom is a speedy virtual dom library, Flyd is one of the fastest stream libraries
 - Efficient: only redraws when your model changes
-- Tiny
 - Intuitive
 - A router that is just a stream of urls.
 - Customizable Router
@@ -23,7 +22,7 @@ Inspiration
 
 ?Framework? is inspired by CycleJS's simplicity and mithril's component architecture.
 I wrote this library because I wasn't into RxJS verbosity, CycleJS selectors in the DOM driver
-and mithril's reliance on controller constructors and over abstraction over the diff lifecycle.
+and mithril's controller constructors and over abstraction over the diff lifecycle.
 
 This library will feel very familiar to users of Mithril.  I believe it takes all the best ideas from both libraries.
 
