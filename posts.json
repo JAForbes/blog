@@ -1,5 +1,10 @@
 [
 	{
+		"name": "Blog Rewrite with Snabbdom + Flyd",
+		"path":"posts/blog-rewrite.md",
+		"created": "2016-01-08"
+	},
+	{
 		"name": "Philosophies.  Not Frameworks.",
 		"path": "posts/philosophies-vs-frameworks.md",
 		"created": "2015-10-16T22:38:58.538Z",

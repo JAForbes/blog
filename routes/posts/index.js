@@ -1,3 +1,5 @@
+/* global url */
+/* global twttr */
 var marked = require('marked')
 var hljs = require('highlight.js')
 
@@ -98,23 +100,26 @@ function PhoneNav(v, show_sidebar$){
 	})
 }
 
-function Twitter(v, post){
+function Twitter(v, post, postBody){
 
 	var setupTwitter = R.once(function(node){
 
 		node.elm.innerHTML = ""
 
-		return twttr.widgets.createTweet(
-			post().twitter,
-			node.elm,
-			{ theme: 'light' }
-		)
+		if(post().twitter){
+			return twttr.widgets.createTweet(
+				post().twitter,
+				node.elm,
+				{ theme: 'light' }
+			)
+		}
+
 	})
 
 	var twitterHook =
 		h.redrawHook(
 			R.when(function(){
-				return post().twitter
+				return post().path
 			}, setupTwitter)
 		)
 
@@ -142,7 +147,7 @@ function Post(v, postBody, post){
 			)
 		)
 
-	var twitter = Twitter(v, post)
+	var twitter = Twitter(v, post, postBody)
 
 	var model = h.merge(postBody, post);
 

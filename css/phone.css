@@ -5,6 +5,10 @@
 	}
 	p { line-height: 2em; }
 
+* {
+	color: purple;
+}
+
 code, pre {
 	overflow-x: scroll;
 	margin: 0.1em;
@@ -57,7 +61,7 @@ code, pre {
 }
 .phone-menu-nav {
 	top: 10px;
-	right: 10px;
+	right: 20px;
 	width: 40px;
 	z-index: 2;
 	position: fixed;
