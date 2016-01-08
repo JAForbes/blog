@@ -5,12 +5,8 @@
 	}
 	p { line-height: 2em; }
 
-* {
-	color: purple;
-}
-
 code, pre {
-	overflow-x: scroll;
+	overflow-x: auto;
 	margin: 0.1em;
 	font-size: 0.8em;
 }

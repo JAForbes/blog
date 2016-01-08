@@ -52,7 +52,7 @@ function Component(v){
 	})
 
 	//display depends on a + b and view depends on display
-	//therefore whenever a or b change, how view is updated
+	//therefore whenever a or b change, our view is updated
 	var view = display.map(function(){
 
 		return h('div', [

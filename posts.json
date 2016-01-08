@@ -1,7 +1,7 @@
 [
 	{
-		"name": "Blog Rewrite with Snabbdom + Flyd",
-		"path":"posts/blog-rewrite.md",
+		"name": "The power of m.prop",
+		"path":"posts/power-of-m-prop.md",
 		"created": "2016-01-08"
 	},
 	{
