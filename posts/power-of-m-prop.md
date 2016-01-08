@@ -284,8 +284,8 @@ This very blog was recently rewritten as a testing ground for this new approach.
 
 You can inspect the source here:
 
-[Blog Source: ](https://github.com/JAForbes/JAForbes.github.io/blob/master/routes/posts/index.js)
-[Framework Readme: ](https://github.com/JAForbes/JAForbes.github.io/tree/master/framework/readme.md)
+- [Blog Source: ](https://github.com/JAForbes/JAForbes.github.io/blob/master/routes/posts/index.js)
+- [Framework Readme: ](https://github.com/JAForbes/JAForbes.github.io/tree/master/framework/readme.md)
 
 This website has twitter integration, code highlighting, css transitions and the history api.
 So it is a good test bed for exploration of these ideas.
