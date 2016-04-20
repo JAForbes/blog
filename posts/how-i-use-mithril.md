@@ -68,7 +68,7 @@ that accepts the `controller` as its first argument.
 I think this is a great low level API, it is flexible and it allows
 for a variety of component patterns to work and still feel native.
 
-I write my component as a function that returns a view function.
+However, I write my component as a function that returns a view function.
 All the model state lives within the closure.
 
 This isn't just because closures are cool, and `this` is lame.
@@ -77,7 +77,7 @@ if you reuse base views across components.  But in practice, that doesn't happen
 
 Using a closure also reduces library specific machinery.  I don't need to rely on the somewhat
 magical behaviour that mithril passes the controller instance to the view function.
-I can just reach the state directly using standard javascript practice.
+I can just reach the state directly using a standard javascript lanaguage behaviour.
 
 You'll notice our view also no longer needs to prefix each prop with `state`.
 So the view itself is a lot less ceremonial.
@@ -143,16 +143,137 @@ And then other devs do not need to know that I used a closure component behind t
 
 ```js
 //file: components/example.js
+
+// es6
 export default component(Example)
+
+// commonjs
+
+module.exports = component(Example)
 ```
 
 Flyd Streams everywhere 
 -----------------------
 
 Flyd is a tiny library.  It lets you pass values to subscribers and set a new value at any time.
-It plays well with mithril because it's API is almost identical to `m.prop`.
+It goes with mithril like Peanut Butter and Jam - it's API is almost identical to `m.prop`.
+
+#### A quick introduction to flyd
+
+In flyd we get and set and values the same way that we use props.
+
+```js
+var a = stream(0)
+a() //=> 0
+a(1) 
+a() //=> 1
+```
+
+But we can also subscribe to changes.  And create dependent streams using `map`
+
+```js
+var a = stream(0)
+var b = a.map(multiply(2))
+
+a(2)
+b() //=> 4
+```
 
 It comes in handy in so many ways.  Let's take a look!
+
+
+#### Replace prop's with streams.
+
+*Everything still works*
+
+```js
+var f = require('flyd')
+
+function Example(){
+
+  var count = f.stream(0)
+  var checked = f.stream(false)
+
+  return function view(){
+    return m('div', [
+      m('input[type=number]', { 
+        onchange: m.withAttr('value', count) 
+      })
+      ,m('p', 'The number is: '+ count() )
+      ,m('input[type=checkbox]', { 
+        checked: checked() 
+        , onchange: m.withAttr('checked', checked) 
+      })
+    ])
+  }
+}
+```
+
+Not very exciting, but worth stating.
+
+#### Subviews
+
+Below we subscribe to changes to our state streams (`count` and `checked`).  
+We then declare view streams that will be regenerated whenever the state changes.
+
+We are creating streams based on the value of our prop's.
+They will always be up to date.  And when we execute our sub streams as functions,
+we are not rerunning the view itself, it is cached.
+
+It's a shame mithril doesn't know about this caching, so it will still do a diff 
+against the DOM.  But for complex view calculations, you can ensure, you are only
+generating that vdom when you need to.
+
+It would also be quite simple to return `{ subtree: retain}` on subsequent calls to a stream.
+Might be a nice experiment to try.
+
+```js
+
+var f = require('flyd')
+
+function Example(){
+
+  var count = f.stream(0)
+  var checked = f.stream(false)
+
+  var p = count.map(function(n){
+    return m('p', 'The number is: '+ count)
+  })
+  
+  var numberInput = count.map(function(n){
+    return m('input[type=number]', { 
+      onchange: m.withAttr('value', count)
+      value: n
+    })
+  })
+  
+  var checkbox = checked.map(function(value){
+    m('input[type=checkbox]', { 
+      checked: value
+      , onchange: m.withAttr('checked', checked) 
+    })
+  })
+
+  var view = f.combine(function(){
+    return m('div', [
+      numberInput()
+      ,p()
+      ,checkbox()
+    ])
+  }, [ checkbox, numberInput, p])
+
+  return view
+}
+```
+
+In the above example, I probably wouldn't define those particular subviews as streams.
+There is no real benefit.  But it is nice that our component is a declarative depedency tree.
+It's simple to see what state triggers changes to a particular view.
+
+But I do use this for complex situations like occlusion culling, where you need to calculate how many items
+are on screen and their respective positions.  It's nice to know that calculcation is only happening when 
+a dependency triggers it, and not on every redraw.
+
 
 Opt out of Mithril when appropriate
 -----------------------------------
