@@ -276,6 +276,21 @@ a dependency triggers it, and not on every redraw.
 
 #### Cross component communication
 
+The observer pattern suffers from "Call from where?", and is too heavy.
+Simply sharing props, leads to managing when to redraw, and spaghetti code.
+
+But streams are undirectional and clearly state their dependencies and flow.
+They are the perfect tool for sending data through multiple levels of components in your application.
+
+Below is an example of a Sidebar.  It's animates on the x axis, and its position will affect the 
+content pane to its right.  We've got a `SidebarManager` that sets up the streams and passes it to the
+sub components `Sidebar` and `ContentPane`.
+
+The thing I really like about streams, is that we are not listening to events.  
+We are declaring relationships.  It's not a matter of "when this changes, do that"
+but "This *is* that transformed by a function"
+
+
 ```js
 function SidebarManager(){
 
@@ -325,7 +340,7 @@ function ContentPane(world){
 }
 ```
 
-
+So I hope I've show that flyd+mithril is golden.  Please try it out!
 
 Opt out of Mithril when appropriate
 -----------------------------------
@@ -351,7 +366,7 @@ m('div', { config:
 
 When I first saw that API, it scared me.  Often I just want access to element.
 
-In plain old mithril, we could just use a prop as the config function, and because the `el` is the first argument, we'll store the element in the prop.
+But, In plain old mithril, we could just use a prop as the config function, and because the `el` is the first argument, we'll store the element in the prop.
 
 ```js
 //controller
