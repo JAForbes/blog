@@ -392,6 +392,9 @@ computedStyle.map(
 m('div', config: container)
 ```
 
+We've got this great way of interacting with the DOM now.  But
+there are somethings virtual doms are not good at, so it's great its so simple to 
+transfer back and forth between mithril and the "real world".
 
 Avoid Model Layer
 -----------------
