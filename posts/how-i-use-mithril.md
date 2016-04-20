@@ -30,25 +30,121 @@ so we are actually making it more explicit.
 
 ```js
 //traditional mithril revealing module approach
-var component = {
+var Example = {
   controller: function(){
     var count = m.prop(0)
-   
-    return { count }
+    var checked = m.prop(false)
+    
+    return { count, checked }
   }
   
   view: function(state){
     return m('div', [
-      m('input[type=number]', { onchange: state.count })
+      m('input[type=number]', { 
+        onchange: m.withAttr('value', state.count) 
+      })
       ,m('p', 'The number is: '+ state.count() )
+      ,m('input[type=checkbox]', { 
+        checked: state.checked() 
+        , onchange: m.withAttr('checked', state.checked) 
+      })
     ])
   }
 }
 ```
 
+> When I started with mithril I had separate namespaces for the model and the view-model.
+I don't do that anymore.  Dividing our data into separate namespaces for its origin and intent is noise.
+And often the line between view state and model state can blur over time.
+Though, I do think the concept of a view model is valuable.
+
 Closure components
 ------------------
 
+The traditional mithril component API is a struct with a
+`controller` constructor function, and a `view` function
+that accepts the `controller` as its first argument.
+
+I think this is a great low level API, it is flexible and it allows
+for a variety of component patterns to work and still feel native.
+
+I write my component as a function that returns a view function.
+All the model state lives within the closure.
+
+This isn't just because closures are cool, and `this` is lame.
+It's because decoupling the `view` from the `controller` is only useful
+if you reuse base views across components.  But in practice, that doesn't happen often.
+
+Using a closure also reduces library specific machinery.  I don't need to rely on the somewhat
+magical behaviour that mithril passes the controller instance to the view function.
+I can just reach the state directly using standard javascript practice.
+
+You'll notice our view also no longer needs to prefix each prop with `state`.
+So the view itself is a lot less ceremonial.
+
+```js
+function Example(){
+
+  var count = m.prop(0)
+  var checked = m.prop(false)
+
+  return function view(){
+    return m('div', [
+      m('input[type=number]', { 
+        onchange: m.withAttr('value', count) 
+      })
+      ,m('p', 'The number is: '+ count() )
+      ,m('input[type=checkbox]', { 
+        checked: checked() 
+        , onchange: m.withAttr('checked', checked) 
+      })
+    ])
+  }
+}
+```
+
+Of course, if this Component doesn't obey the traditional mithril API, how do we mount it, or render it?
+
+A simple utility.
+
+```js
+function component(f){
+   return { controller: f, view: function(view){ return view() } }
+}
+```
+
+We can then plugin to the normal mithril machinery.  
+Here I'm injecting our component into a parent component in 3 different ways.
+
+```js
+
+function ParentComponent(){
+  
+  var example = Example()
+  
+  return function(){
+    return m('div', 
+      
+      // { controller: Example, view: function(view){ return view() } }
+      component(Example)
+      
+      // view()
+      ,example()
+      
+      // Allow passing in parameterized data
+      ,m.component(component(Example), { data: [1,2,3] })
+    )
+  }
+}
+```
+
+The above just shows what's possible.  I tend to export the traditional API as a module.
+And then other devs do not need to know that I used a closure component behind the scenes.
+
+```js
+//file: components/example.js
+export default component(Example)
+```
 
 Flyd Streams everywhere 
 -----------------------
