@@ -29,12 +29,15 @@ so we are actually making it more explicit.
 var component = {
   controller: function(){
     var count = m.prop(0)
-    
+   
     return { count }
   }
   
   view: function(state){
-    return m('div')
+    return m('div', [
+      m('input[type=number]', { onchange: state.count })
+      ,m('p', 'The number is: '+ state.count() )
+    ])
   }
 }
 ```
@@ -43,9 +46,23 @@ Closure components
 ------------------
 
 
+Flyd Streams everywhere 
+-----------------------
+
+Flyd is a tiny library.  It lets you pass values to subscribers and set a new value at any time.
+It plays well with mithril because it's API is almost identical to `m.prop`.
+
+It comes in handy in so many ways.  Let's take a look!
+
 Opt out of Mithril when appropriate
 -----------------------------------
 
 Mithril makes it astonishingly convenient to jump in and out of virtual dom and direct dom.
 So if you *need* to just get in there and play with the dom directly, it's straightforward.
-```
+
+
+Avoid Model Layer
+-----------------
+
+Models are closely coupled to views.  The sooner we admit this, the more trouble we save.
+So let's define them in the same file, and in most cases, lets just define them within in the controller.
