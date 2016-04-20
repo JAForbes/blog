@@ -11,6 +11,10 @@ it solves a lot of common problems I've experienced in other frameworks like Bac
 
 In this post I'd like to cover how I structure components and share data throughout the app.
 
+Mithril gives us a lot of flexibility when defining components.  I don't write components using the traditional Mithril API.
+The code examples will not be indicative of my usage, until the end of the post.  
+I am going to gradually introduce my approach so we can stay focused on each layer.
+
 Never use `this`
 ----------------
 
