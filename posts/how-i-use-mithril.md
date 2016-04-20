@@ -281,6 +281,50 @@ Opt out of Mithril when appropriate
 Mithril makes it astonishingly convenient to jump in and out of virtual dom and direct dom.
 So if you *need* to just get in there and play with the dom directly, it's straightforward.
 
+There is no shame in this!  If you want to `getComputedStyle` or access `parentNode` then all power to you.
+
+In mithril it's as simple as using the `config` function.
+
+```js
+m('div', { config: 
+  function(el, firstTime, context){
+    if(firstTime){
+      el.parentNode.style.backgroundColor = 'red'
+    } else {
+      //subsequent calls
+    }
+  } 
+})
+```
+
+When I first saw that API, it scared me.  Often I just want access to element.
+
+In plain old mithril, we could just use a prop as the config function, and because the `el` is the first argument, we'll store the element in the prop.
+
+```js
+//controller
+var container = m.prop()
+
+//view
+m('div', { config: container })
+```
+
+And with flyd, we can actually do some work when that container arrives.
+
+```js
+var container = f.stream()
+
+var computedStyle = container.map(getComputedStyle)
+
+// log the computed style every redraw
+computedStyle.map(
+  console.log.bind(console, 'computedStyle: ')
+)
+
+//view
+m('div', config: container)
+```
+
 
 Avoid Model Layer
 -----------------
