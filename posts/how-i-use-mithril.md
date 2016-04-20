@@ -364,7 +364,7 @@ m('div', { config:
 })
 ```
 
-When I first saw that API, it scared me.  Often I just want access to element.
+When I first saw that API, it scared me.  Often I just want access to an element.
 
 But, In plain old mithril, we could just use a prop as the config function, and because the `el` is the first argument, we'll store the element in the prop.
 
@@ -415,3 +415,9 @@ Here is the process:
 3. Save it `fetch({ method: PUT, body: JSON.stringify(data) })`
 
 This is a util function, not an application layer and should  all happen in close proximity to the view.
+
+Avoid m.request
+---------------
+
+Magical behaviour, probably won't be supported in future versions.
+Use fetch...
