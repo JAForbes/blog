@@ -274,6 +274,58 @@ But I do use this for complex situations like occlusion culling, where you need 
 are on screen and their respective positions.  It's nice to know that calculcation is only happening when 
 a dependency triggers it, and not on every redraw.
 
+#### Cross component communication
+
+```js
+function SidebarManager(){
+
+  var hidden = f.stream(false)
+  var offset = hidden.map(function(hidden){
+    return hidden ? 40 : 400
+  })
+  
+  var sidebar = Sidebar({ hidden, offset })
+  var content = ContentPane({ offset })
+  
+  return function(){
+    return m('div', [
+      sidebar()
+      world.content()
+    ])
+  }
+}
+
+function Sidebar(world){
+  var style = world.offset.map(function(x){
+    return {
+      left: -440+'px'
+      transform: 'translateX('+x+'px)'
+    }
+  })
+  
+  var view = style.map(function(style){
+    return m('div', { style },  ...)
+  })
+  
+  return view
+}
+
+function ContentPane(world){
+  var style = world.offset.map(function(x){
+    return {
+      transform: 'translateX('+x+'px)'
+    }
+  })
+  
+  var view = style.map(function(){
+    return m('div', { style }, ... )
+  })
+  
+  return view
+}
+```
+
+
 
 Opt out of Mithril when appropriate
 -----------------------------------
