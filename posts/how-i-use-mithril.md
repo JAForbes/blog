@@ -393,11 +393,25 @@ m('div', config: container)
 ```
 
 We've got this great way of interacting with the DOM now.  But
-there are somethings virtual doms are not good at, so it's great its so simple to 
+there are something's virtual doms are not good at, so it's great its so simple to 
 transfer back and forth between mithril and the "real world".
 
-Avoid Model Layer
------------------
+Avoid the Model Layer
+---------------------
 
-Models are closely coupled to views.  The sooner we admit this, the more trouble we save.
+Models are closely coupled to views.  The sooner we admit this, the more trouble we avoid.
 So let's define them in the same file, and in most cases, lets just define them within in the controller.
+
+In some cases it makes sense to put a model in a separate file, but do this after you've found you need shared state across routes.
+
+You also, do not need object relationship management (ORM).
+
+The whole get/set/save mentality is more complicated than just using `fetch({ method: 'POST', body: json })`
+
+Here is the process:
+
+1. Fetch it `(fetch(...).then(data))`
+2. Render it `data().map( i => m('div', i.data ))`
+3. Save it `fetch({ method: PUT, body: JSON.stringify(data) })`
+
+This is a util function, not an application layer and should  all happen in close proximity to the view.
