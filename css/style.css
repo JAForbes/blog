@@ -19,9 +19,8 @@ code:not(.hljs) {
   padding: 0.2em;
   padding: 0;
 }*/
-a {color:black;}      /* unvisited link */
-a:visited {color:black;}  /* visited link */
-a:hover {color:blue;}  /* mouse over link */
+a { color: #faaaff;}      /* unvisited link */
+a:visited { color: #b376a6; }  /* visited link */
 a:active {color:black;}  /* selected link */
 
 .tiny {
@@ -39,6 +38,7 @@ ul {
 
 body {
   margin: 0;
+  
 }
 
 .hidden {
@@ -49,6 +49,8 @@ body {
 
   body {
     text-align: center;
+    color: #f2b5f9;
+    background-color: #231f1f;
   }
   .bio img
   {
