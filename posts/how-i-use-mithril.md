@@ -156,7 +156,7 @@ Flyd Streams everywhere
 -----------------------
 
 Flyd is a tiny library.  It lets you pass values to subscribers and set a new value at any time.
-It goes with mithril like Peanut Butter and Jam - it's API is almost identical to `m.prop`.
+It goes with mithril like Peanut Butter and Jam - its API is almost identical to `m.prop`.
 
 #### A quick introduction to flyd
 
@@ -282,7 +282,7 @@ Simply sharing props, leads to managing when to redraw, and spaghetti code.
 But streams are undirectional and clearly state their dependencies and flow.
 They are the perfect tool for sending data through multiple levels of components in your application.
 
-Below is an example of a Sidebar.  It's animates on the x axis, and its position will affect the 
+Below is an example of a Sidebar.  It animates on the x axis, and its position will affect the 
 content pane to its right.  We've got a `SidebarManager` that sets up the streams and passes it to the
 sub components `Sidebar` and `ContentPane`.
 
@@ -305,7 +305,7 @@ function SidebarManager(){
   return function(){
     return m('div', [
       sidebar()
-      world.content()
+      content()
     ])
   }
 }
@@ -393,7 +393,7 @@ m('div', config: container)
 ```
 
 We've got this great way of interacting with the DOM now.  But
-there are something's virtual doms are not good at, so it's great its so simple to 
+there are some things virtual doms are not good at, so it's great its so simple to 
 transfer back and forth between mithril and the "real world".
 
 Avoid the Model Layer
@@ -414,10 +414,42 @@ Here is the process:
 2. Render it `data().map( i => m('div', i.data ))`
 3. Save it `fetch({ method: PUT, body: JSON.stringify(data) })`
 
-This is a util function, not an application layer and should  all happen in close proximity to the view.
+This should be a util function, not an application layer and should  all happen in close proximity to the view.
 
 Avoid m.request
 ---------------
 
-Magical behaviour, probably won't be supported in future versions.
-Use fetch...
+`m.request` is the XHR utility built into mithril.  I personally don't like utilities that do multiple things in multiple
+ways.  `m.request` returns both a `Promise` and a `m.prop`, it also can control the redraw behaviour of your app *and* handle
+casting the data into a custom Model type.
+
+The Promise implementation is custom, and not A+ compliant.  `m.request` is like a swiss army knife, and if that appeals to you,
+use it by all means.  But I prefer to compose separate tools that do 1 thing well.  Its easier to debug, and reason about later.
+
+Here's an example of using `m.request`
+
+You can initialize your props immediately and mithril will automatically redraw for you when the request completes.
+
+```js
+
+var users = m.request({ method: 'GET' , url: '/users' })
+
+users() //=> undefined
+users.then(function(serverResponse){
+  serverResponse == users()
+})
+```
+
+I would just use `fetch`.
+
+```js
+var users = m.prop([]) // A default value so we can draw immediately.
+fetch('/users') //GET by default
+  .then( r => r.json() )
+  .then(users) // save to prop
+  .then(m.redraw)
+```
+
+I personally like that I am specifically setting the data to the prop and manually triggering a redraw.
+It encourages us to draw immediately with an empty dataset, instead of loading.  It's also simple to add
+some logs, or other transformations within the promise chain.
