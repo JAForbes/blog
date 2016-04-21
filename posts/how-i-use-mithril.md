@@ -466,3 +466,15 @@ fetch('/users') //GET by default
 I personally like that I am specifically setting the data to the prop and manually triggering a redraw.
 It encourages us to draw immediately with an empty dataset, instead of loading.  It's also simple to add
 some logs, or other transformations within the promise chain.
+
+
+Conclusion
+----------
+
+In this post I've demonstrated how *I* like to use mithril.  But the great thing about mithril is that you can choose your own way
+to approach these problems.  Mithril has smart design assumptions built in, bu,t it also is flexible enough to let you opt out at any time.
+
+The upcoming version of mithril will make this even more true.  Mithril's router, rendering, etc are all separate modules that you
+can opt out of at will.
+
+If you found this article interesting, I recommend hanging out in the mithril chat on [gitter](https://gitter.im/lhorie/mithril.js).
