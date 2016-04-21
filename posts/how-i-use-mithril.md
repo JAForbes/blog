@@ -270,7 +270,7 @@ function Example(){
 }
 ```
 
-In the above example, I probably wouldn't define those particular subviews as streams.
+In a real world scenario, I probably wouldn't define those particular subviews as streams.
 There is no real benefit.  But it is nice that our component is a declarative depedency tree.
 It's simple to see what state triggers changes to a particular view.
 
