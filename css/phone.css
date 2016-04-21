@@ -62,7 +62,7 @@ code, pre {
 	z-index: 2;
 	position: fixed;
 	display: block;
-	background-color: rgba(255,255,255, 0.5);
+	background-color: #1d1919;
 }
 .phone-menu-nav p {
 	font-size: 40px;
