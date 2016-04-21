@@ -6,14 +6,20 @@ How I use Mithril
 Mithril is a tiny library for writing interactive web applications.
 It's so small it may seem difficult to know where to start.
 
-I've previously written about [`m.prop`](?/posts/power-of-m-prop) and how cleanly
+Mithril is used by large in production apps, but its footprint is ~8kb.  Yes it's website could use a bit of spit and polish
+but it truly is the best MVC framework we have in Javascript right now.
+
+I've previously written about other aspects of mithril, like [`m.prop`](?/posts/power-of-m-prop) and how cleanly
 it solves a lot of common problems I've experienced in other frameworks like Backbone.
 
-In this post I'd like to cover how I structure components and share data throughout the app.
+In this post, I'd like to cover how I structure components and share data throughout the app.
 
-Mithril gives us a lot of flexibility when defining components.  I don't write components using the traditional Mithril API.
-The code examples will not be indicative of my usage, until the end of the post.  
+Mithril gives us a lot of flexibility when defining components.  
+But I don't write components using the traditional Mithril API.
 I am going to gradually introduce my approach so we can stay focused on each layer.
+
+If you haven't tried mithril, or you are still finding your feet, please to not take this article as gospel.
+The approach I use, works for me, and my usecases.  I recommend trying mithril out and get a feel for your own style.
 
 Never use `this`
 ----------------
