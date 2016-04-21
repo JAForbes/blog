@@ -16,7 +16,7 @@ Mithril gives us a lot of flexibility when defining components.
 But I don't write components using the traditional Mithril API.
 I am going to gradually introduce my approach so we can stay focused on each layer.
 
-If you haven't tried mithril, or you are still finding your feet, please to not take this article as gospel.
+If you haven't tried mithril, or you are still finding your feet, please, do not take this article as gospel.
 The approach I use, works for me, and my usecases.  I recommend trying mithril out and get a feel for your own style.
 
 Never use `this`
