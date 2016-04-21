@@ -23,7 +23,7 @@ code:not(.hljs) {
   padding: 0;
 }*/
 a { color: #968f96;}      /* unvisited link */
-a:visited { color: #b376a6; }  /* visited link */
+a:visited { color: #756772; }  /* visited link */
 a:active {color:black;}  /* selected link */
 
 .tiny {
