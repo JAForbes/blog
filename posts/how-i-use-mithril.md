@@ -357,7 +357,7 @@ Notice `currentTime`, `pointer.scale` and other fields are all streams.  But we 
 
 ---
 
-So I hope I've show that flyd+mithril is golden.  Please try it out!
+So I hope I've shown that flyd+mithril is golden.  Please try it out!
 
 Opt out of Mithril when appropriate
 -----------------------------------
