@@ -336,7 +336,7 @@ function ContentPane(world){
     }
   })
   
-  var view = style.map(function(){
+  var view = style.map(function(style){
     return m('div', { style }, ... )
   })
   
