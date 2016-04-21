@@ -1,5 +1,11 @@
 [
 	{
+		"name": "How I use mithril",
+		"path":"posts/how-i-use-mithril.md",
+		"created": "2016-04-21",
+		"twitter": ""
+	},
+	{
 		"name": "The power of m.prop",
 		"path":"posts/power-of-m-prop.md",
 		"created": "2016-01-08",
