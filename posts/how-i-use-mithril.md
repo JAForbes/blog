@@ -340,6 +340,18 @@ function ContentPane(world){
 }
 ```
 
+#### Easier to debug
+
+flyd streams are easier to debug for 2 reasons.
+
+1. You can subscribe to changes and log them
+2. Every stream implements the `toString` interface so the chrome dev tools will show the current value.
+
+![](https://pbs.twimg.com/media/CgipnNSU0AAlyT_.jpg:large)
+
+Notice `currentTime`, `pointer.scale` and other fields are all streams.  But we get to see the current value rendered inline!
+---
+
 So I hope I've show that flyd+mithril is golden.  Please try it out!
 
 Opt out of Mithril when appropriate
