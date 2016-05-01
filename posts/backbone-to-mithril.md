@@ -113,7 +113,7 @@ Routing
 -------
 
 The Router in Backbone is simple as it could be given the point in time in which it was created.
-You provide a hash of url's with pattern matching for variables within in that URL.  The first pattern that matches will trigger
+You provide a hash of urls with pattern matching for variables within in that URL.  The first pattern that matches will trigger
 a callback.  The nicest part about this is how similar it is to the event declaration code in a Backbone View.
 
 ```js
@@ -328,7 +328,7 @@ m.request has an extremely flexible [API](http://lhorie.github.io/mithril/mithri
 > I personally just use the fetch API.  If you are intrigued, you can read about [how I use Mithril](http://james-forbes.com/?/posts/how-i-use-mithril)
 
 You'll notice I'm *calling* `this.news()` that's because `news` is not an array anymore, its a `prop` that contains an `array`.
-In order to get to the underlying data you just call it.  Prop's are a light weight replacement to Backbone.Model.get/Backbone.Model.set, where every attribute has it's own get/set functionality.  
+In order to get to the underlying data you just call it.  Props are a light weight replacement to Backbone.Model.get/Backbone.Model.set, where every attribute has it's own get/set functionality.  
 
 Calling a prop doesn't trigger any events, but it allows us to use the prop as an event callback directly.
 
@@ -392,7 +392,7 @@ Mithril will redraw our view afterwards so it will automatically be rendered in 
 m('p', 'Hi '+ controller.name())
 ```
 
-> Mithril redraw's for us because we declared the events via mithril's templating system.  But we can redraw whenever we want by calling `m.redraw()`.  And don't worry, calling `m.redraw` twice will only trigger one redraw on the next animation frame.
+> Mithril redraws for us because we declared the events via mithril's templating system.  But we can redraw whenever we want by calling `m.redraw()`.  And don't worry, calling `m.redraw` twice will only trigger one redraw on the next animation frame.
 
 Now let's imagine we wanted to reload the news feed in our previous example.  We just need a button that will trigger fetching the API.
 
@@ -481,4 +481,4 @@ Mithril developers tend to see it is as more of a library than a framework, a ut
 
 By walking through the differences in design, we've walked through a little bit of Javascript history.  From the wild west of JQuery to fast, declarative, functional mithril.
 
-I wonder what come's next?
+I wonder what comes next?
