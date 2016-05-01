@@ -252,7 +252,7 @@ Notice I'm now returning the generated content, not assigning it to the parent e
 
 There is still a lot of boilerplate though.  Why are we extending from Backbone.view?  Backbone.view has some builtin methods for removal, managing events and managing the containing element.  
 We already decided the framework was going to handle removal and event management.  
-What if we just returned our containing element directly, then we wouldn't need any the base view, or inheritance.
+What if we just returned our containing element directly, then we wouldn't need the base view, or inheritance.
 
 ```js
 var NewsFeedView = {
