@@ -38,8 +38,9 @@ var OrganizedView = Backbone.View.extend({
 })
 ```
 
-This is truly the most important change Backbone brought to the application model.  This was the spinal cord that Backbone's name 
-refers to.
+This is truly the most important change Backbone brought to the application model.  Interestingly enough Backone.View accounts for the smallest percentage of source code in the framework.  
+
+There is a lot more to Backbone than it's Views, but I will argue that the rest of Backbone is no longer relevant in the current JS landscape.
 
 Models and Collections
 ----------------------
@@ -55,4 +56,17 @@ were methods instead of pure functions.  This meant that when we wanted to use n
 A simpler approach would have just been to use underscore directly and keep all our collections as arrays of plain objects.
 When you want to implement new functionality, you don't need to introduce inheritance (and all the complexity that entails).
 
+But at this point in history, we were afraid of elegance because working with jQuery had scared us away from simple solutions to simple problems.  Structure seemed more valuable than any other axis.  Simplicity was scary.
 
+```js
+// --Method based--
+var c = new Backbone.Collection([ { name: 'Backbone' }, { name: 'Mithril'} ])
+
+c.pluck('name') 
+//=> [ 'Backbone', 'Mithril' ]
+
+// --Functional--
+var a = [ { name: 'Backbone' }, { name: 'Mithril'} ]
+_.pluck(a, 'name') 
+//=> [ 'Backbone', 'Mithril' ]
+```
