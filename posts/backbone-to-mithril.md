@@ -93,3 +93,5 @@ You had more code than you needed, and you needed to constantly refer to the doc
 The XHR API was a mess, we didn't have the Fetch API or even A+ Promises! 
 Backbone seemed to make things easier.  But all we probably needed was a nice utility function for dealing with network requests.
 Low level enough that we didn't need hooks, but still concise and without boilerplate.
+
+A lot of the gains we felt we were getting were probably by making our server's API less chaotic, not by using Backbone's API per se.
