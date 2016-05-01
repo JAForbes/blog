@@ -482,6 +482,6 @@ Just because Backbone's inheritance and event model did not support it's own phi
 Turns out mithril encourages similar practices, and these practices are in harmony with mithril's utility oriented design.
 Mithril developers tend to see it is as more of a library than a framework, a utility belt for building applications without being prescriptive.  You can opt out of any aspect of mithril, it's routing, props, whatever.  And you never need to look at mithril's source code to achieve this.  Just use your own functions, it is that simple.
 
-By walking through the differences in design, we've walked through a little bit of Javascript history.  From the wild west of JQuery to fast, declarative, functional mithril.
+By walking through the differences in design, we've walked through a little bit of Javascript history.  From the wild west of JQuery, to fast, declarative, functional mithril.
 
 I wonder what comes next?
