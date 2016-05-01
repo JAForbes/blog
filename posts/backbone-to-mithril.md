@@ -81,17 +81,22 @@ as long as our API followed best practices.
 Backbone provided methods like `sync` `save` `fetch`, that would automatically construct the relevant XHR query based on
 metadata stored on Collection.
 
-It became quite common to want to modify or manipulate the request or response though.  So Backbone provided events that we could
+It became quite common to want to modify or manipulate the request or response though.  Backbone provided events that we could
 hook into and perform modifications.  Backbone even recommended overriding sync either at the Collection level or at the global
-level.  In the end, I often wondered were we hacking against Backbone in the right way, or the wrong way?
+level.  In the end, one often wondered were we hacking against Backbone in the right way, or the wrong way?
 Backbone encouraged play, but didn't offer guidance when doing so.  Backbone knew it wasn't going to handle the needs 
 of every application out there, so it tried to encourage reading it's source, and providing as many hooks as possible.
 But the sea of documentation and hooks just created an illusion of structure without any clear benefits.
 
-You had more code than you needed, and you needed to constantly refer to the documentation to see exactly how these XHR methods behaved for different HTTP methods and what the difference was when being dispatched from a model or from a collection.
+You had more code than you needed, and you were required to constantly refer to the documentation to see exactly how these XHR methods behaved for different HTTP methods and what the difference was when being dispatched from a model or from a collection.
 
 The XHR API was a mess, we didn't have the Fetch API or even A+ Promises! 
 Backbone seemed to make things easier.  But all we probably needed was a nice utility function for dealing with network requests.
-Low level enough that we didn't need hooks, but still concise and without boilerplate.
+Low level enough that we didn't need hooks, but still concise and without boilerplate (mithril provides exactly that).
 
 A lot of the gains we felt we were getting were probably by making our server's API less chaotic, not by using Backbone's API per se.
+
+Routing
+-------
+
+
