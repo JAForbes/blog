@@ -8,7 +8,7 @@ to this new framework.  There is a great article [Leo Horie](github.com/lhorie) 
 [mithril to other major JS Frameworks](http://lhorie.github.io/mithril/comparison.html) but it was written as if the reader had
 already bought into mithril's philosophies.
 
-The framework I had the most experience with before trying mithril, was Backbone.  So instead of saying why Mithril is better
+The framework I had the most experience with, before trying mithril, was Backbone.  So instead of saying why Mithril is better
 than [Backbone](http://backbonejs.org/), I'm just going to show how to map Backbone's core ideas to Mithril, 
 and leave the final judgement up to the reader.
 
