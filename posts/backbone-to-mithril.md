@@ -99,4 +99,116 @@ A lot of the gains we felt we were getting were probably by making our server's 
 Routing
 -------
 
+The Router in Backbone is simple as it could be given the point in time in which it was created.
+You provide a hash of url's with pattern matching for variables within in that URL.  The first pattern that matches will trigger
+a callback.  The nicest part about this is how similar it is to the event declaration code in a Backbone View.
+
+```js
+var Facebook = Backbone.Router.extend({
+  routes: {
+    '/:user': 'onProfile',
+    '/messages/': 'onMessages',
+    '/settings/:setting': 'onSettings',
+    '/settings': 'onSettings',
+    '/': 'onNewsFeed'
+  },
+  
+  onProfile: function(){
+    // fetch necessary data
+    // instantiate or trigger new view to render
+  },
+  
+  onMessages: function(){
+    // fetch necessary data
+    // instantiate or trigger new view to render
+  }
+  onSettings: function(){
+    // fetch necessary data
+    // instantiate or trigger new view to render
+  }
+  onNewsFeed: function(){
+    // fetch necessary data
+    // instantiate or trigger new view to render
+  }
+})
+```
+
+Every callback does the same thing though.  It would be a lot easier if the route hash instead instantiated the new View.
+
+```js
+var Facebook = Backbone.Router.extend({
+  routes: {
+    '/:user': ProfileView,
+    '/messages/': MessagesView,
+    '/settings/:setting': SettingsView,
+    '/settings': SettingsView,
+    '/': NewsFeedView
+  }
+})
+```
+
+I'm sure the Backbone team thought of this, and I'm sure the reason they didn't go with it because of [Separation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns).  Backbone was trying to bring the Model View Controller architecture
+from the server to the client.  This was a pretty controversial stance at the time.  The Backbone team, wisely, did not deviate much from the patterns used on the server side.  One of the core tenets of MVC advocates is, separation of business logic and state from
+the view layer.  The view should not know manage state, it should only represent it.
+
+This makes a lot of sense when you think about the domain of server side applications.  Your model layer may be reused by command line tools, OS level gui's, the browser and on and on.  Keeping as much of the business logic out of the view as possible theoretically ensures reuse of 90% of your application's code.
+
+But we're not writing our app on the server.  We're in a browser.  And there is only one way to interact with our business logic, *via a view*.  Separating state management into the Routing, Collection and Model layer only adds complexity.  Let's imagine a View oriented archictecture in Backbone.  No Models, No Router callbacks.
+
+```js
+// 1. There is only 1 router, so why bother creating a class?
+// 2. When the route matches, initialize the View
+//    Automatically calls View.remove from the previous route
+Backbone.Router({
+  '/:user': ProfileView,
+  '/messages/': MessagesView,
+  '/settings/:setting': SettingsView,
+  '/settings': SettingsView,
+  '/': NewsFeedView
+})
+
+var NewsFeedView = Backbone.View.extend({
+
+  news: [],
+  className: 'news-feed',
+  
+  initialize: function(){
+    
+    this.render() //Render Loading
+    
+    this.load()
+      // Render server data
+      .then( this.render )
+   
+  },
+  
+  load: function(){
+    return fetch('api.facebook.com/newsfeed')
+      .then( r => r.json() )
+      .then( r => this.news = r )
+  }
+  
+  render: function(){
+    this.el.innerHTML = 
+      news.length 
+      ? 'Loading ...' 
+      : news.map(
+          n => '<div class="news-content">'+ news.content + '</div>'
+        )
+        .join('')
+  }
+})
+```
+
+The above Router is completely made up, it is an illustration of how much simpler Routing can be if we just accept that the View
+knows what data it needs and when.
+
+In the View, I've fetched the data we needed and rendered twice.  The first time we just tell the user we are loading,
+the second time we map over the response and create HTML from the data.
+
+The way I've written the render function is not very idiomatic Backbone.  I could very well be replacing part of the view
+that do not need to be replaced.  But it is a lot easier to see the way the view will render by simply returning a new dom every time.
+
+It would be nice if there was a system that could automatically only apply the changes efficiently...
+
 
