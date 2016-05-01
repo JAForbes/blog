@@ -451,6 +451,8 @@ If you have any performance issues, jump into the [gitter](https://gitter.im/lho
 A lot of our instincts about app development in JS are not specific to a particular framework.  What separates mithril from the pack is its focus on Javascript's semantics and characteristics, instead of framework domain specific languages and techniques.
 If you know how to write fast JS, you already know how to use mithril.
 
+And if you are running a project, you can now search for JS devs instead of developers focused on a particular framework.  They will be better programmers than the framework specific devs, and their solutions will be easier to reuse if you ever move to another framework.
+
 Backbone, a product of its time
 -------------------------------
 
