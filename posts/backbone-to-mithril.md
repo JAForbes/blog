@@ -383,7 +383,10 @@ This function `m.withAttr` will pass `event.currentTarget.value` to our prop whe
 You could do the samething with a checkbox:
 
 ```js
-m('input[type=checkbox]', { checked: controller.checked(), onchange: m.witAttr('checked', controller.checked) })
+m('input[type=checkbox]', { 
+  checked: controller.checked(), 
+  onchange: m.witAttr('checked', controller.checked) 
+})
 ```
 
 Mithril will redraw our view afterwards so it will automatically be rendered in our paragraph.
