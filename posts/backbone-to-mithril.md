@@ -380,7 +380,7 @@ m('input[type=text]', { oninput: m.withAttr('value', controller.name) }
 Now remember, our `name` is a function.  And when we call it with a value, it will be saved internally.
 This function `m.withAttr` will pass `event.currentTarget.value` to our prop whenever they input text into that element.
 
-You could do the samething with a checkbox:
+You could do the same thing with a checkbox:
 
 ```js
 m('input[type=checkbox]', { 
