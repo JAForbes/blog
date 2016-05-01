@@ -147,9 +147,9 @@ var Facebook = Backbone.Router.extend({
 })
 ```
 
-I'm sure the Backbone team thought of this, and I'm sure the reason they didn't go with it because of [Separation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns).  Backbone was trying to bring the Model View Controller architecture
+I'm sure the Backbone team thought of this, and I'm sure the reason they didn't go with it was because of [Separation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns).  Backbone was trying to bring the Model View Controller architecture
 from the server to the client.  This was a pretty controversial stance at the time.  The Backbone team, wisely, did not deviate much from the patterns used on the server side.  One of the core tenets of MVC advocates is, separation of business logic and state from
-the view layer.  The view should not know manage state, it should only represent it.
+the view layer.  The view should not manage state, it should only represent it.
 
 This makes a lot of sense when you think about the domain of server side applications.  Your model layer may be reused by command line tools, OS level gui's, the browser and on and on.  Keeping as much of the business logic out of the view as possible theoretically ensures reuse of 90% of your application's code.
 
@@ -172,28 +172,24 @@ var NewsFeedView = Backbone.View.extend({
   news: [],
   className: 'news-feed',
   
-  initialize: function(){
+  initialize: (){
     
     this.render() //Render Loading
     
-    this.load()
+    fetch('api.facebook.com/newsfeed')
+      .then( r => r.json() )
+      .then( r => this.news = r )
       // Render server data
       .then( this.render )
    
   },
   
-  load: function(){
-    return fetch('api.facebook.com/newsfeed')
-      .then( r => r.json() )
-      .then( r => this.news = r )
-  }
-  
-  render: function(){
+  render: (){
     this.el.innerHTML = 
-      news.length 
+      this.news.length == 0
       ? 'Loading ...' 
-      : news.map(
-          n => '<div class="news-content">'+ news.content + '</div>'
+      : this.news.map(
+          n => '<div class="news-content">'+ n.content + '</div>'
         )
         .join('')
   }
@@ -209,6 +205,232 @@ the second time we map over the response and create HTML from the data.
 The way I've written the render function is not very idiomatic Backbone.  I could very well be replacing part of the view
 that do not need to be replaced.  But it is a lot easier to see the way the view will render by simply returning a new dom every time.
 
-It would be nice if there was a system that could automatically only apply the changes efficiently...
+(It would be nice if there was a system that could automatically only apply the changes efficiently...)
 
+Let's take this further.  Imagine all our different Views, they would all be doing the same thing, render with the intitial state,
+fetch the necessary data, and then render again.  When any event occurs, render again.
 
+What if we established a contract with our router, we could expose a `view` method that returns a HTML string, and it could automatically apply the changes for us.  Our view becomes...
+
+```js
+var NewsFeedView = Backbone.View.extend({
+
+  news: [],
+  className: 'news-feed',
+  
+  initialize: function(){
+     fetch('api.facebook.com/newsfeed')
+      .then( r => r.json() )
+      .then( r => this.news = r )
+  },
+  
+  view: function(){
+    return this.news.length == 0
+      ? 'Loading ...' 
+      : this.news.map(
+          n => '<div class="news-content">'+ n.content + '</div>'
+        )
+        .join('')
+  }
+})
+```
+
+Notice I'm now returning the generated content, not assigning it to the parent element.  This allows the library to decide when and how to apply the change, we simply state what the final result should look like.
+
+There is still a lot of boilerplate though.  Why are we extending from Backbone.view?  Well, it has some builtin methods for removal,
+managing events and managing the containing element.  We already decided the framework was going to handle removal and event management.  What if we just returned our containing element directly, then we wouldn't need inheritance.
+
+```js
+var NewsFeedView = {
+
+  news: [],
+  
+  initialize:(){
+    fetch('api.facebook.com/newsfeed')
+      .then( r => r.json() )
+      .then( r => this.news = r )
+  },
+  
+  view: (){
+    return '<div className="news-feed">' +
+      this.news.length == 0
+      ? 'Loading ...' 
+      : this.news.map(
+          n => '<div class="news-content">'+ n.content + '</div>'
+        )
+        .join('') +
+    '</div>'
+  }
+})
+```
+
+Clearly we can't write complex views by concatenating together HTML strings.  But I think we've now reached a sufficient conceptual plain to bridge the gap between Backbone and Mithril.  We've removed inheritance, we've removed the model layer, the routing layer.
+We're declaratively returning what our view should ook like, and we're exposing two functions for our framework to hook into (`initialize` and `view`).
+
+We've basically created a rudimentary version of mithril.  Let's complete the transformation.
+
+```js
+m.route(document.body, '/', {
+  '/:user': ProfileView,
+  '/messages/': MessagesView,
+  '/settings/:setting': SettingsView,
+  '/settings': SettingsView,
+  '/': NewsFeedView
+})
+
+var NewsFeedView = {
+  
+  controller: function(){
+    this.news = m.request({ 
+      method: 'GET', 
+      url: 'api.facebook.com/newsfeed',
+      initialValue: []
+    )
+  }
+  
+  view: function(){
+    return m('div.news-feed', 
+      this.news().length 
+      ? 'Loading ...'
+      : this.news().map(
+        n => m('div.news-content', n.content)
+      )
+    )
+  }
+}
+```
+
+Behold, we've conceptually migrated from Backbone to Mithril.  Let me walk through the small changes needed to bridge the gap.
+
+`m.request` is an XHR utility built into mithril.  It returns a getter/setter called a prop.  Because we are performing XHR via
+m.request, mithril will automatically redraw our `view` when the request completes.  Because we have specified an `initialValue`
+our view be able to render immediately even though the request hasn't completed.
+
+m.request is extremely flexible [API](http://lhorie.github.io/mithril/mithril.request.html), I personally don't use it, but I'm introducing to the standard mithril API.  If you are intrigued, you can read about [how I use Mithril](http://james-forbes.com/?/posts/how-i-use-mithril)
+
+You'll notice I'm calling `this.news()` that's because `news` is not an array anymore, its a `prop` that contains an `array`.
+In order to get to the underlying data you just call it.  Imagine a Backbone.Model.get/Backbone.Model.set but every attribute has it's own get/set functionality.  Calling a prop doesn't trigger any events, but it allows us to use the prop as an event callback directly.
+I've written extensively about props [here](http://james-forbes.com/?/posts/power-of-m-prop).
+
+You'll also notice I've changed the name of `initialize` to `controller`.  Think of this as an alias and nothing more.
+ 
+We are also using the `m` function to generate our DOM elements.  `m` is the most important part of mithril.  We'll walk through how it works, but for now, just think of it as a way to avoid mangling HTML strings.
+
+There is one key step I've glossed over until now.  How do we bind events to the HTML within our view.  I've explained that the framework will redraw when events occur, but not how to bind them ourselves.
+
+We just declare the event on the element itself.
+
+```js
+m('button', { onclick: this.onClick }, 'Click Me!')
+```
+
+When you click on that button, mithril will call your callback, and then redraw afterwards.
+
+Here is an example of saving input from the user.
+
+```js
+var Component = {
+
+  controller: function(){
+    this.name = m.prop('')
+  }
+
+  view: (controller) => [
+    m('p', 'Hi '+ controller.name())
+    m('input[type=text]', {
+      oninput: function(e){
+        var value = (e.currentTarget || this).value;
+        // save the input's value to our name prop
+        controller.name(value)
+    }
+  })
+]
+```
+
+Now that is clearly to long winded to write every time.  Luckily mithril has a utility that does exactly what I've shown above.
+
+```js
+m('input[type=text]', { oninput: m.witAttr('value', controller.name) }
+```
+
+Now remember, our `name` is a function.  And when we call it with a value, it will be saved internally.
+This function `m.withAttr` will pass `event.currentTarget.value` to our prop whenever they input in that element.
+
+Mithril will redraw our view afterwards so it will automatically be rendered in our paragraph.
+
+```js
+m('p', 'Hi '+ controller.name())
+```
+
+Now let's imagine we wanted to reload the news feed in our previous example.  We just need a button that will trigger fetching the API.
+
+```js
+var NewsFeedView = {
+  
+  controller: function(){
+    this.news = this.load()
+  }
+  
+  load: function(){
+    return m.request({ 
+      method: 'GET', 
+      url: 'api.facebook.com/newsfeed',
+      initialValue: []
+    )
+  },
+  
+  view: function(ctrl){
+    return m('div.news-feed', 
+      this.news().length 
+      ? 'Loading ...'
+      : this.news().map(
+        n => m('div.news-content', n.content)
+      ),
+      m('button',{ onclick: _ => ctrl.load().then(ctrl.news) }, 'Load New Stories')
+    )
+  }
+}
+```
+
+We just moved our request into it's own function, and then we call that from the click handler.  You could approach this a million and one ways, but its extremely straightforward.  You'll notice most of this code isn't framework specific, it should feel a lot like talking to HTML elements directly.  We've got a nice utility for making network requests and generating the DOM, but really its just a new layer on top of a DOM API we all know well.  We use CSS selector syntax to generate elements, we use standard event callbacks on the virtual element, the same way we would in HTML, and the rest is just ceremony and boilerplate we don't need to worry about.
+
+Trustworthy, Simplicity
+-----------------------
+
+You may be concerned that all this simplicity will lead to slower applications, or that mithril won't be able to handle real world applications.  But, to be clear, if your Backbone app is fast, it is because you made it fast.  Backbone doesn't have a rendering system, so it is completely up to you to render in the most efficient way possible.
+
+But here's the thing, mithril is faster than your application rendering logic.  The entire point of mithril is to be small and fast.
+It has been optimized based on how browser engines interact with JS.  It is one of the fastest virtual dom algorithms out there (~7x faster than React).
+
+And even if you don't believe me - if you need to opt out of the auto redrawing API, there are many ways to do so.  You can interact with the elements directly via mithril's config function.  You can also return `{ subtree: 'retain' }` in your view to completely avoid the redraw of that subtree.
+
+But these are optimizations you will not need unless you are dealing with thousands of elements that are rapidly changing constantly.
+Even then, mithril's opt out API is nicer than any other framework.  And you can use virtual dom for the rest of your application.
+
+Mithril (and virtual doms in general) makes extremely complex view code trivial, things like occlusion culling, conditional list rendering, dynamic styles, are all declarative and easy to read/edit.  You will have less bugs, and a faster app.
+
+I encourage you to experiment with it yourself (and turn on paint rectangles in your dev tools).  You'll be pleasantly suprised.
+If you have any performance issues, jump into the [gitter](https://gitter.im/lhorie/mithril.js).
+
+A lot of your instincts about app development in JS are not specific to a particular framework.  What separate mithril from the pack is its focus on Javascript's semantics and characteristics, instead of framework domain specific languages and techniques.
+If you know how to write fast JS, you already know how to use mithril.
+
+Backbone, a product of its time
+-------------------------------
+
+Backbone did introduce a lot of important concepts to the JS community.  Things that seemed radical at the time are now second nature.
+We all use some deviation of Lodash/Underscore/Ramda.  We all know Single Page Applications are superior to server side rendering.
+"Web apps" as a term is no longer something people scoff at.
+
+We know MVC is important (even if Backbone's interpretation was a little heavy handed), and most of us have moved on from using JQuery altogether.
+
+Yes, underscore templates were the wrong approach, but they share a lot in common with something like JSX or hyperscript.  Perhaps client side templates paved the way for virtual dom.  Who knows.  [I experimented with JS templating 2 years ago](https://github.com/JAForbes/temple) because of ideas sparked by working with Backbone.  It's funny how similar those experiments look to hyperscript today.
+
+Ultimately, Backbone's legacy is philosophical.  If you want to get something done, get in the code and fix it yourself.  Just because Backbone's inheritance and event model did not support that hypothesis does not make it the sentiment any less worthy.  Instead of skilling up as an Angular developer, or a React developer, because a better JS developer.  Read the source code, adapt it to your needs.
+
+Turns out mithril encourages similar practices, and these practices are in harmony with mithril's utility oriented design.
+Mithril developers tend to see it is as more of a library than a framework, a utility belt for building applications without being prescriptive.
+
+By walking through the differences in design, we've walked through a little bit of Javascript history.  From the wild west of JQuery to fast, declarative, functional Javascript.
+
+I wonder what come's next?
