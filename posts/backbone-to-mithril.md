@@ -436,7 +436,7 @@ Trustworthy simplicity
 You may be concerned that all this simplicity will lead to slower applications, or that mithril won't be able to handle real world applications.  But, to be clear, if your Backbone app is fast, it is because you made it fast.  Backbone doesn't have a rendering system, so it is completely up to you to render in the most efficient way possible.
 
 But here's the thing, mithril is faster than your custom application rendering logic.  The entire point of mithril is to be small and fast.
-It has been optimized based and benchmarked tirelessly.  Mithril is one of the fastest virtual dom algorithms out there (~7x faster than React).
+It has been optimized and benchmarked tirelessly.  Mithril is one of the fastest virtual dom algorithms out there (~7x faster than React).
 
 And even if you don't believe me - if you need to opt out of the auto redrawing API, there are many ways to do so.  You can interact with the elements directly via mithril's config function.  You can also return `{ subtree: 'retain' }` in your view to completely avoid the redraw of that subtree.
 
