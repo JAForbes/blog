@@ -470,9 +470,11 @@ Yes, underscore templates were the wrong approach, but they share a lot in commo
 
 We also all agree RESTful API's are better than remote method calls or arbitrarily named endpoints with custom semantics.
 
-Ultimately, Backbone's legacy was always going to be philosophical.  If you want to get something done, get in the code and fix it yourself.  Just because Backbone's inheritance and event model did not support that hypothesis, does not make it the sentiment any less worthy.  Instead of skilling up as an Angular developer, or a React developer, because a better JS developer.  Read the source code, adapt it to your needs.
+Ultimately, Backbone's legacy was always going to be philosophical: "If you want to get something done, get in the code and fix it yourself".  "Instead of skilling up as an Angular developer, or a React developer, become a better JS developer.  Read the source code, adapt it to your needs".
 
-Often though customizing backbone meant creating your own fork and patching methods.  Not pretty.
+Often though customizing Backbone meant creating your own fork and patching methods.  And then when you had to update Backbone, somehow patch it without breaking your app.  Not pretty.
+
+Just because Backbone's inheritance and event model did not support it's own philosophies, does not make the sentiment any less worthy.
 
 Turns out mithril encourages similar practices, and these practices are in harmony with mithril's utility oriented design.
 Mithril developers tend to see it is as more of a library than a framework, a utility belt for building applications without being prescriptive.  You can opt out of any aspect of mithril, it's routing, props, whatever.  And you never need to look at mithril's source code to achieve this.  Just use your own functions, it is that simple.
