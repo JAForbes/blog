@@ -334,7 +334,7 @@ Calling a prop doesn't trigger any events, but it allows us to use the prop as a
 
 > I've written extensively about props [here](http://james-forbes.com/?/posts/power-of-m-prop).
 
-You'll also notice I've changed the name of `initialize` to `controller`.  This is just an alias to satify mithril's component API.
+You'll also notice I've changed the name of `initialize` to `controller`.  This is just an alias to satisfy mithril's component API.
  
 We are also using the `m` function to generate our DOM elements.  `m` is the most important part of mithril.  We'll walk through how it works, but for now, just think of it as a way to avoid mangling HTML strings.
 
