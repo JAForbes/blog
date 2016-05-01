@@ -433,6 +433,8 @@ We use CSS selector syntax to generate elements, we use standard event callbacks
 Trustworthy simplicity
 ----------------------
 
+![](http://1520unreached.com/wp-content/uploads/2016/01/183-center_for_ants.jpg)
+
 You may be concerned that all this simplicity will lead to slower applications, or that mithril won't be able to handle real world applications.  But, to be clear, if your Backbone app is fast, it is because you made it fast.  Backbone doesn't have a rendering system, so it is completely up to you to render in the most efficient way possible.
 
 But here's the thing, mithril is faster than your custom application rendering logic.  The entire point of mithril is to be small and fast.
@@ -455,6 +457,8 @@ And if you are running a project, you can now search for JS devs instead of deve
 
 Backbone, a product of its time
 -------------------------------
+
+![](http://pics1.pof.com/dating/1128/49/24/4ad33bfe6-c89e-4088-af5c-bc7162a4e1d6.2.jpg)
 
 Backbone did introduce a lot of important concepts to the JS community.  Things that seemed radical at the time are now second nature.
 We all use some deviation of Lodash/Underscore/Ramda.  We all know Single Page Applications are superior to server side rendering.
