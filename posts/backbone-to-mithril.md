@@ -369,7 +369,9 @@ var Component = {
 ]
 ```
 
-Now that is clearly too long winded to write every time.  Luckily mithril has a utility that does exactly what I've shown above.
+Hopefully this is familiar, it's a lot like adding an event listener to HTML.  We get the native DOM event passed to us.
+But most of the time we don't actually want to inspect the event manually.
+Luckily mithril has a utility that intelligently grabs the desired property off of the event in a browser indepedent manner.
 
 ```js
 m('input[type=text]', { oninput: m.witAttr('value', controller.name) }
