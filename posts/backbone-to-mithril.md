@@ -73,7 +73,7 @@ _.pluck(a, 'name')
 //=> [ 'Backbone', 'Mithril' ]
 ```
 
-Sever Communication
+Server Communication
 -------------------
 
 Another reason we used Collections and Models in Backbone was to add structure to our server calls.
@@ -294,7 +294,7 @@ var NewsFeedView = {
       url: 'api.facebook.com/newsfeed',
       initialValue: []
     )
-  }
+  },
   
   view: function(){
     return m('div.news-feed', 
@@ -355,7 +355,7 @@ var Component = {
 
   controller: function(){
     this.name = m.prop('')
-  }
+  },
 
   view: (controller) => [
     m('p', 'Hi '+ controller.name())
@@ -404,7 +404,7 @@ var NewsFeedView = {
   
   controller: function(){
     this.news = this.load()
-  }
+  },
   
   load: function(){
     return m.request({ 
