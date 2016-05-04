@@ -288,17 +288,19 @@ var NewsFeedView = {
   },
   
   view: (){
-    return '<div className="news-feed">' +
-      this.news.length == 0
-      ? 'Loading ...' 
-      : this.news.map(
-          n => 
-            '<div class="news-content">'
-              + n.content 
-            + '</div>'
-        )
-        .join('') +
-    '</div>'
+    return '<div className="news-feed">'
+      + (
+        this.news.length == 0
+        ? 'Loading ...' 
+        : this.news.map(
+            n => 
+              '<div class="news-content">'
+                + n.content 
+              + '</div>'
+          )
+          .join('')
+      )
+    + '</div>'
   }
 })
 ```
