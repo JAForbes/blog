@@ -65,8 +65,8 @@ But at this point in history, we were afraid of elegance because working with jQ
 // --Method based--
 var c =
   new Backbone.Collection([
-  { name: 'Backbone'}
-  ,{ name: 'Mithril'} 
+    { name: 'Backbone'}
+    ,{ name: 'Mithril'} 
   ])
 
 c.pluck('name') 
@@ -98,10 +98,13 @@ level.  In the end, one often wondered whether we were hacking against Backbone 
 
 ```js
 Backbone._sync = Backbone.sync
-Backbone.sync = _.wrap(Backbone._sync, function(fn, args){
-  // What am I doing ???
-  return fn(args) // I guess? 
-})
+Backbone.sync =
+  _.wrap(
+    Backbone._sync
+    ,function(fn, args){
+      // What am I doing ???
+      return fn(args) // I guess? 
+  })
 ```
 ![](https://media.giphy.com/media/C7olQswvzSwAE/giphy.gif)
 
