@@ -29,15 +29,16 @@ So Backbone did the next best thing, it made sure all the code that interacted w
 And all the events that operated on that view were declared in the same place at the top of the file.
 
 ```js
-var OrganizedView = Backbone.View.extend({
-  events: {
-    'click button': 'onSubmit'
-    'input .name': 'onInput'
-  }
-  
-  onSubmit: function(e){}
-  onInput: function(e){}
-})
+var OrganizedView = 
+  Backbone.View.extend({
+    events: {
+      'click button': 'onSubmit'
+      'input .name': 'onInput'
+    }
+    
+    onSubmit: function(e){}
+    onInput: function(e){}
+  })
 ```
 
 This is truly the most important change Backbone brought to the application model.  Interestingly enough Backone.View accounts for the smallest percentage of source code in the framework.
