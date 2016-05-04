@@ -458,11 +458,15 @@ var NewsFeedView = {
       this.news().length 
       ? 'Loading ...'
       : this.news().map(
-        n => m('div.news-content', n.content)
+        n => 
+          m('div.news-content'
+            , n.content
+          )
       ),
       m('button',
         { onclick: _ => 
-          ctrl.load().then(ctrl.news) 
+          ctrl.load()
+            .then(ctrl.news) 
         }
         , 'Load New Stories'
       )
