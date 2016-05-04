@@ -63,13 +63,20 @@ But at this point in history, we were afraid of elegance because working with jQ
 
 ```js
 // --Method based--
-var c = new Backbone.Collection([ { name: 'Backbone' }, { name: 'Mithril'} ])
+var c =
+  new Backbone.Collection([
+  { name: 'Backbone'}
+  ,{ name: 'Mithril'} 
+  ])
 
 c.pluck('name') 
 //=> [ 'Backbone', 'Mithril' ]
 
 // --Functional--
-var a = [ { name: 'Backbone' }, { name: 'Mithril'} ]
+var a = 
+  [{ name: 'Backbone'}
+  ,{ name: 'Mithril'} 
+  ]
 _.pluck(a, 'name') 
 //=> [ 'Backbone', 'Mithril' ]
 ```
