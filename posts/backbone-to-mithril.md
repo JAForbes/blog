@@ -128,47 +128,48 @@ You provide a hash of urls with pattern matching for variables within in that UR
 a callback.  The nicest part about this is how similar it is to the event declaration code in a Backbone View.
 
 ```js
-var Facebook = Backbone.Router.extend({
-  routes: {
-    '/:user': 'onProfile',
-    '/messages/': 'onMessages',
-    '/settings/:setting': 'onSettings',
-    '/settings': 'onSettings',
-    '/': 'onNewsFeed'
-  },
-  
-  onProfile: function(){
-    // fetch necessary data
-    // instantiate or trigger new view to render
-  },
-  
-  onMessages: function(){
-    // fetch necessary data
-    // instantiate or trigger new view to render
-  }
-  onSettings: function(){
-    // fetch necessary data
-    // instantiate or trigger new view to render
-  }
-  onNewsFeed: function(){
-    // fetch necessary data
-    // instantiate or trigger new view to render
-  }
-})
+var Facebook = 
+  Backbone.Router.extend({
+    routes: {
+      '/:user': 'onProfile',
+      '/messages/': 'onMessages',
+      '/settings/:setting': 'onSettings',
+      '/settings': 'onSettings',
+      '/': 'onNewsFeed'
+    },
+    
+    onProfile: function(){
+      // fetch necessary data
+      // trigger new view to render
+    },
+    
+    onMessages: function(){
+      // fetch necessary data
+      // trigger new view to render
+    }
+    onSettings: function(){
+      // fetch necessary data
+      // trigger new view to render
+    }
+    onNewsFeed: function(){
+      // fetch necessary data
+      // trigger new view to render
+    }
+  })
 ```
 
 Every callback does the same thing though.  It would be a lot easier if the route hash instead instantiated the new View.
 
 ```js
-var Facebook = Backbone.Router.extend({
-  routes: {
-    '/:user': ProfileView,
-    '/messages/': MessagesView,
-    '/settings/:setting': SettingsView,
-    '/settings': SettingsView,
-    '/': NewsFeedView
-  }
-})
+var Facebook = 
+  Backbone.Router.extend({
+    routes: {
+      '/:user': ProfileView,
+      '/messages/': MessagesView,
+      '/settings': SettingsView,
+      '/': NewsFeedView
+    }
+  })
 ```
 
 I'm sure the Backbone team thought of this, and I'm sure the reason they didn't go with it was because of [Separation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns).  Backbone was trying to bring the Model View Controller architecture
@@ -180,44 +181,49 @@ This makes a lot of sense when you think about the domain of server side applica
 But we're not writing our app on the server.  We're in a browser.  And there is only one way to interact with our business logic, *via a view*.  Separating state management into the Routing, Collection and Model layer only adds complexity.  Let's imagine a View oriented archictecture in Backbone.  No Models, No Router callbacks.
 
 ```js
-// 1. There is only 1 router, so why bother creating a class?
-// 2. When the route matches, initialize the View
-//    Automatically calls View.remove from the previous route
+// 1. There is only 1 router
+// so why bother creating a class?
+// 2. When the route matches
+// initialize the View
+// Automatically calls View.remove
 Backbone.Router({
   '/:user': ProfileView,
   '/messages/': MessagesView,
-  '/settings/:setting': SettingsView,
   '/settings': SettingsView,
   '/': NewsFeedView
 })
 
-var NewsFeedView = Backbone.View.extend({
-
-  news: [],
-  className: 'news-feed',
+var NewsFeedView = 
+  Backbone.View.extend({
   
-  initialize: (){
+    news: [],
+    className: 'news-feed',
     
-    this.render() //Render Loading
+    initialize: (){
+      
+      //Render "Loading"
+      this.render() 
+      
+      fetch('api.facebook.com/newsfeed')
+        .then( r => r.json() )
+        .then( r => this.news = r )
+        // Render server data
+        .then( this.render )
+     
+    },
     
-    fetch('api.facebook.com/newsfeed')
-      .then( r => r.json() )
-      .then( r => this.news = r )
-      // Render server data
-      .then( this.render )
-   
-  },
-  
-  render: (){
-    this.el.innerHTML = 
-      this.news.length == 0
-      ? 'Loading ...' 
-      : this.news.map(
-          n => '<div class="news-content">'+ n.content + '</div>'
-        )
-        .join('')
-  }
-})
+    render: (){
+      this.el.innerHTML = 
+        this.news.length == 0
+        ? 'Loading ...' 
+        : this.news.map(
+            n => '<div class="news-content">'
+                + n.content 
+              + '</div>'
+          )
+          .join('')
+    }
+  })
 ```
 
 The above Router is completely made up, it is an illustration of how much simpler Routing can be if we just accept that the View
@@ -252,7 +258,10 @@ var NewsFeedView = Backbone.View.extend({
     return this.news.length == 0
       ? 'Loading ...' 
       : this.news.map(
-          n => '<div class="news-content">'+ n.content + '</div>'
+          n => 
+            '<div class="news-content">'
+              + n.content 
+            + '</div>'
         )
         .join('')
   }
@@ -281,7 +290,10 @@ var NewsFeedView = {
       this.news.length == 0
       ? 'Loading ...' 
       : this.news.map(
-          n => '<div class="news-content">'+ n.content + '</div>'
+          n => 
+            '<div class="news-content">'
+              + n.content 
+            + '</div>'
         )
         .join('') +
     '</div>'
@@ -312,7 +324,10 @@ var NewsFeedView = {
       this.news().length 
       ? 'Loading ...'
       : this.news().map(
-        n => m('div.news-content', n.content)
+        n => 
+          m('div.news-content'
+            ,n.content
+          )
       )
     )
   }
@@ -321,7 +336,6 @@ var NewsFeedView = {
 m.route(document.body, '/', {
   '/:user': ProfileView,
   '/messages/': MessagesView,
-  '/settings/:setting': SettingsView,
   '/settings': SettingsView,
   '/': NewsFeedView
 })
@@ -339,7 +353,7 @@ m.request has an extremely flexible [API](http://lhorie.github.io/mithril/mithri
 > I personally just use the fetch API.  If you are intrigued, you can read about [how I use Mithril](http://james-forbes.com/?/posts/how-i-use-mithril)
 
 You'll notice I'm *calling* `this.news()` that's because `news` is not an array anymore, its a `prop` that contains an `array`.
-In order to get to the underlying data you just call it.  Props are a light weight replacement to Backbone.Model.get/Backbone.Model.set, where every attribute has it's own get/set functionality.  
+In order to get to the underlying data you just call it.  Props are a light weight replacement to Backbone.Model.get / Backbone.Model.set, where every attribute has it's own get/set functionality.  
 
 Calling a prop doesn't trigger any events, but it allows us to use the prop as an event callback directly.
 
@@ -354,7 +368,10 @@ There is one key step I've glossed over until now.  How do we bind events to the
 We just declare the event on the element itself.
 
 ```js
-m('button', { onclick: this.onClick }, 'Click Me!')
+m('button', 
+  { onclick: this.onClick }
+  ,'Click Me!'
+)
 ```
 
 When you click on that button, mithril will call your callback, and then redraw afterwards.
@@ -372,8 +389,13 @@ var Component = {
     m('p', 'Hi '+ controller.name())
     m('input[type=text]', {
       oninput: function(e){
-        var value = (e.currentTarget || this).value;
-        // save the input's value to our name prop
+        var value = (
+          e.currentTarget 
+          || this
+        ).value;
+        
+        // save the input's value
+        // to our `name` prop
         controller.name(value)
     }
   })
@@ -396,7 +418,9 @@ You could do the same thing with a checkbox:
 ```js
 m('input[type=checkbox]', { 
   checked: controller.checked(), 
-  onchange: m.witAttr('checked', controller.checked) 
+  onchange: m.witAttr(
+    'checked', controller.checked
+  ) 
 })
 ```
 
@@ -432,7 +456,12 @@ var NewsFeedView = {
       : this.news().map(
         n => m('div.news-content', n.content)
       ),
-      m('button',{ onclick: _ => ctrl.load().then(ctrl.news) }, 'Load New Stories')
+      m('button',
+        { onclick: _ => 
+          ctrl.load().then(ctrl.news) 
+        }
+        , 'Load New Stories'
+      )
     )
   }
 }
