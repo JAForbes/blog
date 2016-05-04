@@ -294,9 +294,9 @@ var NewsFeedView = {
         ? 'Loading ...' 
         : this.news.map(
             n => 
-              '<div class="news-content">'
-                + n.content 
-              + '</div>'
+            '<div class="news-content">'
+              + n.content 
+            + '</div>'
           )
           .join('')
       )
