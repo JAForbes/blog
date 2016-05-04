@@ -216,12 +216,14 @@ var NewsFeedView =
       this.el.innerHTML = 
         this.news.length == 0
         ? 'Loading ...' 
-        : this.news.map(
-            n => '<div class="news-content">'
-                + n.content 
-              + '</div>'
-          )
-          .join('')
+        : this.news
+        .map(
+          n => 
+            '<div class="news-content">'
+              + n.content 
+            + '</div>'
+        )
+        .join('')
     }
   })
 ```
