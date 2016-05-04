@@ -411,7 +411,12 @@ But most of the time we don't actually want to inspect the event manually.
 Luckily mithril has a utility that intelligently grabs the desired property off of the event in a browser indepedent manner.
 
 ```js
-m('input[type=text]', { oninput: m.withAttr('value', controller.name) }
+m('input[type=text]', { 
+  oninput: m.withAttr
+    'value'
+    , controller.name
+  ) 
+}
 ```
 
 Now remember, our `name` is a function.  And when we call it with a value, it will be saved internally.
