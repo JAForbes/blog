@@ -148,7 +148,7 @@ It teaches a function how to interact with a stream, or a task, or a list,
 or any other contained value that supports this API.
 
 In order for `lift` to work, a type needs to have a method called `ap`.
-In the case of array's, there is no internal support, so Ramda handles fills in the gaps for us.
+In the case of array's, there is no internal support, so Ramda fills in the gaps for us.
 
 I will cover exactly how lift works momentarily.
 But first, let's see how we can handle errors using this API.
