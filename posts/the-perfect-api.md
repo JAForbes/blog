@@ -212,7 +212,7 @@ In the above code, our dangerous code throws an Error, sanctuary then returns a 
 This means there was a failure somewhere along the way.
 
 The map after the dangerous code would never have been invoked.
-`Nothing::map` will never perform an the operation, it just returns a new `Nothing`
+`Nothing::map` will never perform an operation, it just returns a new `Nothing`
 
 
 Let's make use of our Maybe container code by performing a risky operation: dynamically calling a method on an object.
