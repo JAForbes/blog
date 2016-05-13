@@ -332,7 +332,7 @@ lift simply calls the `ap` method on a given type.
 Colloquially, `ap` teaches a function how to interact with a given container type.
 
 In order to demonstrate ap, let's create our own container type.  I'm just going to call it `Type`.
-Our type does creates a wrapper around a value that allows us to use the API we've been exploring.
+Our type creates a wrapper around a value that allows us to use the API we've been exploring.
 
 
 ```js
