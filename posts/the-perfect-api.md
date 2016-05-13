@@ -147,7 +147,7 @@ It teaches a function how to interact with a stream, or a task, or a list,
 or any other contained value that supports this API.
 
 In order for `lift` to work, a type needs to have a method called `ap`.
-In the case of array's, there is no interal support, so Ramda handles fills in the gaps for us.
+In the case of array's, there is no internal support, so Ramda handles fills in the gaps for us.
 
 I will cover exactly how lift works momentarily.
 But first, let's see how we can handle errors using this API.
@@ -200,7 +200,7 @@ S.encase(dangerous)
 (1)
 
 // Attempt to transform the output
-// The never happens though
+// This never happens though
 .map( n => n + 1 )
 
 //=> Nothing
@@ -316,9 +316,9 @@ It translates to a tuple where the first index is the error and the second index
     [undefined, "Some value"]
 
 > A lot of functional programming's terminology is tied up in history, and the names are an homage to that history.
-`Either` is a great name, and `Left` just means error, and `Right` just means success.
+`Left` just means error, and `Right` just means success.
 
-In any case, we can handle errors trivially using this API.  Errors are just data with different datatypes.
+We can handle errors trivially using this API.  Errors are just data with different datatypes.
 
 
 #### combination
