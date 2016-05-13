@@ -3,11 +3,12 @@ The Perfect API
 
 Imagine for a second that everything had the same interface.  Everything.
 
-That interface would need to support asynchronous and lazy values, so it clearly needs to use functions
-That interface would need to handle errors, but because they may come lazily, they will also require functions
+That interface would need to support asynchronous and lazy values, so it clearly needs to use functions.
 
-We'd need a way to transform values (functions)
-And a way to combine separate values together to create new values (functions)
+The interface would need to handle errors, but because they may come lazily, they will also require functions.
+
+We'd need a way to transform values (functions).
+And a way to combine separate values together to create new values (functions).
 
 If this API is going to handle every situation, its surface area can't be used conditionally.
 E.g. we don't use certain parts for certain problem domains.
