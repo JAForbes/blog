@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "static -p 80"
+    "start": "static -p 80",
+    "dist": "browserify app.js | uglifyjs -mc > bundle.min.js",
+    "watch": " watchify app.js -d -o bundle.min.js --verbose"
   },
   "repository": {
     "type": "git",
@@ -28,9 +30,9 @@
     "snabbdom": "^0.2.8"
   },
   "devDependencies": {
-    "browser-sync": "^2.11.0",
     "browserify": "^12.0.1",
     "node-static": "^0.7.7",
-    "uglifyjs": "^2.4.10"
+    "uglifyjs": "^2.4.10",
+    "watchify": "^3.7.0"
   }
 }
