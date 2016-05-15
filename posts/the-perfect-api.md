@@ -130,12 +130,12 @@ add(Array.of(2),Array.of(3)) //=> Array 5
 
 // Tasks are lazy and async, these computations won't happen until the task is forked
 add( task.of(2), task.of(3) )
+//=> Task 5
+
     .fork(
         console.error
         ,console.log
     )
-
-//=> Task 5
 // ( logs 5 to the console)
 
 add( stream.of(2), stream.of(3) )
