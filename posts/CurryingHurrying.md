@@ -3,7 +3,7 @@ Currying vs Hurrying
 
 For the sake of this discussion, all functions are now aeroplanes.
 
-```
+```js
 function Aeroplane(){
 
 }
@@ -11,24 +11,39 @@ function Aeroplane(){
 
 And each Aeroplane can take many passengers
 
-```
-function Aeroplane( passenger1, passenger2, passenger3 ){
-  return "Taking off!  With: " + ([]).slice.apply(arguments).join(', ')
+```js
+function Aeroplane(
+  passenger1
+  , passenger2
+  , passenger3
+){
+  return "Taking off! With: "
+    + ([]).slice.apply(
+        arguments
+      ).join(', ')
 }
 ```
 
 To make an Aeroplane take off, you supply a list of passengers.
 
-```
-Aeroplane( 'Pilot', 'Snake', 'Snake', 'Snake' )
-//=> "Taking off!  With Pilot, Snake, Snake, Snake"
+```js
+Aeroplane(
+  'Pilot'
+  , 'Snake'
+  , 'Snake'
+  , 'Snake'
+)
+//=> "Taking off!
+//=> With Pilot, Snake,
+//=> Snake, Snake"
 ```
 
 Let's say this Aeroplane was in a _Hurry_ and no-one boarded except the Pilot.
 
-```
+```js
 Aeroplane( 'Pilot' )
-//=> "Taking off!  With Pilot"
+//=> "Taking off!
+//  With Pilot"
 ```
 
 This plane had to take off without any passengers because it had to stay on a deadline to pick up other passengers.
@@ -45,16 +60,22 @@ to you.
 
 We can save our current list of passengers in a variable if we want.
 
-```
-pilotSeated = Aeroplane( 'Pilot' )
+```js
+pilotSeated =
+  Aeroplane( 'Pilot' )
 ```
 
 We could tell `pilotSeated` to take off as many times as we want, but it will never take off until 2 more passengers are seated on board.
 
-```
+```js
 pilotSeated() //=> pilotSeated
 
-pilotSeated( 'Snake', 'Snake' ) //=> "Taking off!  With Pilot, Snake, Snake"
+pilotSeated(
+  'Snake'
+  , 'Snake'
+)
+//=> "Taking off!
+//  With Pilot, Snake, Snake"
 ```
 
 Because everyone on board of the plane is waiting so patiently for the other passengers, the Airline gives everyone on board a free hot curry to tide them over (which seems pretty nice of the Airline but is actually just a clever public relations trick ).

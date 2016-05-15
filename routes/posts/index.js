@@ -1,7 +1,8 @@
 /* global url */
 /* global twttr */
 var marked = require('marked')
-var hljs = require('highlight.js')
+
+var Prism = require('prismjs');
 
 global.Promise = require('es6-promise').Promise
 if (!Array.from) Array.from = require('array-from');
@@ -135,8 +136,9 @@ function Twitter(v, post, postBody){
 
 function Post(v, postBody, post){
 
+
 	var highlightCode = R.once(function(){
-		Array.from(document.querySelectorAll('pre code')).forEach(hljs.highlightBlock)
+		Prism.highlightAll()
 	})
 
 	var highlightHook =

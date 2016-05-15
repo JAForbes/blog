@@ -1,14 +1,16 @@
 	body {
-		font-size: 1.3em;
 		overflow: hidden;
 		box-sizing: border-box;
 	}
 	p { line-height: 2em; }
-
+/*
 code, pre {
 	overflow-x: auto;
 	margin: 0.1em;
 	font-size: 0.8em;
+}*/
+code {
+	font-size: 0.9em;
 }
 .post {
 	top: 0px;

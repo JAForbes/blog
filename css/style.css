@@ -17,13 +17,6 @@ h1 { font-family: "Inconsolata", sans-serif; }
 code, code span {
   font-family: "Inconsolata", sans-serif;
 }
-/*
-code:not(.hljs) {
-  background: #EEE;
-  border-radius: 0.3em;
-  padding: 0.2em;
-  padding: 0;
-}*/
 a { color: #968f96;}      /* unvisited link */
 a:visited { color: #756772; }  /* visited link */
 a:active {color:black;}  /* selected link */
@@ -36,14 +29,10 @@ a:active {color:black;}  /* selected link */
   margin: 0.5em;
   list-style:none
 }
-ul {
-  margin: 0;
-  padding: 0;
-}
 
 body {
   margin: 0;
-  
+
 }
 
 .hidden {

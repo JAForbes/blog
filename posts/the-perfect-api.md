@@ -64,7 +64,7 @@ Let us begin the frivolities!
 
 `Type.of`
 
-```js
+```javascript
 var flyd = require('flyd')
 var Task = require('data.task')
 
@@ -93,7 +93,7 @@ No matter the situation or data type we have a consistent way to instantiate.
 
 `Type::map`
 
-```js
+```javascript
 var double = x => x * 2
 
 stream.map(double)
@@ -121,7 +121,7 @@ This allows the specific inner workings to occur while exposing a shared API
 
 `lift( type )`
 
-```js
+```javascript
 var R = require('ramda')
 
 var add = R.lift(R.add)
@@ -163,14 +163,14 @@ of other implementations.
 
 Maybe will prevent unsafe computations from occurring.
 
-```js
+```javascript
 var S = require('sanctuary')
 var Maybe = S.Maybe
 ```
 
 Maybe is completely interoperable with the existing API
 
-```js
+```javascript
 // (3 + 5) ^ 2
 add(
     Maybe.of(3)
@@ -187,7 +187,7 @@ We did not need to implement a new `add` function for the new data type.
 Sanctuary provides a method called `encase` that will return a Maybe that contains the success or failure state.
 Future operations on failed states are ignored, while successful states carry on as usual.
 
-```js
+```javascript
 function dangerous(value){
     throw new Error(
         "Danger! Danger!"
@@ -217,7 +217,7 @@ The map after the dangerous code would never have been invoked.
 
 Let's make use of our Maybe container code by performing a risky operation: dynamically calling a method on an object.
 
-```js
+```javascript
 //calls a function on an object
 function method(
     methodName
@@ -254,7 +254,7 @@ We then prepend the result with a dollar sign `"$"` using `Maybe::map`.
 
 Let's try introducing a subtle error.
 
-```js
+```javascript
 // Make our function safe
 S.encase3(method)
 
@@ -281,7 +281,7 @@ You could probably imagine how convenient it would be to not have to write error
 
 Let's try `encaseEither` which is just like a `Maybe`, but gives us some context on why there was a failure.
 
-```js
+```javascript
 S.encaseEither3(
     // If there is an error
     // grab the message property
@@ -335,7 +335,7 @@ In order to demonstrate ap, let's create our own container type.  I'm just going
 Our type creates a wrapper around a value that allows us to use the API we've been exploring.
 
 
-```js
+```javascript
 class Type {
   constructor (value){
       this.__value = value
@@ -354,14 +354,14 @@ class Type {
 
 We can instantiate a type:
 
-```js
+```javascript
 Type.of(2)
 //=> Type 2
 ```
 
 We can transform a type:
 
-```js
+```javascript
 Type.of(2).map( double )
 
 //=> Type 4
@@ -369,7 +369,7 @@ Type.of(2).map( double )
 
 And we can combine types:
 
-```js
+```javascript
 // recall: add has been lifted
 add( Type.of(2), Type.of(4) )
 //=> Type 6
@@ -384,7 +384,7 @@ First we teach a function how to interact with our type,
 by storing that function in a container just like any other value.
 ( Functions are values too ya know! )
 
-```js
+```javascript
 var square = Type.of(
     a => a * a
 )
@@ -394,7 +394,7 @@ var square = Type.of(
 
 Then we can apply that contained function to a contained value.
 
-```js
+```javascript
 square.ap( Type.of(3) )
 
 //=> Type 9
@@ -402,7 +402,7 @@ square.ap( Type.of(3) )
 
 All ap is doing is calling map on a received type, with itself as the transform function.
 
-```js
+```javascript
 function ap(type){
   // recall our value
   // is a function
