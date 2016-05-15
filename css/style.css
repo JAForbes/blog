@@ -17,9 +17,9 @@ h1 { font-family: "Inconsolata", sans-serif; }
 code, code span {
   font-family: "Inconsolata", sans-serif;
 }
-a { color: #968f96;}      /* unvisited link */
-a:visited { color: #756772; }  /* visited link */
-a:active {color:black;}  /* selected link */
+a { color:  #e6cdf9; }      /* unvisited link */
+a:visited { color:  #e6cdf9; }  /* visited link */
+a:active {color:black; }  /* selected link */
 
 .tiny {
   font-size: 0.8em;
