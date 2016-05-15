@@ -1,5 +1,5 @@
 	body {
-		overflow: hidden;
+		overflow-x: hidden;
 		box-sizing: border-box;
 	}
 	p { line-height: 2em; }
