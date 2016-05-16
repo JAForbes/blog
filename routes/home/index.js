@@ -83,8 +83,9 @@ var style = j2c.sheet({
     }
 })
 
+
 function Post(p){
-    return h('a', { props: { href: '?/'+p.path.replace('.md','') }}, [
+    return h('a', url.anchor('/'+p.path.replace('.md','')), [
         h('li', [
             h('p', p.name)
             ,h('i', iso(p.created) )

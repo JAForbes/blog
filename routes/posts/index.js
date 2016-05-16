@@ -200,11 +200,6 @@ function PostsModel(v, postsCache){
 			R.tap(posts),
 			postsCache
 		))
-		.then(function(){
-			if( url().indexOf('posts/') == -1){
-				url('/'+posts()[0].path.replace('.md',''))
-			}
-		})
 
 	return {
 		postBody: postBody,

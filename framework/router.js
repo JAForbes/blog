@@ -1,6 +1,5 @@
 var f = require('flyd')
 	f.dropRepeats = require('flyd/module/droprepeats').dropRepeats
-
 var v = f.stream
 
 var I = function(v){ return v }
@@ -46,6 +45,17 @@ function router(options){
 	}
 	//initial state push
 	onpopstate()
+
+	external_url.anchor = function(href){
+		var real_href = mode_char()+href
+		return {
+			props: { href: real_href }
+			,on: { click: function(e){
+				e.preventDefault()
+				external_url(href)
+			}}
+		}
+	}
 
 	return external_url
 }
