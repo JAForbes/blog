@@ -23,7 +23,7 @@ function router(options){
 	var popstate = v()
 
 	//external getter setter stream for pushing state
-	var external_url = f.dropRepeats(popstate.map(I))
+	var external_url = popstate.map(I)
 	var url = f.dropRepeats(external_url)
 
 	//make all streams end when url ends
@@ -41,8 +41,10 @@ function router(options){
 	//when the backbutton triggers, set the popstate
 	//which also sets the url - without pushing state -
 	onpopstate = function(){
-		popstate( window.location[mode()].replace(mode_char(), "") )
+		var new_url = window.location[mode()].replace(mode_char(), "")
+		popstate(new_url)
 	}
+
 	//initial state push
 	onpopstate()
 
