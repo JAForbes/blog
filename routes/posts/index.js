@@ -28,19 +28,10 @@ function Sidebar(v, posts, show_sidebar){
 	var list = posts.map(function(posts){
 		return h('ul', { class: { posts: true}, key: 'posts-list' },
 			posts.map(function(post){
-				var href = post.path.replace('.md', '')
+				var href = '/'+post.path.replace('.md', '')
 
 				return h('li', { key: href }, [
-					h('a', {
-						props: { href: href },
-						on: {
-							click: function(e){
-								scrollBy(0, -scrollY)
-								url('/' + href)
-								e.preventDefault()
-							}
-						}
-					}, [ post.name ]),
+					h('a', url.anchor(href), [ post.name ]),
 					h('div', { class: { tiny: true} },
 						iso8601(post.created)
 					)
