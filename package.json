@@ -32,6 +32,8 @@
   },
   "devDependencies": {
     "browserify": "^12.0.1",
+    "browserify-css": "^0.9.1",
+    "conff": "^1.1.0",
     "node-static": "^0.7.7",
     "uglifyjs": "^2.4.10",
     "watchify": "^3.7.0"

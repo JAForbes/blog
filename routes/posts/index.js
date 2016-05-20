@@ -1,8 +1,10 @@
 /* global url */
 /* global twttr */
 var marked = require('marked')
-
+var style = require('../../css/style.css.js')
 var Prism = require('prismjs');
+var j2c = require('j2c')
+var sheet = j2c.sheet(style)
 
 global.Promise = require('es6-promise').Promise
 if (!Array.from) Array.from = require('array-from');
@@ -216,9 +218,10 @@ function PostsContainerView(v){
 
 	var view = subviews.map(function(){
 		return h('div', { class: { container: true }}, [
-			views.sidebar(),
-			views.post(),
-			views.phoneNav()
+			h('style', String(sheet) )
+			,views.sidebar()
+			,views.post()
+			,views.phoneNav()
 		])
 	})
 

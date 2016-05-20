@@ -1,12 +1,15 @@
 var h = require('../../framework')
 var posts = require('../../posts')
+var style = require('../../css/style.css.js')
+
 var j2c = require('j2c')
 
 var iso = function(date){
     return new Date(date).toISOString().slice(0,10)
 }
+var R = require('ramda')
 
-var style = j2c.sheet({
+var style = j2c.sheet(R.merge( style, {
     '.bio': {
         'border-radius': '100%'
         ,'max-width': '8em'
@@ -81,7 +84,7 @@ var style = j2c.sheet({
     ,'.posts ul li': {
         padding: '1em'
     }
-})
+}))
 
 
 function Post(p){
