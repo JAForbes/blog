@@ -18,7 +18,7 @@ module.exports = h('div', {}, [
     h('style', String(style))
     ,h('h3', 'James Forbes')
     ,h('ul', { props: { className: style.nav } }, [
-        h('li', [ h('a', url.anchor('/home'), ['Writing']) ])
+        h('li', [ h('a', url.anchor('/'), ['Writing']) ])
         ,h('li', [ h('a', { props: { href: 'https://soundcloud.com/gazevectors/sets/impossible-lake' } }, 'Music') ])
         ,h('li', [ h('a', { props: { href: 'https://canyon.itch.io/' } }, 'Games') ])
         ,h('li', [ h('a', { props: { href: 'https://github.com/JAForbes/' } }, 'Programs') ])
