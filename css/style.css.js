@@ -13,7 +13,12 @@ module.exports = {
         ,'-webkit-overflow-scrolling': 'touch'
     }
     ,p: { 'line-height': '2em' }
-    ,img: { max_width: '100%'}
+    ,img: {
+        max_width: '100%'
+        ,'display': 'block'
+        ,'margin-left': 'auto'
+        ,'margin-right': 'auto'
+    }
     ,'a, a:visited': { color: '#e6cdf9' }
     ,'a:active': { color: 'black' }
 };

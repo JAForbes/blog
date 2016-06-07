@@ -12,7 +12,10 @@ var style = Object.assign(appStyle, {
         font_family: 'Inconsolata'
         ,src: 'url(../font/Inconsolata-Regular.ttf) format("truetype")'
     }
-    ,h1: { font_family: '"Inconsolata", sans-serif' }
+	,'h1': {
+		text_align: 'center'
+		,font_family: '"Inconsolata", sans-serif'
+	}
     ,'h1, h2, h3, h4, h5, h6': {
         color: 'white'
     }
