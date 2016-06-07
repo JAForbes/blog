@@ -1,4 +1,4 @@
-/* global container */
+/* global container scrollTo */
 
 var h = require('./framework')
 
@@ -10,6 +10,11 @@ var router = h.router('/', {
 })
 
 url.map(function(){
+
+	setTimeout(function(){
+		var heading = document.querySelector('h1,h2')
+		document.title = "James Forbes" + (heading ? ' - ' + heading.innerText : '')
+	}, 1000)
 	scrollTo(0,0)
 })
 h.route(container, url, router)
