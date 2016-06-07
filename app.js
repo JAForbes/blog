@@ -6,7 +6,7 @@ global.url = h.url('search')
 
 var router = h.router('/home', {
 	'/home': require('./routes/home')
-	,'/posts': require('./routes/posts')
+	,'/posts': require('./routes/post')
 })
 
 h.route(container, url, router)
