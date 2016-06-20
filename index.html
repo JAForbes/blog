@@ -8,9 +8,9 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
 	<script type="text/javascript">
-	    var host = "yoursite.com";
-	    if ((host == window.location.host) && (window.location.protocol != "https:"))
+	    if ( window.location.protocol != "https:"){
 	        window.location.protocol = "https";
+	    }
 	</script>
 	<script>
 	if (!Function.prototype.bind) {
