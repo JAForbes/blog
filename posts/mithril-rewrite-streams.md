@@ -27,6 +27,19 @@ we can abstract over time entirely, and think in terms of transforms.
 
 Exactly the same as Excel.  You do not create event listeners when you an Excel formula.
 
+> Isn't Functional Programming Slower than a for loop?
+
+"The effective programmer is keenly aware of the limited size of his own head." - Edsger W. Dijkstra
+
+Yes.  It is.  But managing when to recalculate all the transforms in your code can become so complex, that your app will
+become difficult to edit.  Codebases are not static.  You will constantly edit the same files over and over.
+Streams allow you to only calculate when a dependent piece of data changes.  If you manage recalcs yourself, you will likely
+waste cycles calculating things that do not need to be changes.  Your file will fill with boolean flags for marking when data is dirty.  Even identifying what the transforms are will become impossible, and therefore editing them is impossible.
+
+Streams abstract over one thing: time.  Within a `map` you can write any transformation you would like.  You can write extremely 
+imperative code if you prefer.  But at least it is clear what transformations are occuring.
+
+
 Cross Component Communication
 -----------------------------
 
@@ -86,7 +99,7 @@ Fantasy Land (Why you should care)
 - A consistent API for many different data structures makes switching easier/trivial.
 - A consistent API means you spend less time checking documentation and more time coding
 - Ramda + [Possible Lodash Support](https://github.com/lodash/lodash/issues/2406)
-
+- Not about ignoring data, about choosing the best structure for your data.
 
 Related Reading
 ---------------
