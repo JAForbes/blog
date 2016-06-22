@@ -104,7 +104,7 @@ Fantasy Land (Why you should care)
 Related Reading
 ---------------
 
-[Unidirectional User Interface Architectures - André Staltz][http://staltz.com/unidirectional-user-interface-architectures.html]
-[Data Oriented Design - Mike Acton][https://www.youtube.com/watch?v=rX0ItVEVjHc]
-[Compression Oriented Programming - Casey Muratori][https://mollyrocket.com/casey/stream_0019.html]
+[Unidirectional User Interface Architectures - André Staltz](http://staltz.com/unidirectional-user-interface-architectures.html)
+[Data Oriented Design - Mike Acton](https://www.youtube.com/watch?v=rX0ItVEVjHc)
+[Compression Oriented Programming - Casey Muratori](https://mollyrocket.com/casey/stream_0019.html)
 
