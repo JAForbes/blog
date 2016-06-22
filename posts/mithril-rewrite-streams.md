@@ -19,6 +19,14 @@ It makes sense to avoid that extra layer of abstraction if you do not value the 
 
 But now that props are streams, we can base our 
 
+> Are observables just some sugar on top of the Observer pattern?
+
+No.  Javascript has embraced the concept of (on/then/when).  We change some existing data when some event occurs.
+Streams are about a piece of data *being* a function of some other data.  So instead of thinking in terms of time (when/then/on),
+we can abstract over time entirely, and think in terms of transforms.
+
+Exactly the same as Excel.  You do not create event listeners when you an Excel formula.
+
 Cross Component Communication
 -----------------------------
 
