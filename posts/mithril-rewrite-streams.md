@@ -43,6 +43,13 @@ Data Oriented Design
 - Remove unnecessary model calculations from redraw (logicless view)
 - Treat entire app as a series of transform streams reduced into a view
 
+Mike Action: "The only purpose of *any* code is to transform data"
+
+- Code is not anywhere near as important as the data
+- Code is just a tool to transform data.
+- Only write code that transforms the data in a meaningful way
+- In order to do that you need to understand the data
+
 CycleJS and the Elm Architecture
 --------------------------------
 
