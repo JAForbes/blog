@@ -80,9 +80,31 @@ Typescript is just complaining because require is used but not defined.  A simpl
 ```tsc
 //typescript.ts
 
+declare var require : any;
 const common = require('./common')
 import harmony from './harmony'
 
 export common
 export harmony
 ```
+
+Okay, now let's build our project.
+
+Define the following script in your `package.json`
+
+```json
+{
+
+  "scripts" : {
+    "compile": "browserify -p tsify index.js -o bundle.js"
+  }
+}
+```
+
+Now at the command prompt run:
+
+```
+npm run compile
+```
+
+
