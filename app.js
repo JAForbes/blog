@@ -10,6 +10,7 @@ var router = h.router('/', {
 })
 
 url.map(function(page){
+	console.log('Sending page view', page)
 	ga('set', 'page', page);
 	ga('send', 'pageview');
 	
