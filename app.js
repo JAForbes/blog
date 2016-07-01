@@ -1,4 +1,4 @@
-/* global container scrollTo */
+/* global container,scrollTo,ga */
 
 var h = require('./framework')
 
@@ -9,8 +9,10 @@ var router = h.router('/', {
 	,'/posts': require('./routes/post')
 })
 
-url.map(function(){
-
+url.map(function(page){
+	ga('set', 'page', page);
+	ga('send', 'pageview');
+	
 	setTimeout(function(){
 		var heading = document.querySelector('h1,h2')
 		document.title = "James Forbes" + (heading ? ' - ' + heading.innerText : '')
