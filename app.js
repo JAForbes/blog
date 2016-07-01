@@ -10,13 +10,14 @@ var router = h.router('/', {
 })
 
 url.map(function(page){
-	console.log('Sending page view', page)
-	ga('set', 'page', page);
-	ga('send', 'pageview');
-	
 	setTimeout(function(){
 		var heading = document.querySelector('h1,h2')
 		document.title = "James Forbes" + (heading ? ' - ' + heading.innerText : '')
+		
+		console.log('Sending page view', page)
+		ga('set', 'page', page);
+		ga('send', 'pageview');
+		
 	}, 1000)
 	scrollTo(0,0)
 })
