@@ -32,7 +32,13 @@ External Libraries:
 > Through out this post I'm going to pull in arbitrary libraries to demonstrate interoperability.
 Don't feel as if you need to know about any of these libraries - in fact what I really seek to demonstrate, is that by sharing the same API you really can follow along without knowing the ins and outs, or specifics.
 
+Warning Haskell Programers!
+
+> For the duration of this post I am going to use a simplified type annotation system that focuses on tracking the types *and* values to simulate a typed repl so non-functional programmers can track transformations more easily.
+Please forgive my incorrect usage.  This article is optimizing for a different audience :)
+
 Type Signatures
+
 > Throughout the post I will be annotating types as `Array 4`. This could be read as:
 
 > "an `Array` that contains the value `4`".
