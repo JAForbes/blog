@@ -290,7 +290,7 @@ S.encase(parseJSON)
 The string we passed in used single quotes, and this means it is invalid JSON.
 
 Normally we'd get an `Error` with a message like.
-"SyntaxError: Unexpected token".  Hopefully we'd have caught the error...
+`"SyntaxError: Unexpected token"`.  Hopefully we'd have caught the error...
 
 But in the case of our `Maybe`, no error is thrown.  
 Our function just returns a Maybe that we can map over.
