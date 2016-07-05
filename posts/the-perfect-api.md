@@ -39,15 +39,15 @@ Please forgive my incorrect usage.  This article is optimizing for a different a
 
 Type Signatures
 
-> Throughout the post I will be annotating types as `Array 4`. This could be read as:
+> Throughout the post I will be annotating types as `Array(4)`. This could be read as:
 
 > "an `Array` that contains the value `4`".
 
-> `Task 'hello'` would be read as
+> `Task('hello')` would be read as
 
 > "a `Task` that contains the value `'hello'`"
 
-> `Task Array 4` would be read as
+> `Task Array(4)` would be read as
 
 > "A `Task` that contains an `Array` that contains the value `4`"
 
@@ -57,8 +57,29 @@ Type Signatures
 
 > `string -> number`
 
-> And a Task containing a function that accepts an Array
-> containing a number that returns a Maybe containing a string would look like
+> When a function can accept a generic type, the letters `a` through `z` are used.
+
+> The below signature says this function accepts one type, and returns another type:
+
+> `a -> b`
+
+
+> This function takes 2 types and returns the same type as the second argument:
+
+> `a -> b -> b`
+
+> This signature says an array can contain any specific type:
+
+> `Array a`
+
+> Where `a` could be a `number` or a `string`.  
+
+> This is a lot like generics in languages like C# or Java, except a lot more powerful and expressive.
+
+> Important to note that `a` and `b` *might* be the same type, but they are not required to be.
+
+> And a `Task` containing a function that accepts an `Array`
+> containing a `number` that returns a `Maybe` containing a string would look like
 
 > `Task (Array number -> Maybe string)`
 
@@ -76,16 +97,16 @@ var Task = require('data.task')
 
 // A stream of values
 var stream = flyd.stream().of(2)
-//=> Stream 2
+//=> Stream(2)
 
 // An asynchronous value
 // like a Promise but better
 var task = Task.of(2)
-//=> Task 2
+//=> Task(2)
 
 // A humble array
 var list = Array.of(2)
-//=> Array 2
+//=> Array(2)
 ```
 
 
@@ -100,10 +121,12 @@ No matter the situation or data type we have a consistent way to instantiate.
 `Type::map`
 
 ```javascript
+
+// number -> number
 var double = x => x * 2
 
 stream.map(double)
-//=> Stream 4
+//=> Stream(4)
 
 task.map(double)
 //=> Task 4
@@ -122,6 +145,10 @@ Note that `map` always returns a new instance of the same type.  It never modifi
 Our values must always live in containers of a given type.
 This allows the specific inner workings to occur while exposing a shared API
 
+> In Functional Programming a type that has the function `map` is referred to as a Functor.  
+For the duration of this post I'll stay away from these sorts of terms and instead say Mappable.
+I think the hardest part about learning these systems is learning the terminology.  
+But its pretty straight forward to learn those terms when you have a solid understanding of the underlying mechanics.
 
 #### Combining values
 
@@ -130,22 +157,20 @@ This allows the specific inner workings to occur while exposing a shared API
 ```javascript
 var R = require('ramda')
 
+// Mappable a -> Mappable a -> Mappable a
 var add = R.lift(R.add)
 
-add(Array.of(2),Array.of(3)) //=> Array 5
+// Array number -> Array number -> Array number
+add(Array.of(2),Array.of(3)) //=> Array(5)
 
-// Tasks are lazy and async, these computations won't happen until the task is forked
+
+// Task number -> Task number -> Task number
 add( task.of(2), task.of(3) )
-//=> Task 5
+//=> Task(5)
 
-    .fork(
-        console.error
-        ,console.log
-    )
-// ( logs 5 to the console)
-
+// Stream number -> Stream number -> Stream number
 add( stream.of(2), stream.of(3) )
-//=> Stream 5
+//=> Stream(5)
 
 ```
 
@@ -178,13 +203,15 @@ Maybe is completely interoperable with the existing API
 
 ```javascript
 // (3 + 5) ^ 2
+
+// Maybe number -> Maybe number -> Maybe number
 add(
     Maybe.of(3)
     ,Maybe.of(5)
 )
 .map(n => n * n)
 
-//=> Just 64
+//=> Maybe(64)
 ```
 
 As you can see, we create using `of`, and transform using `map`.  We can also use our lifted `add` function.
@@ -210,108 +237,105 @@ S.encase(dangerous)
 // This never happens though
 .map( n => n + 1 )
 
-//=> Nothing
+//=> Maybe number
 
 ```
 
-In the above code, our dangerous code throws an Error, sanctuary then returns a `Nothing` type.
-This means there was a failure somewhere along the way.
+In the above code, our dangerous code throws an Error.  Sanctuary will then recognize that an error has occurred and will no longer perform transformations on the Maybe.
 
-The map after the dangerous code would never have been invoked.
-`Nothing::map` will never perform an operation, it just returns a new `Nothing`
+The map after the dangerous code would never have been invoked.  So you can safely write your transformations without worrying about
+null checks or catching errors.
 
 
-Let's make use of our Maybe container code by performing a risky operation: dynamically calling a method on an object.
+Let's make use of our Maybe container code by performing a risky operation: parsing some json.
 
 ```javascript
 //calls a function on an object
-function method(
-    methodName
-    ,target
-    ,input
-){
-    return target
-        [methodName]
-        (input)
+function parseJSON(json){
+    return JSON.parse(json)
 }
 
+// Maybe string -> Maybe object
+S.encase(parseJSON)
 
-// S.encase just converts
-// an unsafe function
-// into a safe function
-// S.encase3 is for functions
-// that take 3 arguments
-S.encase3(method)
+// call our safe function with valid JSON
+('{"a": "hello" }')
 
-// call our safe function
-('toFixed', 4, 2)
+// grab the property `a`
+// Maybe {a:string} -> string
+.map( obj => obj.a )
 
-// prepend the output with a $
-.map( R.concat('$') )
-
-//=> Maybe "$4.00"
+//=> Maybe("hello")
 ```
 
 
 Everything works well.
-We called the method 4.toFixed(2) which formats the number to have 2 decimal points.
-We then prepend the result with a dollar sign `"$"` using `Maybe::map`.
+We extracted the property `a` from a `Maybe {a:string}` by mapping over the `Maybe string` of the parsed JSON.
 
 
 Let's try introducing a subtle error.
 
 ```javascript
 // Make our function safe
-S.encase3(method)
+S.encase(parseJSON)
 
 // Invoke it with bad inputs
-( 'toFixed', "4", 2)
+( "{'a': 'hello' }" )
 
-// Attempt to transform
-// the output
-.map( R.concat('$') )
+// Attempt to grab the parsed property
+.map( obj => obj.a )
 
 ```
 
-The string `"4"` does not have a method `toFixed()` on it.
-Normally we'd get an `Error` with a message like.
-"Undefined is not a function".  Hopefully we'd have caught the error.
+The string we passed in used single quotes, and this means it is invalid JSON.
 
-But in the case of our `Maybe`, no error is thrown, we get a `Nothing` instead.
+Normally we'd get an `Error` with a message like.
+"SyntaxError: Unexpected token".  Hopefully we'd have caught the error...
+
+But in the case of our `Maybe`, no error is thrown.  
+Our function just returns a Maybe that we can map over.
 
 Notice we are attempting to perform an operation after the error would have occurred.
-But this is completely fine, Nothing.map doesn't do anything,
-it is safe to assume you have a value and write your code as if errors do not exist.
+But this is completely fine, `Maybe.map` won't do anything because the `Maybe` is an Error state.
+It is safe to assume you have a value and write your code as if errors do not exist.
 
-You could probably imagine how convenient it would be to not have to write error checks throughout your code and instead simply handle the Nothing type.  You can also probably imagine encoding additional information about the failure within in the Nothing.  Such a thing exists, it's called an `Either`.
+You could probably imagine how convenient it would be to not have to write error checks 
+throughout your code and instead simply handle the Maybe type.  
 
-Let's try `encaseEither` which is just like a `Maybe`, but gives us some context on why there was a failure.
+You can also probably imagine encoding additional information about the failure within in the Maybe.  
+Such a thing exists, it's called an `Either`.
+
+Let's try `encaseEither` which is just like a `Maybe`, 
+but gives us some context on why there was a failure.
 
 ```javascript
-S.encaseEither3(
+S.encaseEither(
     // If there is an error
     // grab the message property
     // from the error
-    R.prop('message')
+    error => error.message
 
     // the unsafe function
     // that will soon
     // return an Either
-    ,method
+    ,parseJSON
 )
 
-// Pass in some terrible input
-( undefined, null, null )
+// Pass in some invalid input
+( "{'a': 'hello'}" )
 
 // Attempt to transform
 // the output
 // (Won't happen though)
-.map( R.concat('$') )
+.map( obj => obj.a )
 
-// => Left "Cannot read..."
+// => Either("Syntax Error: Unexpected token")
 ```
 
-The `Left`'s value is the error message.  If the type was `Right` it would have been a success.
+The `Either` can be 1 of 2 types: `Left` or `Right`.
+`Left` is the error data and `Right` is the success value.
+Because our JSON was invalid, our `Either` is `Left`, and any transformations won't occur.
+But we can access the error message as it is stored within the data type.
 
 > I personally think the `Left` and `Right` naming is pretty poor.
 It translates to a tuple where the first index is the error and the second index is the successful value.
@@ -322,7 +346,8 @@ It translates to a tuple where the first index is the error and the second index
     // Right (success)
     [undefined, "Some value"]
 
-> A lot of functional programming's terminology is tied up in history, and the names are an homage to that history.
+> A lot of functional programming's terminology is tied up in history, 
+> and the names are an homage to that history.
 `Left` just means error, and `Right` just means success.
 
 We can handle errors trivially using this API.  Errors are just data with different datatypes.
@@ -334,7 +359,7 @@ We can handle errors trivially using this API.  Errors are just data with differ
 
 So, how does `R.lift` work, really?  What secrets lie beneath?
 
-lift simply calls the `ap` method on a given type.
+`lift` simply calls the `ap` method on a given type.
 Colloquially, `ap` teaches a function how to interact with a given container type.
 
 In order to demonstrate ap, let's create our own container type.  I'm just going to call it `Type`.
@@ -362,7 +387,7 @@ We can instantiate a type:
 
 ```javascript
 Type.of(2)
-//=> Type 2
+//=> Type(2)
 ```
 
 We can transform a type:
@@ -370,7 +395,7 @@ We can transform a type:
 ```javascript
 Type.of(2).map( double )
 
-//=> Type 4
+//=> Type(4)
 ```
 
 And we can combine types:
@@ -378,7 +403,7 @@ And we can combine types:
 ```javascript
 // recall: add has been lifted
 add( Type.of(2), Type.of(4) )
-//=> Type 6
+//=> Type(6)
 ```
 
 Now let's imagine we didn't have ramda in our codebase.
@@ -406,7 +431,7 @@ square.ap( Type.of(3) )
 //=> Type 9
 ```
 
-All ap is doing is calling map on a received type, with itself as the transform function.
+`ap` calls `map` on a received type, with itself as the transform function.
 
 ```javascript
 function ap(type){
@@ -425,8 +450,9 @@ It also handles some edge cases, like Array's and a few other JS types.
 Now, that we have `ap` in place we can use a large part of the Ramda utilities
 as if they were written specifically for our custom types!
 
-We do not need to implement a lot of the amazing functionality ourselves.  And we do not need to constantly
-wrap and unwrap values as we would if we were using a library like Lodash ( [at the time of writing][Lodash and Fantasy Land] )
+We do not need to implement a lot of the amazing functionality ourselves.  
+And we do not need to constantly wrap and unwrap values 
+as we would if we were using a library like Lodash ( [at the time of writing][Lodash and Fantasy Land] )
 
 So, that is our API.  It handles any situation, it's trivial to support,
 and if we all support it we can jump straight into using new and exciting data types
