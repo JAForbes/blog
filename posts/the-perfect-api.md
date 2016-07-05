@@ -428,7 +428,7 @@ Then we can apply that contained function to a contained value.
 ```javascript
 square.ap( Type.of(3) )
 
-//=> Type 9
+//=> Type(9)
 ```
 
 `ap` calls `map` on a received type, with itself as the transform function.
