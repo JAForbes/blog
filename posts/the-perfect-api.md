@@ -420,7 +420,7 @@ Now, that we have `ap` in place we can use a large part of the Ramda utilities
 as if they were written specifically for our custom types!
 
 We do not need to implement a lot of the amazing functionality ourselves.  And we do not need to constantly
-wrap and unwrap values as we would if we were using a library like Lodash ( at the time of writing )
+wrap and unwrap values as we would if we were using a library like Lodash ( [at the time of writing][Lodash and Fantasy Land] )
 
 So, that is our API.  It handles any situation, it's trivial to support,
 and if we all support it we can jump straight into using new and exciting data types
@@ -449,3 +449,7 @@ so we can use your amazing code without needing to learn a new API.
 
 Thank you for reading.  I hope you're excited, now that we have the perfect API,
 we can solve some *real* problems.
+
+> If you would like to see Lodash support Fantasy Land please vote on this [thread][Lodash and Fantasy Land]
+
+[Lodash and Fantasy Land]: https://github.com/lodash/lodash/issues/2406
