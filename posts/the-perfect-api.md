@@ -72,7 +72,7 @@ Type Signatures
 
 > `Array a`
 
-> Where `a` could be a `number` or a `string`.  
+> Where `a` could be a `number` or a `string` (or any other type).  
 
 > This is a lot like generics in languages like C# or Java, except a lot more powerful and expressive.
 
