@@ -53,7 +53,7 @@ Type Signatures
 
 > Function signatures use the `->`
 
-> A function that accepts a string and returns a number would be annoted
+> A function that accepts a string and returns a number would be annotated
 
 > `string -> number`
 
