@@ -1,5 +1,11 @@
 [
 	{
+		"name": "How to talk to a computer"
+		"path": "posts/how-to-talk-to-a-computer.md"
+		"created": "2016-09-11",
+		"twitter": "774757674164498432"
+	}
+	,{
 		"name": "The Perfect API",
 		"path": "posts/the-perfect-api.md",
 		"created": "2016-05-13",
