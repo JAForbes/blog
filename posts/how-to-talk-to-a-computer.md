@@ -10,13 +10,13 @@ But once the unfamiliarity wears off, the name becomes endearing.
 > REPL means Read - Eval - Print - Loop, which is exactly how a REPL operates!
 
 We write programs with the intention of running them.  The traditional usage is writing some code, saving it to a file
-and executing it against some binary.  If its a compiled language that binary will emit some executable file, and if it is a
+and executing it against some binary.  If it's a compiled language that binary will emit some executable file, and if it is a
 strongly typed language, you'll get some errors when attempting to compile if your types do not line up.
 
 These steps can be considered friction; unnecessary separation between writing and executing; human and computer.
 
 The REPL on the otherhand blurs the line between writing and executing.  Instead of preparing all statements and expressions ahead of time in order to get a final computation, the repl waits for your input after each evaluation.
-Its more like a conversation with the computer, where you are an active participant.
+It's more like a conversation with the computer, where you are an active participant.
 
 By reducing latency between program and programmer we can often iterate on our design, find, and solve problems more readily.
 
@@ -477,7 +477,7 @@ This makes sense because the date input has no notion of hours.  So it has no ju
 
 Which raises the question?  Why convert at all?  Why not just store the user entered date in much the same manner - ignoring hours and minutes.  Well you can, but you will be limiting the capability of your application.  For example, you will have trouble if you ever ask the user to specify a more specific time in future, or if other systems in your infrastructure or system should be activated at a specific local time offset from the user entered date, or if two users in different timezones are collaborating.
 
-Its always better to play it safe, store your dates as UTC or as a unix timestamp.  Timezones are a user matter, leave it to the user interface to handle.
+It's always better to play it safe, store your dates as UTC or as a unix timestamp.  Timezones are a user matter, leave it to the user interface to handle.
 
 #### Bring it back home
 
