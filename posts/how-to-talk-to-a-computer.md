@@ -518,7 +518,8 @@ We'll make our final tests a little more verbose to keep track of all the transl
 
 ```js
 var setMinutes = 
-  offset => date => new Date(
+  offset => date => 
+  new Date(
     new Date(date)
       .setMinutes(
         offset
