@@ -30,27 +30,27 @@ Just now, I was working on something non-trivial within the browser repl.  And I
 #### Timezones and User Input
 
 Programming dates can be tricky.  Humans think of time in bitesize non-uniform abstractions.
-These abstraction require constant conversion to do any kind of useful calculation.
+These abstractions require constant conversion to do any kind of useful calculation.
 
 Dates also mean different things depending on where you are on the globe.  Most phyisicists agree that [spacetime](https://en.wikipedia.org/wiki/Spacetime) exists, and therefore time exists outside our own abstractions.
 
-But minutes, hours, days, months, years are human constructs.  And while meaningful to us meat bags, they are inefficient for computers to store and process, and the conversion between different units can be error prone for us programmers.
+But minutes, hours, days, months and years are human constructs.  And (while meaningful to us meat bags) they are inefficient for computers to store and process, and the conversion between different units can be error prone for us programmers.
 
 Programmers have come up with many approaches to solve this problem.  Usually the answer is standardized formats that are convenient to process.
 
 Greenwich Mean Time (GMT) and Coordinate Universal Time (UTC) are the basis for most other international date formats.   Both standards are interchangeable but the latter is the standard used and maintained by the scientific community.  
 
-The part of UTC we are interested in is that we can store dates in a Universal Timezone, and that timezone, arbitrarily is Greenwich England.  From there we count backwards or forwards around the globe to localize a date.
+The part of UTC we are interested in is storing dates in a Universal Timezone.  That timezone, arbitrarily is Greenwich England.  From there we count backwards or forwards around the globe to localize a date.
 
-The Unix Epoch is the number of seconds since Midnight January 1st 1970 at Greenwich, England.  Any date in history can be represented as either a negative or positive number in this format.  Adding and subtracting dates in this format is trivial, it is just a number.  And by agreeing on a universal time zone we can always add or subtract the relevant timezone offset to render a local date to the user on the given system.
+The Unix Epoch is the number of seconds since Midnight, January 1st, 1970 at Greenwich, England.  Any date in history can be represented as either a negative or positive number in this format.  Adding and subtracting dates in this format is trivial, it is just a number.  And by agreeing on a universal time zone we can always add or subtract the relevant timezone offset to render a local date to the user on the given system.
 
-The ISO 8601 format is the standard method for representing dates as text.  The unix epoch written in ISO looks like this:
+The ISO 8601 format is a standard method for representing dates as text.  The unix epoch, written in ISO 8601 looks like this:
 
 ```
 1970-01-01T00:00:00:00.000Z
 ```
 
-And we can truncate that at any point juncture, it will still be an ISO String.  So this is an ISO formatted date with day precision
+And we can truncate that at any juncture, it will still be an ISO String.  So this is an ISO formatted date with day precision
 
 ```
 1970-01-01
@@ -59,7 +59,7 @@ And we can truncate that at any point juncture, it will still be an ISO String. 
 
 The `Z` stands for the Zero timezone.
 
-> You might have heard the military talk about "Zulu" time.  This is just the phoenetic alphabet employed in combination with UTC
+> You might have heard the military talk about "Zulu" time.  This is just the phoenetic alphabet employed in combination with UTC.
 
 With these standard formats in our toolbelt we can engage in conversation with our REPL.
 
@@ -114,6 +114,7 @@ All we need to do, is multiply our existing assumption by 1000 and we should zoo
 ```js
 var DAY_SECONDS = 
   86400
+  
 var YEAR_DAYS = 
   365
 
