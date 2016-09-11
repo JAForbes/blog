@@ -437,11 +437,12 @@ resulted in a Type error.
 Here is a quick, albeit ugly solution.
 
 ```js
-var setMinutes = (offset,date) => 
-  new Date(
-    new Date(date)
-      .setMinutes(offset)
-  )
+var setMinutes = 
+  (offset,date) => 
+    new Date(
+      new Date(date)
+        .setMinutes(offset)
+    )
 
 var d = new Date()
 setMinutes(1,d)
@@ -453,7 +454,8 @@ Our goal is to convert to and from local and universal dates.  So lets write som
 
 ```js
 var setMinutes = 
-  offset => date => new Date(
+  offset => date => 
+  new Date(
     new Date(date)
       .setMinutes(
         offset
@@ -462,14 +464,21 @@ var setMinutes =
 
 var TIMEZONE_OFFSET = -600
 var toLocal = 
-  setMinutes(TIMEZONE_OFFSET)
+  setMinutes(
+    TIMEZONE_OFFSET
+  )
+  
 var fromLocal = 
-  setMinutes(-TIMEZONE_OFFSET)
+  setMinutes(
+    -TIMEZONE_OFFSET
+  )
 
 var TIMEZONE_OFFSET_MINUTES = 
   -600
+  
 var TIMEZONE_OFFSET_HOURS = 
-  TIMEZONE_OFFSET_MINUTES / 60
+  TIMEZONE_OFFSET_MINUTES 
+  / 60
   
 var UNIX_EPOCH = 0
 
@@ -546,17 +555,35 @@ var HTML_TO_JS_EVENT =
 
 ;[
   
-,(FROM_API() == 0 ? '✔' : '✘')
+,(FROM_API() == 0 ?'✔':'✘')
 + ' Initial API value was UNIX Epoch'
 
-,(API_TO_HTML( FROM_API() ) == '1969-12-31' ? '✔' : '✘')  
- + ' Universal date was converted before rendering to HTML' 
+,(API_TO_HTML( FROM_API() )
+  == '1969-12-31' 
+    ? '✔' : '✘')
+ + ' Universal date was' 
+ + ' converted before'
+ + ' rendering to HTML' 
 
-,(HTML_TO_JS_EVENT('1964-03-01').getUTCHours() == 10 ? '✔' : '✘' )
-+ ' Local rendered date was converted to universal date before being sent to the server'
+,(HTML_TO_JS_EVENT('1964-03-01')
+  .getUTCHours() == 10 
+  ? '✔' : '✘' )
++ ' Local rendered date was'
++ ' converted to universal'
++ ' date before being sent'
++ ' to the server'
 
-,(HTML_TO_JS_EVENT(API_TO_HTML(HTML_TO_JS_EVENT('1964-03-01'))).getUTCHours() == 10 ? '✔' : '✘' ) 
-+ ' Round trip through pipeline maintained timezone offset integrity'
+,(HTML_TO_JS_EVENT(
+  API_TO_HTML(
+    HTML_TO_JS_EVENT(
+      '1964-03-01'
+    )
+  )
+  ).getUTCHours() == 10 
+  ? '✔' : '✘' 
+  ) + ' Round trip through 
+  + 'pipeline maintained 
+  + 'timezone offset integrity'
 
 ].join('\n')
 // => 
@@ -592,7 +619,8 @@ We can literally move our code verbatim into functions and export them as module
 //date-conversions.js
 
 var setMinutes = 
-  offset => date => new Date(
+  offset => date => 
+    new Date(
     new Date(date)
       .setMinutes(
         offset
@@ -603,9 +631,13 @@ var TIMEZONE_OFFSET =
   new Date().getTimezoneOffset()
 
 var toLocal = 
-  setMinutes(TIMEZONE_OFFSET)
+  setMinutes(
+    TIMEZONE_OFFSET
+  )
 var fromLocal = 
-  setMinutes(-TIMEZONE_OFFSET)
+  setMinutes(
+    -TIMEZONE_OFFSET
+  )
 
 export default {
   setMinutes
@@ -621,17 +653,26 @@ Let's convert our existing code to tape tests.
 ```js
 //test.js
 
-import {setMinutes} from './date-conversions.js'
+import {setMinutes} 
+  from './date-conversions.js'
+
 import test from 'tape'
 
-var TIMEZONE_OFFSET = -600
-var toLocal = setMinutes(TIMEZONE_OFFSET)
-var fromLocal = setMinutes(-TIMEZONE_OFFSET)
+var TIMEZONE_OFFSET = 
+  -600
+var toLocal = 
+  setMinutes(
+    TIMEZONE_OFFSET
+  )
+var fromLocal = 
+  setMinutes(
+    -TIMEZONE_OFFSET
+  )
 
 var FROM_API = 
-  () => new Date(0).getTime()
+  () => new Date(0)
+    .getTime()
 
-  
 var API_TO_HTML = 
   unixtime => 
     toLocal(unixtime)
@@ -639,25 +680,49 @@ var API_TO_HTML =
       .slice(0,10)
   
 var HTML_TO_JS_EVENT = 
-  isoString => fromLocal(new Date(isoString))
+  isoString => 
+    fromLocal(
+      new Date(
+        isoString
+      )
+    )
 
-
-test('Date conversions', function(t){
-  var tests = [
+var tests = [
   
-  ,[FROM_API(), 0
-    , ' Initial API value was UNIX Epoch']
+,[FROM_API()
+  , 0
+  ,' Initial API value was UNIX Epoch'
+]
 
-  ,[API_TO_HTML( FROM_API() ),  '1969-12-31'
-     , ' Universal date was converted before rendering to HTML']
-
-  ,[HTML_TO_JS_EVENT('1964-03-01').getUTCHours(), 10 
-     ,' Local rendered date was converted to universal date before being sent to the server']
-
-  ,[HTML_TO_JS_EVENT(API_TO_HTML(HTML_TO_JS_EVENT('1964-03-01'))).getUTCHours(), 10 
-    ,' Round trip through pipeline maintained timezone offset integrity']
-
+,[API_TO_HTML( FROM_API() )
+  ,'1969-12-31' 
+ + ' Universal date was' 
+ + ' converted before'
+ + ' rendering to HTML' 
+]
+,[HTML_TO_JS_EVENT('1964-03-01')
+  .getUTCHours()
+  ,10 
+  ,' Local rendered date was'
+  + ' converted to universal'
+  + ' date before being sent'
+  + ' to the server'
   ]
+
+,[HTML_TO_JS_EVENT(
+  API_TO_HTML(
+    HTML_TO_JS_EVENT(
+      '1964-03-01'
+    )
+  )
+  ).getUTCHours() == 10 
+  ,' Round trip through 
+  + 'pipeline maintained 
+  + 'timezone offset integrity'
+  ]
+]
+
+test('Date conversions', t => {
   
   t.plan(tests.length)
   
