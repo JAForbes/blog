@@ -25,14 +25,14 @@ It is such a radically different workflow that doing anything non-trivial in the
 
 Just now, I was working on something non-trivial within the browser repl.  And I thought this was a perfect opportunity to demonstrate the principles applied throughout the conversation.
 
-> I encourage you to open your browser console while reading this article
+> I encourage you to open your browser console while reading this article.  To open your REPL in most browsers you can hit the F12 key or Ctrl/Command + Shift + J
 
 #### Timezones and User Input
 
 Programming dates can be tricky.  Humans think of time in bitesize non-uniform abstractions.
 These abstraction require constant conversion to do any kind of useful calculation.
 
-Dates also mean different things depending on your where you are on a globe.  Most phyisicists agree that [spacetime](https://en.wikipedia.org/wiki/Spacetime) exists, and therefore time exists outside our own abstractions.
+Dates also mean different things depending on where you are on the globe.  Most phyisicists agree that [spacetime](https://en.wikipedia.org/wiki/Spacetime) exists, and therefore time exists outside our own abstractions.
 
 But minutes, hours, days, months, years are human constructs.  And while meaningful to us meat bags, they are inefficient for computers to store and process, and the conversion between different units can be error prone for us programmers.
 
@@ -130,7 +130,7 @@ new Date(
 //=> "1999-12-25T00:00:00.000Z"
 ```
 
-> These excerpts are always the complete example, you can copy+paste the extract and it will evaluate to the same result that is rendered here.  Keeping our REPL as stateless as possible will make life easier later, so we will never rely on ambient variable and function definitions.  To open your REPL in most browsers you can hit the F12 key or Ctrl/Command + Shift + J
+> These excerpts are always the complete example, you can copy+paste the extract and it will evaluate to the same result that is rendered here.  Keeping our REPL as stateless as possible will make life easier later, so we will never rely on ambient variable and function definitions.
 
 1999? That is *much* better, but still not the answer we were looking for.
 
