@@ -546,19 +546,17 @@ var HTML_TO_JS_EVENT =
 
 ;[
   
-  ,(FROM_API() == 0 
-    ? '✔' : '✘')
-    
-     + ' Initial API value was UNIX Epoch'
+,(FROM_API() == 0 ? '✔' : '✘')
++ ' Initial API value was UNIX Epoch'
 
-  ,(API_TO_HTML( FROM_API() ) == '1969-12-31' ? '✔' : '✘')  
-     + ' Universal date was converted before rendering to HTML' 
+,(API_TO_HTML( FROM_API() ) == '1969-12-31' ? '✔' : '✘')  
+ + ' Universal date was converted before rendering to HTML' 
 
-  ,(HTML_TO_JS_EVENT('1964-03-01').getUTCHours() == 10 ? '✔' : '✘' )
-     + ' Local rendered date was converted to universal date before being sent to the server'
+,(HTML_TO_JS_EVENT('1964-03-01').getUTCHours() == 10 ? '✔' : '✘' )
++ ' Local rendered date was converted to universal date before being sent to the server'
 
-  ,(HTML_TO_JS_EVENT(API_TO_HTML(HTML_TO_JS_EVENT('1964-03-01'))).getUTCHours() == 10 ? '✔' : '✘' ) 
-    + ' Round trip through pipeline maintained timezone offset integrity'
+,(HTML_TO_JS_EVENT(API_TO_HTML(HTML_TO_JS_EVENT('1964-03-01'))).getUTCHours() == 10 ? '✔' : '✘' ) 
++ ' Round trip through pipeline maintained timezone offset integrity'
 
 ].join('\n')
 // => 
