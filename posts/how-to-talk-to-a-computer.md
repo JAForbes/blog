@@ -71,7 +71,8 @@ Let's see if we can generate the Date object 30 years in the future from the epo
 First we'll need the number of seconds in a day:
 
 ```js
-24 * 60 * 60 + 'seconds in a day' 
+24 * 60 * 60 
+  + 'seconds in a day' 
 //=> "86400 seconds in a day"
 ```
 
@@ -81,7 +82,9 @@ First we'll need the number of seconds in a day:
 var DAY_SECONDS = 86400
 var YEAR_DAYS = 365
 
-DAY_SECONDS * YEAR_DAYS * 30
+DAY_SECONDS 
+  * YEAR_DAYS 
+  * 30
 //=> 946080000
 ```
 
@@ -92,9 +95,15 @@ We want to get the date January 1st 2000, Midnight
 var DAY_SECONDS = 86400
 var YEAR_DAYS = 365
 
-var SECONDS_30_YEARS = DAY_SECONDS * YEAR_DAYS * 30
+var SECONDS_30_YEARS = 
+  DAY_SECONDS 
+  * YEAR_DAYS 
+  * 30
 
-new Date(SECONDS_30_YEARS).toISOString()
+new Date(
+  SECONDS_30_YEARS
+)
+.toISOString()
 //=> "1970-01-11T22:48:00.000"
 ```
 
@@ -119,10 +128,12 @@ var YEAR_DAYS =
   365
 
 var SECONDS_30_YEARS = 
-  DAY_SECONDS * YEAR_DAYS * 30
+  DAY_SECONDS 
+  * YEAR_DAYS * 30
 
 var MILLIS_30_YEARS
-  SECONDS_30_YEARS * 1000
+  SECONDS_30_YEARS 
+  * 1000
 
 new Date(
   MILLIS_30_YEARS
@@ -145,16 +156,23 @@ var YEAR_DAYS =
   365
 
 var SECONDS_30_YEARS = 
-  DAY_SECONDS * YEAR_DAYS * 30
+  DAY_SECONDS 
+  * YEAR_DAYS * 30
 
 var MILLIS_30_YEARS =
-  SECONDS_30_YEARS * 1000
+  SECONDS_30_YEARS 
+  * 1000
 
 ;(
-    new Date('2000-01-01')
-    - new Date(MILLIS_30_YEARS)
+    new Date(
+      '2000-01-01'
+    )
+    - new Date(
+      MILLIS_30_YEARS
+    )
 )
-  / DAY_SECONDS / 1000
+  / DAY_SECONDS 
+  / 1000
   + ' days'
 //=> "7 days"
 ```
@@ -166,7 +184,9 @@ We can simply divide 30 by 4 to get the number of extra leap days.
 We'll use `Math.floor` to simulate integer division so we have whole days only.
 
 ```js
-Math.floor(30 / 4) == 7
+Math.floor(
+  30 / 4
+) == 7
 //=> true
 ```
 
@@ -185,12 +205,21 @@ var SECONDS_30_YEARS =
   DAY_SECONDS 
   * YEAR_DAYS 
   * 30
-  + ( Math.floor(30/4) * DAY_SECONDS )
+  + ( 
+    Math.floor(
+      30/4
+    ) 
+    * DAY_SECONDS 
+  )
 
 var MILLIS_30_YEARS =
-  SECONDS_30_YEARS * 1000
+  SECONDS_30_YEARS 
+  * 1000
   
-new Date(MILLIS_30_YEARS).toISOString() 
+new Date(
+  MILLIS_30_YEARS
+)
+.toISOString() 
   == "2000-01-01T00:00:00.000Z"
 //=> true
 ```
@@ -206,18 +235,29 @@ Reflect on the conversation we had with the computer so far.
 
 ```
 Us: A day is 24 * 60 * 60
+
 Computer: Yeah that is 86400 seconds
 
-Us: Ok great, so a year in seconds is 365 * 86400 
-and 30 years as seconds is 365 * 86400 * 30
-Computer: Seems right, that is 946080000 by the way.
+Us: Ok great, so a year in seconds is 
+365 * 86400 and 30 years as seconds 
+is 365 * 86400 * 30
 
-Us: Let's prove our hypothesis by parsing our number to `new Date(...)`
-Computer: Hmmm turns out that number computes to be only 10 months
+Computer: Seems right, that is 
+946080000 by the way.
 
-Us: Oh! The documentation says Javascript takes milliseconds 
-instead of seconds so we need to multiply by 1000 first
-Computer: Much better, but not exactly 30 years in the future.
+Us: Let's prove our hypothesis by
+parsing our number to `new Date(...)`
+
+Computer: Hmmm turns out that number
+computes to be only 10 months
+
+Us: Oh! The documentation says 
+Javascript takes milliseconds 
+instead of seconds so we need to
+multiply by 1000 first
+
+Computer: Much better, but not 
+exactly 30 years in the future.
 
 Us: Leap years!
 Computer: BINGO!
@@ -244,11 +284,19 @@ I like to test multiple results via an array expression.
 ```js
 
 ;[
-  'James'.toUpper() == 'JAMES'
-  ,'JAMES'.toLower() == 'james'
+  'James'.toUpper() 
+    == 'JAMES'
+  ,'JAMES'.toLower()
+    == 'james'
   ,'james'.split('')
-    .map( s => s.charCodeAt() )
-    .map( String.fromCharCode )
+    .map( 
+      s => 
+        s.charCodeAt() 
+    )
+    .map(
+      String
+        .fromCharCode 
+    )
     .join('')
     == 'james'
 ] //= [true, true, false]
@@ -259,21 +307,42 @@ We can take advantage of javascript's array functions `some` and `every` to see 
 ```js
 var tests = [
   'james'.split('')
-    .map( s => s.charCodeAt() )
-    .map( String.fromCharCode )
+    .map( 
+      s => s.charCodeAt() 
+    )
+    .map( 
+      String
+        .fromCharCode 
+    )
     .join('')
     .length == 5
     
   ,'james'.split('')
-    .map( s => s.charCodeAt() )
-    .map( s => String.fromCharCode(s) )
+    .map( 
+      s => 
+        s.charCodeAt() 
+    )
+    .map( 
+      s => 
+        String
+          .fromCharCode(
+            s
+          ) 
+    )
     .join('')
     .length == 5
 ]
 
-tests //=> [false, true]
-tests.every(Boolean) //=> false
-test.some(Boolean) //=> true
+tests 
+//=> [false, true]
+
+tests
+.every(Boolean) 
+//=> false
+
+test
+.some(Boolean) 
+//=> true
 ```
 
 > The initial test fails.  An exercise for the reader.
@@ -288,7 +357,7 @@ And when we render our stored universal timezones to the screen, we will want to
 
 The Javascript Date object has a function for obtaining the users timezone offset.
 
-> Date.prototype.getTimezoneOffset()
+> Date::getTimezoneOffset()
 > Returns the time-zone offset in minutes for the current locale.
 
 [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTimezoneOffset)
@@ -302,7 +371,8 @@ Let's try this out in the console.
 > My timezone offset might be different to yours if you live in another part of the world.
 
 ```js
-new Date().getTimezoneOffset()
+new Date()
+  .getTimezoneOffset()
 //=> -600
 ```
 
@@ -345,11 +415,20 @@ It would be much easier to keep track of these calculations if `setMinutes` gave
 Let's write a `setMinutes` function that always returns a new Date().
 
 ```js
-var setMinutes = (offset,date) => new Date(date).setMinutes(offset)
+var setMinutes = 
+  (offset,date) => 
+    new Date(date)
+      .setMinutes(
+        offset
+      )
 
 var d = new Date()
-setMinutes(1,d).getMinutes() == 1
-//=> TypeError: setMinutes(...).getMinutes is not a function(…)
+setMinutes(1,d)
+  .getMinutes() == 1
+  
+//=> TypeError: 
+//=> ...getMinutes 
+//=> is not a function
 ```
 
 Unfortunately `setMinutes` returns a millisecond unix timestamp instead of a Date object, so calling a method on the result
@@ -365,7 +444,8 @@ var setMinutes = (offset,date) =>
   )
 
 var d = new Date()
-setMinutes(1,d).getMinutes() == 1
+setMinutes(1,d)
+  .getMinutes() == 1
 //=> true
 ```
 
@@ -381,21 +461,28 @@ var setMinutes =
   )
 
 var TIMEZONE_OFFSET = -600
-var toLocal = setMinutes(TIMEZONE_OFFSET)
-var fromLocal = setMinutes(-TIMEZONE_OFFSET)
+var toLocal = 
+  setMinutes(TIMEZONE_OFFSET)
+var fromLocal = 
+  setMinutes(-TIMEZONE_OFFSET)
 
-var TIMEZONE_OFFSET_MINUTES = -600
+var TIMEZONE_OFFSET_MINUTES = 
+  -600
 var TIMEZONE_OFFSET_HOURS = 
   TIMEZONE_OFFSET_MINUTES / 60
   
 var UNIX_EPOCH = 0
 
-var d = new Date(UNIX_EPOCH) 
+var d = 
+  new Date(UNIX_EPOCH) 
 
 ;[
   d.getUTCHours() == 0
   ,toLocal(d).getUTCHours() 
-    == (24 + TIMEZONE_OFFSET_HOURS) % 24
+    == (
+      24 
+      + TIMEZONE_OFFSET_HOURS
+    ) % 24
   ,fromLocal(d).getUTCHours() 
     == -TIMEZONE_OFFSET_HOURS
 ]
@@ -429,12 +516,17 @@ var setMinutes =
       )
   )
 
-var TIMEZONE_OFFSET = -600
-var toLocal = setMinutes(TIMEZONE_OFFSET)
-var fromLocal = setMinutes(-TIMEZONE_OFFSET)
+var TIMEZONE_OFFSET = 
+  -600
+var toLocal = 
+  setMinutes(TIMEZONE_OFFSET)
+var fromLocal = 
+  setMinutes(-TIMEZONE_OFFSET)
 
 var FROM_API = 
-  () => new Date(0).getTime()
+  () => 
+    new Date(0)
+      .getTime()
 
   
 var API_TO_HTML = 
@@ -444,12 +536,19 @@ var API_TO_HTML =
       .slice(0,10)
   
 var HTML_TO_JS_EVENT = 
-  isoString => fromLocal(new Date(isoString))
+  isoString => 
+    fromLocal(
+      new Date(
+        isoString
+      )
+    )
 
 
 ;[
   
-  ,(FROM_API() == 0 ? '✔' : '✘') 
+  ,(FROM_API() == 0 
+    ? '✔' : '✘')
+    
      + ' Initial API value was UNIX Epoch'
 
   ,(API_TO_HTML( FROM_API() ) == '1969-12-31' ? '✔' : '✘')  
