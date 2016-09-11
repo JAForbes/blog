@@ -380,12 +380,12 @@ To avoid differences in timezones, we'll just hard code the Sydney, Australia ti
 
 
 ```js
-var TIMEZONE_OFFSET = -600
+var TZ_OFFSET = -600
 var UNIX_EPOCH = 0
 
 var d = new Date(UNIX_EPOCH) 
 
-d.setMinutes(TIMEZONE_OFFSET)
+d.setMinutes(TZ_OFFSET)
 
 d.getHours() == 24-10 
 //=> false
@@ -395,12 +395,12 @@ d.getHours() == 24-10
 Instead we want `d.getUTCHours()`, these subtle API mismatches are extremely hard to track down when you are testing a large project instead of conversing with your machine line by line.
 
 ```js
-var TIMEZONE_OFFSET = -600
+var TZ_OFFSET = -600
 var UNIX_EPOCH = 0
 
 var d = new Date(UNIX_EPOCH) 
 
-d.setMinutes(TIMEZONE_OFFSET)
+d.setMinutes(TZ_OFFSET)
 
 d.getUTCHours() == 24-10
 //=> true
@@ -462,22 +462,22 @@ var setMinutes =
       )
   )
 
-var TIMEZONE_OFFSET = -600
+var TZ_OFFSET = -600
 var toLocal = 
   setMinutes(
-    TIMEZONE_OFFSET
+    TZ_OFFSET
   )
   
 var fromLocal = 
   setMinutes(
-    -TIMEZONE_OFFSET
+    -TZ_OFFSET
   )
 
-var TIMEZONE_OFFSET_MINUTES = 
+var TZ_OFFSET_MINUTES = 
   -600
   
-var TIMEZONE_OFFSET_HOURS = 
-  TIMEZONE_OFFSET_MINUTES 
+var TZ_OFFSET_HOURS = 
+  TZ_OFFSET_MINUTES 
   / 60
   
 var UNIX_EPOCH = 0
@@ -490,10 +490,10 @@ var d =
   ,toLocal(d).getUTCHours() 
     == (
       24 
-      + TIMEZONE_OFFSET_HOURS
+      + TZ_OFFSET_HOURS
     ) % 24
   ,fromLocal(d).getUTCHours() 
-    == -TIMEZONE_OFFSET_HOURS
+    == -TZ_OFFSET_HOURS
 ]
   .every(Boolean)
   
@@ -526,12 +526,12 @@ var setMinutes =
       )
   )
 
-var TIMEZONE_OFFSET = 
+var TZ_OFFSET = 
   -600
 var toLocal = 
-  setMinutes(TIMEZONE_OFFSET)
+  setMinutes(TZ_OFFSET)
 var fromLocal = 
-  setMinutes(-TIMEZONE_OFFSET)
+  setMinutes(-TZ_OFFSET)
 
 var FROM_API = 
   () => 
@@ -582,16 +582,16 @@ var HTML_TO_JS_EVENT =
   )
   ).getUTCHours() == 10 
   ? '✔' : '✘' 
-  ) + ' Round trip through 
-  + 'pipeline maintained 
-  + 'timezone offset integrity'
+  ) + ' Round trip through' 
+  + ' pipeline maintained' 
+  + ' timezone offset integrity'
 
 ].join('\n')
 // => 
-// ✔ Initial API value was UNIX Epoch
-// ✔ Universal date was converted before rendering to HTML
-// ✔ Local rendered date was converted to universal date before being sent to the server
-// ✔ Round trip through pipeline maintained timezone offset integrity
+// ✔ Initial API value was ...
+// ✔ Universal date was conv...
+// ✔ Local rendered date was ...
+// ✔ Round trip through pipe ...
 ```
 
 The HTML input expects an ISO formatted string that is 10 characters long (YYYY-MM-DD).  
@@ -628,16 +628,16 @@ var setMinutes =
       )
   )
   
-var TIMEZONE_OFFSET = 
+var TZ_OFFSET = 
   new Date().getTimezoneOffset()
 
 var toLocal = 
   setMinutes(
-    TIMEZONE_OFFSET
+    TZ_OFFSET
   )
 var fromLocal = 
   setMinutes(
-    -TIMEZONE_OFFSET
+    -TZ_OFFSET
   )
 
 export default {
@@ -659,15 +659,15 @@ import {setMinutes}
 
 import test from 'tape'
 
-var TIMEZONE_OFFSET = 
+var TZ_OFFSET = 
   -600
 var toLocal = 
   setMinutes(
-    TIMEZONE_OFFSET
+    TZ_OFFSET
   )
 var fromLocal = 
   setMinutes(
-    -TIMEZONE_OFFSET
+    -TZ_OFFSET
   )
 
 var FROM_API = 
@@ -717,9 +717,9 @@ var tests = [
     )
   )
   ).getUTCHours() == 10 
-  ,' Round trip through 
-  + 'pipeline maintained 
-  + 'timezone offset integrity'
+  ,' Round trip through' 
+  + ' pipeline maintained' 
+  + ' timezone offset integrity'
   ]
 ]
 
