@@ -22,9 +22,7 @@ The Front End Virtual DOM framework, [Mithril](http://mithril.js.org/) is includ
 
 These libraries and their communities are not satelites of Ramda, they are separate communities showing interest in Algebraic types.
 
-I've received a lot of feedback and support from those in the larger JS community 
-that they are interested in using functional datastructures in their day to day work, but that feedback
-is rarely translated into words in public forums.
+I've received a lot of feedback and support from those in the larger JS community.  It is clear many are interested in using functional data structures in their day to day work, but that feedback is rarely translated into words in public forums.
 
 It is fine to support communities in whatever way is comfortable, and please continue to do so!
 But I'm inferring the majority of that quiet support is coming from people who want JS 
