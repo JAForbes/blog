@@ -5,7 +5,7 @@ This post is directed at anyone who is interested in the Fantasy Land specificat
 
 > Fantasy Land is a specification for supporting Algebraic types in Javascript.  Algebraic types are just data structures that obey some laws.  
 >
-> If you use Observables, Promises, Arrays or Strings you are already using Algebraic types without realising it.
+> If you use Observables, Promises, Arrays or Strings you are already using Algebraic types (or something very close) without realising it.
 >
 > The Fantasy Land spec codifies a standard for different types within the context of Javascript.  Many libraries implement the spec, and the community is constantly growing.
 > 
