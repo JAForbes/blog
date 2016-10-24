@@ -7,9 +7,10 @@ Fantasy Land: The Power is Yours!
 >
 > The Fantasy Land spec codifies a standard for different types within the context of Javascript.  
 > 
-> If you have never heard of Fantasy Land and it sounds interesting to you, I've written a post that explains the benefits with the assumption that the reader may not be interested or experienced with functional programming.
+> If you have never heard of Fantasy Land and it sounds interesting to you, I've written a post that explains the benefits. 
+> The post is written without the assumption that the reader is interested in functional programming.
 >
->You can read it here: [The Perfect API](https://james-forbes.com/?/posts/the-perfect-api)
+> You can read it here: [The Perfect API](https://james-forbes.com/?/posts/the-perfect-api)
 
 I've seen lots of interest in supporting Fantasy Land in mainstream libraries.  I've seen activity on twitter, likes / hearts on github issues, people messaging me about fantasy land on gitter, google analytics on blog posts etc.
 
