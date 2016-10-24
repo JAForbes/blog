@@ -31,7 +31,7 @@ to be more functional, but don't feel qualified to weigh in.  I've also heard JS
 I understand that Functional programming is intimidating, (despite how friendly the community can be) 
 the concepts and vernacular are foreign to the majority of JS programmers.
 
-It also doesn't help that some of the greatest minds in programming are drawn to FP, which creates a false impression that you are required be a genius to engage with the community.  I think it is important to publically document our mistakes.
+It also doesn't help that some of the greatest minds in programming are drawn to FP, which creates a false impression that you are required to be a genius to engage with the community.  I think it is important to publically document our mistakes.
 
 You may feel like you are over your head.  But there is always someone else who could benefit from your knowledge, and teaching is the best way to solidify concepts in your mind.  I would not claim to be an experienced functional programmer in the context of the fantasy land community.  But in many other communities I may be among the most experienced; simply because different communities have different focal points.  There are lots of people who can benefit from your knowledge *today*.
 
