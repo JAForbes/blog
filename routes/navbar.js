@@ -19,7 +19,7 @@ module.exports = h('div', {}, [
     ,h('h3', 'James Forbes')
     ,h('ul', { props: { className: style.nav } }, [
         h('li', [ h('a', url.anchor('/'), ['Explore']) ])
-        ,h('li', [ h('a', { props: { href: 'https://soundcloud.com/gazevectors/sets/impossible-lake' } }, 'Listen') ])
+        ,h('li', [ h('a', { props: { href: 'https://soundcloud.com/james_forbes' } }, 'Listen') ])
         ,h('li', [ h('a', { props: { href: 'https://canyon.itch.io/' } }, 'Play') ])
         ,h('li', [ h('a', { props: { href: 'https://github.com/JAForbes/' } }, 'Parse') ])
         ,h('li', [ h('a', { props: { href: 'https://twitter.com/james_a_forbes' } }, 'Follow') ])
