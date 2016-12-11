@@ -187,7 +187,7 @@ request('https://en.wikipedia.org/wiki/George_Washington')
     bday: $('.bday').text(),
   }
 })
-.then(console.log) //=> { names: ['George', 'Washington'], dob: '1732-02-22' }
+.then(console.log) //=> { names: [ 'George', 'Washington' ], bday: '1732-02-22' }
 ```
 
 Let's add some more properties.  Some of these parsing queries get pretty ugly, but that is just the nature of scraping web pages.
