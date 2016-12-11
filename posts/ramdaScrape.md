@@ -178,7 +178,7 @@ Run that and you'll get:
 Great!  Using the same process of inspecting elements we find there is a `bday` class on the George Washinton page.
 
 ```javascript
-request('httsp://en.wikipedia.org/wiki/George_Washington')
+request('https://en.wikipedia.org/wiki/George_Washington')
 .then(R.prop('body'))
 .then(cheerio.load)
 .then(function($){
