@@ -32,7 +32,7 @@ cd presidents #move into our project
 
 npm init #create our package json
 
-npm install ramda cheerio request promise lodash --save #install our dependencies
+npm install ramda cheerio request promise --save #install our dependencies
 
 touch app.js #create our script file
 
@@ -47,7 +47,7 @@ var R = require('ramda') //reduce complexity
 var cheerio = require('cheerio') //DOM traversal
 
 //test request works
-request('http://en.wikipedia.org/wiki/George_Washington', console.log )
+request('https://en.wikipedia.org/wiki/George_Washington', console.log )
 ```
 
 Then open up your terminal again and run our script
@@ -61,7 +61,7 @@ You'll get a huge data dump.  That's a good thing.
 Now we just want the HTML response.  We may not know what `request`'s response API is.  So let's look at the keys of the response to see what we can access.
 
 ```js
-request('http://en.wikipedia.org/wiki/George_Washington')
+request('https://en.wikipedia.org/wiki/George_Washington')
     .then(R.keys)
     .then(console.log)
 ```
@@ -109,19 +109,19 @@ Then re run it in your termninal.  You'll get something like this.
 `body` looks like the most applicable attribute.  So lets change our code to grab the body instead.
 
 ```js
-request('http://en.wikipedia.org/wiki/George_Washington')
-  .then(R.get('body'))
+request('https://en.wikipedia.org/wiki/George_Washington')
+  .then(R.prop('body'))
   .then(console.log)
 ```
 
 Run your script, and you'll get a _whole lot_ of HTML dumped to your console.  Now we need to parse the HTML to access our president data.  Enter cheerio.
 
 ```js
-request('http://en.wikipedia.org/wiki/George_Washington')
-  .then(R.get('body'))
+request('https://en.wikipedia.org/wiki/George_Washington')
+  .then(R.prop('body'))
   .then(cheerio.load) //<-- create a query function: $
   .then(function( $ ){
-    return $('p').first().text() //get the 1st paragraph
+    return $('p').eq(7).text() //get the 7th paragraph, which reflects the opening sentence
   })
   .then(console.log)
 ```
@@ -129,7 +129,7 @@ request('http://en.wikipedia.org/wiki/George_Washington')
 Now run your app.  You'll get the following in your console.
 
 
-> George Washington (February 22, 1732 [O.S. February 11, 1731][Note 1][Note 2] - December 14, 1799) was the first President of the United States (1789-1797), the Commander-in-Chief of the Continental Army during the American Revolutionary War, and one of the Founding Fathers of the United States.[3] He presided over the convention that drafted the United States Constitution, which replaced the Articles of Confederation and remains the supreme law of the land.
+> George Washington (/ˈdʒɔːrdʒ ˈwɒʃɪŋtən/; February 22, 1732 [O.S. February 11, 1731][b][c] – December 14, 1799) was an American soldier and statesman who served as the first President of the United States from 1789 to 1797. During the American Revolutionary War, Washington served as Commander-in-Chief of the Continental Army; as one of the Founding Fathers of the United States, he presided over the convention that drafted the United States Constitution and came to be known as the "father of his country" during his lifetime and to this day.[2]
 
 
 Thank our dependencies for our simple 12 line program.
@@ -140,7 +140,7 @@ Parsing the relevant data
 
 Now we pray Wikipedia uses some standard convention for its data, so we can parse easily.
 
-Go to the the [George Washington page on Wikipedia](http://en.wikipedia.org/wiki/George_Washington) and open up your browser dev tools.
+Go to the the [George Washington page on Wikipedia](https://en.wikipedia.org/wiki/George_Washington) and open up your browser dev tools.
 
 At the time of writing they have JQuery on the page.  This will allow us to figure out our queries for cheerio.
 
@@ -156,8 +156,8 @@ Now back in `app.js` let's store that as a `names` property, using Cheerio.
 
 ```js
 
-request('http://en.wikipedia.org/wiki/George_Washington')
-  .then(R.get('body'))
+request('https://en.wikipedia.org/wiki/George_Washington')
+  .then(R.prop('body'))
   .then(cheerio.load)
   .then(function($){
     return {
@@ -178,8 +178,8 @@ Run that and you'll get:
 Great!  Using the same process of inspecting elements we find there is a `bday` class on the George Washinton page.
 
 ```javascript
-request('http://en.wikipedia.org/wiki/George_Washington')
-.then(R.get('body'))
+request('httsp://en.wikipedia.org/wiki/George_Washington')
+.then(R.prop('body'))
 .then(cheerio.load)
 .then(function($){
   return {
@@ -193,8 +193,8 @@ request('http://en.wikipedia.org/wiki/George_Washington')
 Let's add some more properties.  Some of these parsing queries get pretty ugly, but that is just the nature of scraping web pages.
 
 ```javascript
-request('http://en.wikipedia.org/wiki/Thomas_Jefferson')
-.then(R.get('body'))
+request('https://en.wikipedia.org/wiki/Thomas_Jefferson')
+.then(R.prop('body'))
 .then(cheerio.load)
 .then(function($){
   return {
@@ -217,10 +217,10 @@ The response you get back will look like this:
 { names: [ 'Thomas', 'Jefferson' ],
   born: '1743-04-13',
   died: '1826-07-04',
-  birthplace: 'Charlottesville, Virginia, U.S.',
-  religion: 'Christian deism',
+  birthplace: 'Charlottesville, Virginia, United States',
+  religion: '',
   party: 'Democratic-Republican',
-  profession: 'Statesman, planter, lawyer, architect',
+  profession: '',
   graduated: 'College of William and Mary' }
 
 ```
@@ -229,23 +229,29 @@ Now we need to collect this data for _all_ Presidents.
 
 Every president's page has a `Succeeded by` section, with a link to the next page.  But that means we would only process the data in order, which could take a lot longer than doing so in parallel.
 
-Instead we can parse a list of the presidents from http://www.whitehouse.gov/about/presidents/.
+Instead we can parse a list of the presidents from https://www.whitehouse.gov/about/presidents/.
 
 ```js
 var parsePresidentsList = R.pipe(
-  R.get('body'),
+  R.prop('body'),
   cheerio.load,
   function($){
-    return $('.views-field-title').text()
+    return $('.field-items').eq(1).text()
   },
-  R.replace(/\d*\./g,''),//remove list numbering
-  R.split('\n'), //split on new line
-  R.map(R.match(/[A-z]+/g)), //remove anything that isn't a letter
-  _.compact, //remove any failed matches
-  R.map(R.join(' ')) //join the surviving names with a space
+  R.replace(/\d*\./g,''),    // remove list numbering
+  R.split('\n'),             // split on new line
+  R.map(R.match(/[A-z]+/g)), // remove anything that isn't a letter
+  R.reject(R.isEmpty),		 // remove any failed matches
+  R.reject(R.contains('Century')),	// Remove the lines indicating century (18th, 19th, 20th, 21st)
+  R.map(R.join(' '))         // join the surviving names with a space
 )
 
-request('http://www.whitehouse.gov/about/presidents/')
+request({
+	url: 'https://www.whitehouse.gov/1600/presidents',
+	headers: {
+    	'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'
+	}
+  })
   .then(parsePresidentsList)
   .then(console.log)
 ```
@@ -261,24 +267,24 @@ var Promise = require('Promise')
 var request = Promise.denodeify(require('request'))
 var R = require('ramda')
 var cheerio = require('cheerio')
-var _ = require('lodash')
 
 var parsePresidentsList = R.pipe(
-  R.get('body'),
+  R.prop('body'),
   cheerio.load,
   function($){
-    return $('.views-field-title').text()
+    return $('.field-items').eq(1).text()
   },
-  R.replace(/\d*\./g,''),//remove list numbering
-  R.split('\n'), //split on new line
-  R.map(R.match(/[A-z]+/g)), //remove anything that isn't a letter
-  _.compact //remove any failed matches
+  R.replace(/\d*\./g,''),    
+  R.split('\n'),             
+  R.map(R.match(/[A-z]+/g)), 
+  R.reject(R.isEmpty),		 
+  R.reject(R.contains('Century'))	
 )
 
 function scrapeWikipedia(president){
-  var url = 'http://en.wikipedia.org/wiki/'+president.join('_')
+  var url = 'https://en.wikipedia.org/wiki/'+president.join('_')
   return request(url)
-  .then(R.get('body'))
+  .then(R.prop('body'))
   .then(cheerio.load)
   .then(function($){
     return {
@@ -294,9 +300,12 @@ function scrapeWikipedia(president){
   })
 }
 
-request('http://www.whitehouse.gov/about/presidents/')
+request({
+	url: 'https://www.whitehouse.gov/1600/presidents',
+	headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'	}
+  })
   .then(parsePresidentsList)
-  .then(R.take(2)) //only parse 2 presidents for now
+  .then(R.take(2)) //only parse 2 presidents for now 
   .then(R.map(scrapeWikipedia))
   .then(Promise.all)
   .then(console.log)
@@ -306,7 +315,7 @@ request('http://www.whitehouse.gov/about/presidents/')
 Let's walk through that code dump.
 
 ```js
-request('http://www.whitehouse.gov/about/presidents/') // <-- get website about presidents
+request('https://www.whitehouse.gov/about/presidents/') // <-- get website about presidents
   .then(parsePresidentsList) // <-- Parse an array of president names from the response
   .then(R.take(2)) //only parse 2 presidents for now to speed up development, just comment this out later
   .then(R.map(scrapeWikipedia)) //scrape wikipedia for every president
@@ -330,29 +339,28 @@ var Promise = require('Promise')
 var request = Promise.denodeify(require('request'))
 var R = require('ramda')
 var cheerio = require('cheerio')
-
-var _ = require('lodash')
 var fs = require('fs')
-var writeFile = _.curry(Promise.denodeify(fs.writeFile),2)
-var prettyJSON = _.partialRight(JSON.stringify, null, 2)
+
+var	writeFile  = R.curryN(2, Promise.denodeify(fs.writeFile));
+var	prettyJSON = R.partialRight(JSON.stringify, [null, 2]);
 
 var parsePresidentsList = R.pipe(
-  R.get('body'),
+  R.prop('body'),
   cheerio.load,
   function($){
-    return $('.views-field-title').text()
+    return $('.field-items').eq(1).text()
   },
-  R.replace('James Carter','Jimmy Carter'),
-  R.replace(/\d*\./g,''),//remove list numbering
-  R.split('\n'), //split on new line
-  R.map(R.match(/[A-z]+/g)), //remove anything that isn't a letter
-  _.compact //remove any failed matches
+  R.replace(/\d*\./g,''),    
+  R.split('\n'),             
+  R.map(R.match(/[A-z]+/g)), 
+  R.reject(R.isEmpty),		 
+  R.reject(R.contains('Century'))	
 )
 
 function scrapeWikipedia(president){
-  var url = 'http://en.wikipedia.org/wiki/'+president.join('_')
+  var url = 'https://en.wikipedia.org/wiki/'+president.join('_')
   return request(url)
-  .then(R.get('body'))
+  .then(R.prop('body'))
   .then(cheerio.load)
   .then(function($){
     return {
@@ -368,29 +376,31 @@ function scrapeWikipedia(president){
   })
 }
 
-request('http://www.whitehouse.gov/about/presidents/')
+request({
+	url: 'https://www.whitehouse.gov/1600/presidents',
+	headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'	}
+  })
   .then(parsePresidentsList)
-  .then(R.take(4)) //speed up development process
+  .then(R.take(2)) //only parse 2 presidents for now 
   .then(R.map(scrapeWikipedia))
   .then(Promise.all)
   .then(prettyJSON,console.error)
   .then(writeFile('presidents.json'))
-
 
 ```
 
 I'll walk through the function definitions of prettyJSON and writeFile.
 
 ```js
-var writeFile = _.curry(Promise.denodeify(fs.writeFile),2)
-var prettyJSON = _.partialRight(JSON.stringify, null, 2)
+var	writeFile  = R.curryN(2, Promise.denodeify(fs.writeFile));
+var	prettyJSON = R.partialRight(JSON.stringify, [null, 2]);
 ```
 
 `fs.writeFile` does not return a promise by default.  So we call `Promise.denodeify(fs.writeFile)` to convert `fs.writeFile` into a thenable function.
 
-We use `_.curry` so we can specify the filename before we receive the file data.  Put that together and you get `_.curry(Promise.denodeify(fs.writeFile),2)`
+We use `R.curryN` so we can specify the filename before we receive the file data.  Put that together and you get `R.curryN(2, Promise.denodeify(fs.writeFile))`
 
-`_.partialRight(JSON.stringify, null, 2)` just means, when we call `JSON.stringify( json )`, add these arguments at the end, so it becomes.  `JSON.stringify( json, null, 2)`.  Which specifies `stringify` to pretty print the output.
+`R.partialRight(JSON.stringify, [null, 2])` just means, when we call `JSON.stringify( json )`, add these arguments at the end, so it becomes.  `JSON.stringify( json, null, 2)`.  Which specifies `stringify` to pretty print the output.
 
 If you run the above code you should get an array of president data.
 
@@ -464,4 +474,4 @@ We just demonstrated scraping data from multiple sites in parallel, and logging 
 
 The final code is easy to augment and debug.
 
-If you are a user of Lodash, and you haven't yet given Ramda a try, I recommend it highly.
+(If you are a user of Lodash, and you haven't yet given Ramda a try, I recommend it highly.)
