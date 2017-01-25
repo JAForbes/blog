@@ -1,5 +1,5 @@
 The versatility of Array methods
---------------------------------
+================================
 
 #### Using array methods to replace conditionals, null checks and exception handling.
 
@@ -53,7 +53,7 @@ We are going to replace a lot of tedious spaghetti code with small isolated func
 > For demonstration purposes only we will be adding methods to built in prototypes.  Fear not.  Think of it as a polyfill for ES2050.
 
 filter vs if + push
-===================
+-------------------
 
 Have you ever written code like this before?
 
@@ -236,7 +236,7 @@ f(list)
 ```
 
 Redefining filtration
-=====================
+---------------------
 
 Initially I defined `filter`'s responsibilities as:
 
@@ -278,7 +278,7 @@ x && doSomethingElse
 `filter` is a formalization and abstraction of conditional logic.
 
 Operations that may not succeed
-===============================
+-------------------------------
 
 ```js
 function divide(a, b){
@@ -531,7 +531,7 @@ f(['{"A":2}'] ) //=> [50]
 ```
 
 Strategies for handling invalid values for your business logic
-==============================================================
+--------------------------------------------------------------
 
 ```js
 const = divide a => b => a / b
@@ -577,7 +577,7 @@ NonZeroNumber(0)
 ```
 
 BONUS ROUND: Multiple parallel conditionals
-===========================================
+-------------------------------------------
 
 Have you ever seen logic like this before?
 
@@ -667,7 +667,7 @@ With our `flatMap` and `get` function becomes:
 ```
 
 A simpler language
-==================
+------------------
 
 Even if your not 100% sold on using Array's to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly null values and functions that may throw exceptions, you might give a thought to the humble Javascript array, the little object that could.
 
