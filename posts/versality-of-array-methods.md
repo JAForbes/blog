@@ -373,7 +373,7 @@ The last point is the most important.  What is the correct return type for the f
 
 What is a reasonable response to any of the `else` or `catch` cases?
 
-As a thought experiment, lets create a rule than an empty list symbolizes failure, and a list of one entry symbolizes success.
+As a thought experiment, lets create a rule that an empty list symbolizes failure, and a list of one entry symbolizes success.
 
 ```js
 [1] //success
