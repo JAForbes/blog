@@ -403,7 +403,7 @@ parseJSON('{"A":1}') //=> [{A:1}]
 parseJSON("<A>1</A>") //=> []
 ```
 
-Now that we get back a list, we can tack advantage of the native behaviour of `map`.  It will never call a function on an empty list, and in our case an invalid output.
+Now that we get back a list, we can take advantage of the native behaviour of `map`.  It will never call a function on an empty list, and in our case an invalid output.
 
 ```js
 parseJSON('{"A":1}').map( o => a.A / 2 ) //=> [0.5]
@@ -679,11 +679,11 @@ With our `flatMap` and `get` function becomes:
 A simpler language
 ------------------
 
-Even if your not 100% sold on using Array's to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly null values and functions that may throw exceptions, you might give a thought to the humble Javascript array, the little object that could.
+Even if your not 100% sold on using Array methods to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly null values and functions that may throw exceptions, you might give a thought to the humble Javascript array, the little object that could.
 
 This article has been a covert introduction into the Maybe and Either Monad.  If you want to try out the real thing check out [Sanctuary](https://github.com/sanctuary-js/sanctuary)
 
-I also recommend checking out [Railway Oriented Programming - Scott Wlaschin](https://vimeo.com/97344498).  It's a helpful introduction to the framework and justification for avoiding conditions and exceptions.
+I also recommend checking out [Railway Oriented Programming](https://vimeo.com/97344498) by Scott Wlaschin.  It's a helpful introduction to the conceptual framework and justifications for avoiding conditions and exceptions.
 
 By relying on types that encapsulate decisions, branching, failure, success, we can write simpler code that is easier to edit and less likely to crash.
 
