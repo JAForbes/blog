@@ -96,22 +96,22 @@ To demonstrate this, let's add a `filter` method to the Number prototype.
 
 ```js
 Number.prototype.map = function(f){
-  const [answer] = 
+  const answer = 
     [this]
-    .filter( v => isNaN(v) )
+    .filter( v => !isNaN(v) )
     .map(f)
-    .concat(this)
+    .concat(NaN)
   
-  return answer
+  return answer[0]
 }
 Number.prototype.filter = function(f){
   const answer = 
     [this]
-    .filter( v => isNaN(v) )
+    .filter( v => !isNaN(v) )
     .filter(f)
-    .concat(this)
-    
-  return answer
+    .concat(NaN)
+
+  return answer[0]
 }
 ```
 
@@ -130,7 +130,11 @@ if( i % 2 == 0 ){
 And here's our version with `filter` and `map`
 
 ```js
-i = i.filter( i => i % 2 == 0 ).map( i => i / 2 )
+3..filter( i => i % 2 == 0 ).map( i => i / 2 ) 
+//=> NaN
+
+2..filter( i => i % 2 == 0 ).map( i => i / 2 )
+// => 1
 ```
 
 You may look at the above code and think its actually longer than the if statement.  That's true, but thats not a great metric for improving code.  What's significant about our second example is the complete isolation of every operation.  The `if` statement is a single unit of custom code.  The 2nd example is several clearly delineated steps.
@@ -147,10 +151,13 @@ for( var i = 0; i < list.length; i++){
 ```
 
 ```js
-list.filter(
-  i => i.filter( i % 2 == 0 ).map( i => i / 2 )
+[3,4,5].map( 
+  i => i
+    .filter( i => i % 2 == 0 )
+    .map( i => i / 2 )
 )
-.filter(isNaN)
+.filter( i => !isNaN(i))
+//=> [2]
 ```
 
 The top example has a wide variety of syntax, verbs and operations.  
@@ -185,19 +192,20 @@ And again our conditionals are separate from our aggregation, so we can easily r
 const isEven = i => i % 2 == 0
 const halve = i => i / 2
 const filter = f => x => x.filter(f)
+const notNaN = v => !isNaN(b)
 const map = f => x => x.map(f)
 const pipe = (f, g) => x => g(f(x))
 
 const f = 
-  filter(
-    pipe(
+  pipe(
+    map(
       pipe(
         filter( isEven )
-        ,map( halve )
+        ,map(halve)
       )
-      ,isNaN
     )
-)
+    ,filter(notNaN)
+  )
 
 f(list)
 ```
@@ -216,19 +224,19 @@ A language analysis of the above code sample:
 What's more, all the functions we just defined are standard functions that exist across languages, and are defined in many popular JS util libraries.  So from the get go we could use a library and avoid the function definition.
 
 ```js
-const {pipe,map,filter,multiply} = require('ramda')
+const {pipe,map,filter,reject,multiply} = require('ramda')
 const isEven = i % 2 == 0
 
 const f = 
-  filter(
-    pipe(
+  pipe(
+    map(
       pipe(
         filter( isEven )
-        ,map( halve )
+        ,map( mutilply(0.5) )
       )
-      ,isNaN
     )
-)
+    ,reject(isNaN)
+  )
 
 f(list)
 ```
@@ -274,6 +282,9 @@ x && doSomethingElse
 ```
 
 `filter` is a formalization and abstraction of conditional logic.
+
+I'm not advocating adding `map` and `filter` methods to `Number`.  I'm simply hoping to redefine `filter` as more than just a "list operation".
+Later in this post I'll show a more robust and repeatable way to achieve the same thing we've done in this section.
 
 Operations that may not succeed
 -------------------------------
@@ -347,9 +358,9 @@ function divide(a,b){
 }
 ```
 
-Even though are our simple functions now check values diligently for errors and catch potential exceptions we still have problems!
+Even though our simple functions now check values diligently for errors and catch potential exceptions we still have problems!
 
-- We are not handling all possible error cases
+- We are not handling all possible error states
 - Our code is surrounded by stuff that isn't the responsibility of that function
 - We do not have a simple answer for what to return in the failure case
 
@@ -362,7 +373,7 @@ The last point is the most important.  What is the correct return type for the f
 
 What is a reasonable response to any of the `else` or `catch` cases?
 
-There is a solution.  We can create a rule than an empty list symbolizes failure, and a list of one entry symbolizes success.
+As a thought experiment, lets create a rule than an empty list symbolizes failure, and a list of one entry symbolizes success.
 
 ```js
 [1] //success
@@ -389,14 +400,14 @@ If we wrap `JSON.parse` in our `unsafeToMaybe` we can write code that can traver
 const parseJSON = unsafeToMaybe(JSON.parse)
 
 parseJSON('{"A":1}') //=> [{A:1}]
-parseJSON(null) //=> []
+parseJSON("<A>1</A>") //=> []
 ```
 
 Now that we get back a list, we can tack advantage of the native behaviour of `map`.  It will never call a function on an empty list, and in our case an invalid output.
 
 ```js
 parseJSON('{"A":1}').map( o => a.A / 2 ) //=> [0.5]
-parseJSON(null).map( o => a.A / 2 ) //=> []
+parseJSON("<A>1</A>").map( o => a.A / 2 ) //=> []
 ```
 
 Let's extend our unsafeToMaybe to ignore `undefined` and `null` too.
@@ -421,12 +432,13 @@ Now let's make our original functions all return lists on a failure case.
 // but we'll curry it so we can easily call it when we're chaining
 const divide = a => b => a / b
 
-// we'll leave toLowerCase as is, because we don't need to do null checks anymore
+// we'll leave toLowerCase as is
+// because we don't need to do null checks with our new system
 function toLowerCase(str){
   return str.toLowerCase()
 }
 
-// We only wrap the unsafe part, the initial function call is already safe.
+// We only need to wrap the unsafe part
 const get = p => unsafeToMaybe( o => o[p] )
 
 const parseJSON = unsafeToMaybe(JSON.parse)
@@ -440,7 +452,7 @@ We are no longer checking if the inputs are valid: we can always safely assume t
   .map( toLowerCase ) //=> ['{"a":2}']
   .map( parseJSON ) //=> [[{ a: 2 }]]
   .map( v => v.map( w => w.map( get('a') ) )) //=> [[[2]]]
-  .map( v => v.map( w => w.map( x => x.map(divide(100)) ))) //=> [[[50]]]
+  .map( v => v.map( w => w.map( x => x.map(divide(100)) ))) //=> [[[[50]]]]
   
 ```
 
@@ -454,7 +466,7 @@ Array.prototype.flatMap = function(f){
     .reduce( (p,n) => p.concat(n), [])
 }
 
-[3].flatMap( x => [x * 2]  ) //=> 6
+[3].flatMap( x => [x * 2] ) //=> [6]
 ```
 
 With `flatMap` in play let's revisit our sample caller code.
@@ -525,7 +537,7 @@ const f = pipe(
 )
 
 f(['{"A":2}'] ) //=> [50]
-  
+
 ```
 
 Strategies for handling invalid values for your business logic
@@ -618,7 +630,7 @@ Becomes:
 
 ```js
 [[a,b,c,d]]
-  .filter( list => list.every(Boolean) )
+  .filter( conditions => conditions.every(Boolean) )
   .map( doSomething )
 ```
 ---
@@ -633,7 +645,7 @@ Becomes:
 
 ```js
 [[a,b,c,d]]
-  .filter( list => list.some(Boolean) )
+  .filter( conditions => conditions.some(Boolean) )
   .map( doSomething )
 ```
 ---
@@ -669,6 +681,14 @@ A simpler language
 
 Even if your not 100% sold on using Array's to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly null values and functions that may throw exceptions, you might give a thought to the humble Javascript array, the little object that could.
 
+This article has been a covert introduction into the Maybe and Either Monad.  If you want to try out the real thing check out [Sanctuary](https://github.com/sanctuary-js/sanctuary)
+
+I also recommend checking out [Railway Oriented Programming - Scott Wlaschin](https://vimeo.com/97344498).  It's a helpful introduction to the framework and justification for avoiding conditions and exceptions.
+
+By relying on types that encapsulate decisions, branching, failure, success, we can write simpler code that is easier to edit and less likely to crash.
+
+Thank you, for your time and happy coding!
+
 ---
 
-Many thanks to [Barney Carrol](http://barneycarroll.com/) for transforming my mental sprawl into coherent, readable English.
+Many thanks to [Barney Carroll](http://barneycarroll.com/) for transforming my mental sprawl into coherent, readable English.
