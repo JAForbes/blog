@@ -36,7 +36,7 @@ const f =
     flatMap(
       pipe(
         get('someProperty') 
-        ,flatMap('someSubProperty') 
+        ,flatMap(get('someSubProperty')) 
         ,flatMap(parseJSON)
       )
     )
