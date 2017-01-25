@@ -5,7 +5,7 @@ The versatility of Array methods
 
 Javascript arrays have some pretty useful helper methods.  Usually we think of them as a handicapped Lodash or Ramda.  Sure `map` and `reduce` is nice, but what about `_.uniq` or `_.difference` or `_.groupBy`.
 
-But Javascript has just enough primatives to get by without pulling in additional libraries. And in es6 with arrow functions we can define new and interesting visitor functions without expending too much effort.
+But Javascript has just enough building blocks to get by without pulling in additional libraries. And in es6 with arrow functions we can define new and interesting visitor functions without expending too much effort.
 
 But what I'd like to focus on in this post, is seeing these existing Array methods in a new light, as a replacement for if statements.
 
@@ -67,7 +67,7 @@ for(var i = 0; i < somethingElse.length; i++ ){
 I've seen this pattern come up in a lot of code I review.  We can replace this custom logic with a standard template: `filter`
 
 ```js
-var = list = somethingElse.filter( () => someCondition )
+var list = somethingElse.filter( () => someCondition )
 ```
 
 For some readers this might be familiar territory.  You may have already internalized that you can replace this particular pattern with filter.  But let's disect it so we can use filter in more interesting ways in a moment.
@@ -100,6 +100,7 @@ Number.prototype.map = function(f){
     [this]
     .filter( v => !isNaN(v) )
     .map(f)
+    // return NaN if there's no other value
     .concat(NaN)
   
   return answer[0]
@@ -109,6 +110,7 @@ Number.prototype.filter = function(f){
     [this]
     .filter( v => !isNaN(v) )
     .filter(f)
+    // return NaN if there's no other value
     .concat(NaN)
 
   return answer[0]
@@ -310,7 +312,7 @@ function toLowerCase(str){
 Above we have some utility functions that seem fairly innocuous.  
 
 ```js
-toLowerCase('{"A": 2}') //=> 'hello'
+toLowerCase('{"A": 2}') //=> '{"a": 2}'
 parseJSON('{"a": 2}') //=> { a: 1 }
 get('a', { a: 2}) //=> a
 divide(10, 2) //=> 5
@@ -367,8 +369,8 @@ Even though our simple functions now check values diligently for errors and catc
 The last point is the most important.  What is the correct return type for the failure case?
 
 - throwing exceptions causes more problems
-- returning null can just break the next function
-- not returning at all is much the same as returning null.  
+- returning `null` can just break the next function
+- not returning at all is much the same as returning `null`.
 - returning false can overload the meaning of false.
 
 What is a reasonable response to any of the `else` or `catch` cases?
@@ -444,7 +446,7 @@ const get = p => unsafeToMaybe( o => o[p] )
 const parseJSON = unsafeToMaybe(JSON.parse)
 ```
 
-Notice we've only wrapped functions that could either return undefined/null or could throw an exception based on non null input.
+Notice we've only wrapped functions that could either return `undefined`/`null` or could throw an exception based on non `null` input.
 We are no longer checking if the inputs are valid: we can always safely assume they are from here on in.
 
 ```js
@@ -679,7 +681,7 @@ With our `flatMap` and `get` function becomes:
 A simpler language
 ------------------
 
-Even if your not 100% sold on using Array methods to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly null values and functions that may throw exceptions, you might give a thought to the humble Javascript array, the little object that could.
+Even if your not 100% sold on using Array methods to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly `null` values and functions that may throw exceptions, you might give a thought to the humble Javascript `Array`, the little object that could.
 
 This article has been a covert introduction into the Maybe and Either Monad.  If you want to try out the real thing check out [Sanctuary](https://github.com/sanctuary-js/sanctuary)
 
