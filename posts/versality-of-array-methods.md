@@ -1,9 +1,7 @@
 The versatility of Array methods
 ================================
 
-#### Using array methods to replace conditionals, null checks and exception handling.
-
----
+**Using array methods to replace conditionals, null checks and exception handling.**
 
 Javascript arrays have some pretty useful helper methods.  Usually we think of them as a handicapped Lodash or Ramda.  Sure `map` and `reduce` is nice, but what about `_.uniq` or `_.difference` or `_.groupBy`.
 
