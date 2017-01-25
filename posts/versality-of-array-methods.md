@@ -616,7 +616,7 @@ if( a && b && c && d ){
 
 Becomes:
 
-```
+```js
 [[a,b,c,d]]
   .filter( list => list.every(Boolean) )
   .map( doSomething )
