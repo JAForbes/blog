@@ -59,11 +59,13 @@ function Twitter(v, post){
 		node.elm.innerHTML = ""
 
 		if(post().twitter){
-			return twttr.widgets.createTweet(
-				post().twitter,
-				node.elm,
-				{ theme: 'light' }
-			)
+			try {
+				return twttr.widgets.createTweet(
+					post().twitter,
+					node.elm,
+					{ theme: 'light' }
+				)
+			} catch (e) {}
 		}
 
 	})
