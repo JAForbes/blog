@@ -1,6 +1,16 @@
 How I use Mithril
 =================
 
+> Please be aware this post was written when Mithril 0.2x was state of the art.
+> Mithril 1.0 has built in support for streams and closure components; and enables writing in a declarative fashion.
+> Many of the points I make here are still valid, but need to be read in the context of the mithril 0.2x API.
+> The specific code samples and techniques used do not apply if you are using Mithril 1.0
+>
+> I'll leave this article here for posterity, and when I've got more experience with 1.0 I'll post a follow up.
+> In the interim please feel free to ask questions in the [mithril chatroom](https://gitter.im/lhorie/mithril.js).
+> 
+> Happy Coding - James
+
 Mithril is a tiny library for writing interactive web applications.
 It's so small it may seem difficult to know where to start.
 

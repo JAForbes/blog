@@ -1,6 +1,17 @@
 The power of m.prop
 ===================
 
+> Please be aware this post was written when Mithril 0.2x was state of the art.
+> Mithril 1.0 has built in support for streams and closure components; and enables writing in a declarative fashion.
+> Many of the points I make here are still valid, but need to be read in the context of the mithril 0.2x API.
+> The specific code samples and techniques used do not apply if you are using Mithril 1.0
+>
+> I'll leave this article here for posterity, and when I've got more experience with 1.0 I'll post a follow up.
+> In the interim please feel free to ask questions in the [mithril chatroom](https://gitter.im/lhorie/mithril.js).
+> 
+> Happy Coding - James
+
+
 mithril's elegant model binding solution (and its limitations)
 ------------------------------------------------------------
 
@@ -276,19 +287,3 @@ a.end.on(b.end)
 
 Whether you are going reactive or not, I highly recommend trying or at least thinking about how
 `m.prop`/flyd can fit in your workflow.
-
-I have so enjoyed working with flyd that I have begun writing a new framework inspired by
-mithril and cyclejs.  So far it, comes in at 16kb minified and makes use of another of paldepind's excellent libraries: snabbdom.
-
-This very blog was recently rewritten as a testing ground for this new approach.
-
-You can inspect the source here:
-
-- [Blog Source: ](https://github.com/JAForbes/JAForbes.github.io/blob/master/routes/posts/index.js)
-- [Framework Readme: ](https://github.com/JAForbes/JAForbes.github.io/tree/master/framework/readme.md)
-
-This website has twitter integration, code highlighting, css transitions and the history api.
-So it is a good test bed for exploration of these ideas.
-
-> I haven't come up with a name for the framework, so there is no repo just yet.  But once it has matured and I can think of
-> a decent name, I'll update this post to reference it.
