@@ -1,7 +1,7 @@
-const h = require('../framework')
-const j2c = require('j2c')
+var h = require('../framework')
+var j2c = require('j2c')
 
-const style = j2c.sheet({
+var style = j2c.sheet({
     '.nav': {
         paddingLeft: '0em'
         ,width: '100%'
