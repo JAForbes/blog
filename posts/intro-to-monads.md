@@ -56,7 +56,7 @@ Just skip 20 mins in.  It's really good...
 
 Truly.
 
-So what do we do?  Do we go back to writing for loops.
+So what do we do?  Do we go back to writing for loops?
 
 OF COURSE NOT
 
@@ -79,7 +79,7 @@ So what then?
 
 Our program doesn't do anything.  Our program doesn't exist!  We live in a simulation.  Powered by blood transfusions - of children.  DELICIOUS!
 
-That's the point, that's the point.  0 Side Effects
+That's the point, that's the point.  0 Side Effects.
 
 See Monads are Burritos.  You don't *eat* burritos, you give the burrito to a friend and the friend eats the Burrito.  It's the same thing with Monads.
 
