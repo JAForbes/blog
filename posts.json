@@ -1,5 +1,10 @@
 [
-	{
+	{ "name": "Intro to Monads"
+	, "path": "posts/intro-to-monads.md"
+	, "created": "2017-07-20"
+	, "twitter": "888024819114979328"
+	}
+	,{
 		"name": "The versatility of Array methods",
 		"path": "posts/versatility-of-array-methods.md",
 		"created": "2017-01-25",
