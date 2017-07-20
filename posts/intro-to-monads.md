@@ -1,4 +1,4 @@
-What Isnt a Monad?  And why doesn't it matter?
+What isn't a Monad?  And why doesn't it matter?
 ===============================================
 
 Look.  Nobody knows what a Monad is.  Really.
