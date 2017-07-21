@@ -81,6 +81,8 @@ Our program doesn't do anything.  Our program doesn't exist!  We live in a simul
 
 That's the point, that's the point.  0 Side Effects.
 
+![](http://i.imgur.com/Dy2zrr7.jpg)
+
 See Monads are Burritos.  You don't *eat* burritos, you give the burrito to a friend and the friend eats the Burrito.  It's the same thing with Monads.
 
 You don't eat Monads, you write a paper about them and actually you know what...
