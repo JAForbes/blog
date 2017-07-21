@@ -1,6 +1,8 @@
 What isn't a Monad?  And why doesn't it matter?
 ===============================================
 
+> Some people have said to me they were deeply disappointed that this wasn't a real intro to Monads.  I'm sorry for misleading you.  I've added some links to some actually useful resources at the end of this post.
+
 Look.  Nobody knows what a Monad is.  Really.
 
 Why do you think Haskell's package manager is called Cabal?  It's because there's a cabal of computer scientists making up words and seeing if we actually read their papers or instead just blindly believe everything Bartosz Milewski blogs and follows along (spoiler: that's what we do.)
@@ -103,3 +105,23 @@ The remainder of this briefing will be encoded via lambda calculus.
  
 Thank you for your [side effect redacted]
 
+#### What a Monad actually is
+
+A Monad, in the context of software, is an interface for writing sequential code.  That interface includes some laws.  Laws are just rules that you have to follow to call your code a Monad.  Those laws are pretty straight forward and are useful because they guarantee behaviour in a lot of different contexts.
+
+The reason people say Monads "are actually really easy" with a straight face is because it is just a list of behaviours that are and aren't allowed.  And following that list doesn't require any understanding of category theory at all.  In a way, learning what a Monad is, is sort of useless information without knowing why it's useful.
+
+So what a Monad *is*, is only half of the story.  Why a Monad is useful, and how to use them, is potentially a more  approachable and useful topic.  Here's a few resources on how Monad's can be useful. 
+
+- A justification and introduction of Algebraic types: http://james-forbes.com/?/posts/the-perfect-api
+- A demonstration of Algebraic types for managing branching logic [Railway Oriented Programming](https://vimeo.com/97344498)
+- My demonstration of Array methods as an intro to the Maybe Monad: http://james-forbes.com/?/posts/versatility-of-array-methods
+- A free online book walking through FP and using Algebraic types in Javascript: Dr Boolean's [Mostly Adequate Guide]( https://github.com/MostlyAdequate/mostly-adequate-guide)
+- Tom Harding's walkthrough of every single Typeclass in the Javascript Algebraic Type standard: Fantasy Land http://www.tomharding.me/2017/03/03/fantas-eel-and-specification/
+
+#### Apologies and Footnotes
+
+- Brian and Hardy's [podcast](www.magicreadalong.com) is actually a great resource for learning FP and not anti robo-armageddon propaganda.
+- [Bartoz Milewski's](https://bartoszmilewski.com/) somehow clearly distills the most esoteric mathematical concepts into light reading.  No small feat and highly recommended.
+- Lots of people do read FP papers, they are real, they are smart.  If you find it a struggle don't fret, I absolutely cannot read them and so this article is just me projecting.
+- What's with Burritos?  It's best not to ask.  But you did so here's a link to one of the [least helpful resources on Monads](https://www.youtube.com/watch?v=b0EF0VTs9Dc) by Doug Crockford.
