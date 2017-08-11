@@ -227,7 +227,7 @@ What's more, all the functions we just defined are standard functions that exist
 
 ```js
 const {pipe,map,filter,reject,multiply} = require('ramda')
-const isEven = i % 2 == 0
+const isEven = i => i % 2 == 0
 
 const f = 
   pipe(
