@@ -546,7 +546,7 @@ Strategies for handling invalid values for your business logic
 --------------------------------------------------------------
 
 ```js
-const = divide a => b => a / b
+const divide = a => b => a / b
 ```
 Mathematicians often have different answers what dividing by 0 yields.  It can vary from person to person or from field to field.
 In a business environment we usually want to consider 0 as an invalid case, and in some languages dividing by 0 throws an Exception.  In JS it returns `Infinity`.  `Infinity` is a `Number` and doesn't throw Exceptions when we operate on it, but depending on your situation that may actually be a bad thing, because it can silently fail.
