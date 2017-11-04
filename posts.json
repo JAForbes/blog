@@ -1,9 +1,10 @@
 [
-	{ "name": "Intro to Monads"
-	, "path": "posts/intro-to-monads.md"
-	, "created": "2017-07-20"
-	, "twitter": "888024819114979328"
+	
+	{ "name": "Intro to Streams"
+	, "path": "posts/intro-to-streams.md"
+	, "created": "2017-11-04"
 	}
+	
 	,{
 		"name": "The versatility of Array methods",
 		"path": "posts/versatility-of-array-methods.md",
