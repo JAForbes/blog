@@ -16,9 +16,9 @@ var style = Object.assign(appStyle, {
 		text_align: 'center'
 		,font_family: '"Inconsolata", sans-serif'
 	}
-    ,'h1, h2, h3, h4, h5, h6': {
-        color: 'white'
-    }
+	,'h1, h2': {
+		color: '#7588d3'
+	}
     ,'.post': {
         'text-align': 'left'
 		,'padding':'2em'
@@ -32,7 +32,7 @@ var style = Object.assign(appStyle, {
     }
     ,'code, code span': {
         font_family: '"Inconsolata", sans-serif'
-        ,color: 'white'
+        ,color: 'black'
     }
 })
 var sheet = j2c.sheet(style)

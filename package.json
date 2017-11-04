@@ -5,10 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "static -p 80",
-    "start": "npm run serve & npm run watch",
-    "dist": "browserify app.js | uglifyjs -mc > bundle.min.js",
-    "watch": " watchify app.js -d -o bundle.min.js --verbose"
+    "start": "npm-run-all --parallel start:*",
+    "start:serve": "static -p 80",
+    "start:watch": " watchify app.js -d -o bundle.min.js --verbose",
+    "dist": "browserify app.js | uglifyjs -mc > bundle.min.js"
   },
   "repository": {
     "type": "git",
@@ -27,9 +27,11 @@
     "flyd": "^0.2.0",
     "j2c": "^0.11.2",
     "marked": "^0.3.5",
+    "npm-run-all": "^4.1.1",
     "prismjs": "^1.4.1",
     "ramda": "^0.19.1",
-    "snabbdom": "^0.2.8"
+    "snabbdom": "^0.2.8",
+    "uglify-js": "^3.1.6"
   },
   "devDependencies": {
     "browserify": "^12.0.1",
@@ -38,7 +40,6 @@
     "eslint": "^2.11.1",
     "eslint-plugin-immutable": "^1.0.0",
     "node-static": "^0.7.7",
-    "uglifyjs": "^2.4.10",
     "watchify": "^3.7.0"
   }
 }

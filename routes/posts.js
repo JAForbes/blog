@@ -35,22 +35,7 @@ var style = j2c.sheet({
         ,height: '8em'
         ,padding: '1em'
     }
-    ,'.featured ul li:nth-child(5n+1)': {
-        backgroundColor: 'hsl(260, 20%, 20%)'
-    }
-    ,'.featured ul li:nth-child(5n+2)': {
-        backgroundColor: 'hsl(270, 20%, 20%)'
-    }
-    ,'.featured ul li:nth-child(5n+3)': {
-        backgroundColor: 'hsl(280, 20%, 20%)'
-    }
-    ,'.featured ul li:nth-child(5n+4)': {
-        backgroundColor: 'hsl(290, 20%, 20%)'
-    }
-    ,'.featured ul li:nth-child(5n+5)': {
-        backgroundColor: 'hsl(300, 20%, 20%)'
-    },
-    '.posts': {
+    ,'.posts': {
         width: '100%',
         float: 'left',
     }
@@ -65,7 +50,7 @@ var style = j2c.sheet({
 
 function Post(p){
     return h('a', url.anchor('/'+p.path.replace('.md','')), [
-        h('li', [
+        h('li.grow', { class: { 'bg-dark-red': p.featured, 'white': p.featured }}, [
             h('p', p.name)
             ,h('i', iso(p.created) )
         ])

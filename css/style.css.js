@@ -8,8 +8,6 @@ module.exports = {
         'overflow-x': 'hidden'
         ,'box-sizing': 'border-box'
         ,text_align: 'center'
-        ,color: '#e6cdf9'
-        ,background_color: '#231f1f'
         ,'-webkit-overflow-scrolling': 'touch'
     }
     ,p: { 'line-height': '2em' }
@@ -19,6 +17,6 @@ module.exports = {
         ,'margin-left': 'auto'
         ,'margin-right': 'auto'
     }
-    ,'a, a:visited': { color: '#e6cdf9' }
+    ,'a, a:visited': { color: 'black' }
     ,'a:active': { color: 'black' }
 };
