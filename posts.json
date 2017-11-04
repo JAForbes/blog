@@ -4,7 +4,8 @@
 		"name": "Intro to Streams",
 		"path": "posts/intro-to-streams.md",
 		"created": "2017-11-04",
-		"featured": true
+		"featured": true,
+		"twitter": 926654105421996032
 	}
 	,{
 		"name": "The versatility of Array methods",
