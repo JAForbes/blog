@@ -26,7 +26,7 @@ Node is UNIX
 
 My suggestion may seem naive, or unrealistic, so before I go into the specifics I want to point out: Node is greatly inspired by unix.  The unix philosophy informs tiny npm modules being composed to form larger systems.  Node's native api takes naming conventions from unix like `fork`, `pipe`, `fs.stat`, `fs.unlink`, `process.stdout` and so on.  Node's stream implementations though imperfect, seek to recreate unix pipes.  Node has always embraced unix, Ryan Dahl in his original presentations frequently presented node in a unix context.  Node event names like `SIGINT` are present on Windows.  Even though Node works well on Windows, it is designed for and influenced by unix.  Node on Windows is a series of adapters to allow Windows to mimic linux (with varying degrees of success).
 
-Node and npm tooling requires an understanding of the terminal. It is taken for granted now that frontend libraries use the terminal, whether its to run `ava`, `mocha`, `tape` and so on, or using `create-react-app` or  `ember-cli`. `browserify`'s entire tool chain is a series of unix pipe's.  Even when we try to avoid the terminal with tools like gulp we end up mimicking unix ideas (unix streams)  because we are creating tools in the image of node which begets unix.
+Node and npm tooling requires an understanding of the terminal. It is taken for granted now that frontend libraries use the terminal, whether it's to run `ava`, `mocha`, `tape` and so on, or using `create-react-app` or  `ember-cli`. `browserify`'s entire tool chain is a series of unix pipe's.  Even when we try to avoid the terminal with tools like gulp we end up mimicking unix ideas (unix streams)  because we are creating tools in the image of node which begets unix.
 
 When we design libraries that try very hard to avoid unix conventions they are lambasted as complicated (webpack). 
 
@@ -37,24 +37,24 @@ Node is Bash?
 
 There are many shells out there, zsh, fish, dash, and on and on.  But Bash is the javascript of shell languages.  It is ubiquitious, it is supported everywhere, it is the lingua franca.  If you install Git on Windows, you also install a capable bash simulation.  Windows 10 ships with a native subsystem for linux that makes native calls to win32 api's, and unsurprisingly the first shell/os they supported was Ubuntu and bash.
 
-Bash is preinstalled on OSX, and nearly every linux distribution under the sun.  When its not available, its easily attainable.  Your CI likely runs bash.
+Bash is preinstalled on OSX, and nearly every linux distribution under the sun.  When it's not available, it's easily attainable.  Your CI likely runs bash.
 
 Dev tooling is one of the easiest parts of our stack to introduce tech (perhaps even more so than tests) because it doesn't affect our customers.  Even if you work at an enterprise .NET shop with powershell all the way down, there is nothing preventing you from using bash in your company.  If you are using git you probably already have bash on your system even if you are not aware of it.
 
-There's really no excuse, or reason any more to support cmd.exe in npm.  It's the source of countless bugs across countless projects.  It introduces contributor friction and its all because we're assuming that learning bash is not a pre-requisite for using node tooling: maybe it should be.
+There's really no excuse, or reason any more to support cmd.exe in npm.  It's the source of countless bugs across countless projects.  It introduces contributor friction and it's all because we're assuming that learning bash is not a pre-requisite for using node tooling: maybe it should be.
 
 There's very insidious incompatiblities like `&` indicating a parallel processs in bash, but the equivalent of a semicolon under windows. 
 
 We can use npm modules that emulate bash functionality, but without using bash directly it will be difficult to support a suite of useful operations.
 
-I'm not saying node shouldn't run on windows, I'm saying npm shouldn't run on windows.  And at the very least, your team should only use bash for its build tooling.
+I'm not saying node shouldn't run on windows, I'm saying npm shouldn't run on windows.  And at the very least, your team should only use bash for it's build tooling.
 
 The current state of the art
 -----------------------------
 
 Let's say we have a `package.json` that uses browserify.  We're going to use `npm-run-all` to run multiple jobs in parallel and `mkdirp` to create required folders.  If you use `mkdir -p` on windows you'll create a directory called `-p`.
 
-We're going to handle both dev and production bundling, with minification and transpilation.  It's still going to be simpler than most projects tend to be.  I'm ignoring steps like deployments, css concentation and even caching mitigation.  But hopefully complicated enough to see the benefits of the proposal.
+We're going to handle both dev and production bundling, with minification and transpilation.  It's still going to be simpler than most projects tend to be.  I'm ignoring steps like deployments, css concentation and even caching mitigation.  But hopefully complicated enough to see the benefit's of the proposal.
 
 We install our dev dependencies locally and write our scripts like so:
 
@@ -212,7 +212,7 @@ If you want to log out the execution of your `run` script itself (instead of jus
 
 > -x
 
->    Print a trace of simple commands, for commands, case commands, select commands, and arithmetic for commands and their arguments or associated word lists after they are expanded and before they are executed. The value of the PS4 variable is expanded and the resultant value is printed before the command and its expanded arguments.
+>    Print a trace of simple commands, for commands, case commands, select commands, and arithmetic for commands and their arguments or associated word lists after they are expanded and before they are executed. The value of the PS4 variable is expanded and the resultant value is printed before the command and it's expanded arguments.
 
 [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
 
@@ -222,7 +222,7 @@ Bash: The good parts
 
 We can embrace unix without having to leave node conventions in the dust.  npm scripts are a great simple tool with powerful semantics.  I really like them.  But from now on, I'll be using the above pattern because it solves all the problems I have with npm scripts.
 
-There's room for improvement, we could automatically generate tab completion for bash scripts that use this style.  We could extend this approach in a myriad of ways.  But I think this pattern alone allows us to use `package.json` as just project meta data and move our build logic into it's own file.  Because it's just vanilla bash we can lint it with shellcheck and get little benefits like comments and syntax highlighting.
+There's room for improvement, we could automatically generate tab completion for bash scripts that use this style.  We could extend this approach in a myriad of ways.  But I think this pattern alone allows us to use `package.json` as just project meta data and move our build logic into it's own file.  Because it's just vanilla bash we can lint it with shellcheck and get benefits like comments and syntax highlighting.
 
 I hope this post has given you some ideas for your own projects.
 
