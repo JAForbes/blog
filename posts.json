@@ -1,5 +1,10 @@
 [
-	
+	{
+		"name": "An alternative to npm scripts",
+		"path": "posts/alternative-to-npm-scripts.md",
+		"created": "2017-11-09",
+		"featured": true
+	},
 	{ 
 		"name": "Intro to Streams",
 		"path": "posts/intro-to-streams.md",
