@@ -52,9 +52,9 @@ I'm not saying node shouldn't run on windows, I'm saying npm shouldn't run on wi
 The current state of the art
 -----------------------------
 
-Let's say we have a `package.json` that uses browserify, tape.  We're going to use `npm-run-all` to run multiple jobs in parallel and `mkdirp` to create required folders.  If you use `mkdir -p` on windows you'll create a directory called `-p`.
+Let's say we have a `package.json` that uses browserify.  We're going to use `npm-run-all` to run multiple jobs in parallel and `mkdirp` to create required folders.  If you use `mkdir -p` on windows you'll create a directory called `-p`.
 
-We're going to handle both dev and production bundling, with minification and transpilation.  It's still going to be simpler than most projects tend to be.  I'm ignoring steps like deployments, css concentation and even caching mitigating.  But hopefully complicated enough to see the benefits of the proposal.
+We're going to handle both dev and production bundling, with minification and transpilation.  It's still going to be simpler than most projects tend to be.  I'm ignoring steps like deployments, css concentation and even caching mitigation.  But hopefully complicated enough to see the benefits of the proposal.
 
 We install our dev dependencies locally and write our scripts like so:
 
@@ -193,7 +193,7 @@ Keeping all our scripts in one place is one of the best lessons I think we can l
 
 #### What about Grunt/Gulp doing it all in JS?
 
-JS isn't very good at procedural code.  To do basic tasks that bash can do out of the box requires installing several libraries, and inevitably each project uses different approaches to do the same thing.  Its possible, but picking the best language for a given task is advisable I think.
+JS isn't very good at procedural code.  To do basic tasks that bash can do out of the box requires installing several libraries, and inevitably each project uses different approaches to do the same thing.  It's possible, but picking the best language for a given task is advisable I think.
 
 #### What about X,Y,Z?
 
