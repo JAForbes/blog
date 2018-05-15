@@ -212,7 +212,7 @@ const f =
 f(list)
 ```
 
-Again, our sample is more code, but our code is simpler.  The function definitions are uniform, they do 1 thing in the same way again and again.  And our actual business logic is just function calls.
+Again, our sample is more code, but our code is simpler.  The function definitions are uniform, they do *one* thing in the same way again and again.  And our actual business logic is just function calls.
 
 A language analysis of the above code sample:
 
@@ -234,7 +234,7 @@ const f =
     map(
       pipe(
         filter( isEven )
-        ,map( mutilply(0.5) )
+        ,map( multiply(0.5) )
       )
     )
     ,reject(isNaN)
@@ -313,7 +313,7 @@ Above we have some utility functions that seem fairly innocuous.
 
 ```js
 toLowerCase('{"A": 2}') //=> '{"a": 2}'
-parseJSON('{"a": 2}') //=> { a: 1 }
+parseJSON('{"a": 2}') //=> { a: 2 }
 get('a', { a: 2}) //=> a
 divide(10, 2) //=> 5
 ```
@@ -408,8 +408,8 @@ parseJSON("<A>1</A>") //=> []
 Now that we get back a list, we can take advantage of the native behaviour of `map`.  It will never call a function on an empty list, and in our case an invalid output.
 
 ```js
-parseJSON('{"A":1}').map( o => a.A / 2 ) //=> [0.5]
-parseJSON("<A>1</A>").map( o => a.A / 2 ) //=> []
+parseJSON('{"A":1}').map( o => o.A / 2 ) //=> [0.5]
+parseJSON("<A>1</A>").map( o => o.A / 2 ) //=> []
 ```
 
 Let's extend our unsafeToMaybe to ignore `undefined` and `null` too.
