@@ -1,13 +1,37 @@
-/* global container */
+/* global document, container */
 
 
 
 const m = require('mithril')
 m.stream = require('mithril/stream')
 
+
+const updateTitle = Component => ({
+	view(){
+		return m('div', 
+			{ oncreate(){
+				setTimeout(
+					() => {
+
+						const heading = document.querySelector('h1,h2')
+						
+						document.title = 
+							"James Forbes" 
+								+ (heading ? ' - ' + heading.innerText : '')
+					}
+					,1000
+				)
+
+			}
+			}
+			, m(Component)
+		)
+	}
+})
+
 const routes = {
-	Home: require('./home')
-	,Post: require('./post')
+	Home: updateTitle(require('./components/home'))
+	,Post: updateTitle(require('./components/post'))
 }
 
 m.route(container, '/', 
@@ -15,23 +39,3 @@ m.route(container, '/',
 	, '/posts/:post': routes.Post
 	}
 )
-
-
-// todo-james use a route resolver?
-// url.map(function(page){
-
-// 	setTimeout(function(){
-
-// 		const heading = document.querySelector('h1,h2')
-
-// 		document.title = 
-// 			"James Forbes" + (heading ? ' - ' + heading.innerText : '')
-
-		
-
-// 	}, 1000)
-
-// 	scrollTo(0,0)
-
-// })
-

@@ -2,8 +2,8 @@
 /* global twttr */
 const marked = require('marked')
 const Prism = require('prismjs');
-const navbar = require('../navbar')
-const Posts = require('../posts')
+const navbar = require('./navbar')
+const Posts = require('./posts')
 
 require('prismjs/components/prism-json');
 require('prismjs/components/prism-bash');
