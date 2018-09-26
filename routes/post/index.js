@@ -7,15 +7,6 @@ const Posts = require('../posts')
 
 const m = require('mithril')
 m.stream = require('mithril/stream')
-const R = {
-	pipe: require('ramda/src/pipe')
-	,pipeP: require('ramda/src/pipeP')
-	,invoker: require('ramda/src/invoker')
-	,tap: require('ramda/src/tap')
-	,once: require('ramda/src/once')
-	,path: require('ramda/src/path')
-	,when: require('ramda/src/when')
-}
 
 function Twitter(vnode){
 
@@ -48,8 +39,9 @@ function Twitter(vnode){
 function Post({ attrs:{postBody, post}}){
 
 	const highlightCode =
-		R.when(
-			R.path(['dom','children','length']),
+		x => [x]
+		.filter( x => x.dom.children.length )
+		.forEach(
 			() => Prism.highlightAll()
 		)
 
@@ -102,10 +94,9 @@ function PostsModel(postsCache){
 	})
 
 	m.request('posts.json')
-		.then(R.pipe(
-			R.tap(posts),
-			postsCache
-		))
+		.then(
+			x => [posts(x), postsCache(x)]
+		)
 		.catch( console.error )
 		.then( () => m.redraw() )
 		
