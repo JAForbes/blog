@@ -212,7 +212,7 @@ const f =
 f(list)
 ```
 
-Again, our sample is more code, but our code is simpler.  The function definitions are uniform, they do *one* thing in the same way again and again.  And our actual business logic is just function calls.
+Again, our sample is more code, but our code is simpler.  The function definitions are uniform, they do one thing in the same way again and again.  And our actual business logic is just function calls.
 
 A language analysis of the above code sample:
 
