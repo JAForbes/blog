@@ -1,4 +1,4 @@
-/* global document, container */
+/* global container */
 
 
 
