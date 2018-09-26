@@ -9,6 +9,7 @@ const helpers = require('./bss-helpers')
 
 css.helper(helpers)
 
+// todo-james do this as a service
 const updateTitle = Component => ({
 	view(){
 		return m('div', 
