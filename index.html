@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
 	<title>James Forbes</title>
 	<link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.0/css/tachyons.min.css">
@@ -8,24 +9,109 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
-	<script>
-	if (!Function.prototype.bind) {
-		Function.prototype.bind = function(oThis) {
-			if (typeof this !== 'function') {
-				// closest thing possible to the ECMAScript 5
-				// internal IsCallable function
-				throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-			}
+	<style>
+		* {
+			font-family: helvetica;
+			box-sizing: border-box;
+		}
 
-			var aArgs   = Array.prototype.slice.call(arguments, 1),
-			fToBind = this,
-			fNOP    = function() {},
-			fBound  = function() {
-				return fToBind.apply(this instanceof fNOP && oThis
-					? this
-					: oThis,
-					aArgs.concat(Array.prototype.slice.call(arguments)));
-				};
+		body {
+			overflow-x: hidden;
+			box-sizing: border-box;
+			text-align: center;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		p {
+			line-height: 2em;
+		}
+
+		img {
+			max-width: 100%;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		a,
+		a:visited {
+			color: black;
+		}
+
+		a:active {
+			color: black
+		}
+
+		@font-face {
+			font-family: Inconsolata;
+			src: url(../font/Inconsolata-Regular.ttf) format("truetype");
+		}
+
+		h1 {
+			text-align: center;
+			font-family: "Inconsolata", sans-serif;
+		}
+
+		h1,
+		h2 {
+			color: #7588d3;
+		}
+
+		.post {
+			text-align: left;
+			padding: 2em;
+
+		}
+
+		@media (min-width: 801px) {
+			.post {
+				width: 80%;
+				margin-left: 10%;
+			}
+		}
+
+		code {
+			font-size: 0.9em
+		}
+
+		code,
+		code span {
+			font-family: "Inconsolata", sans-serif;
+			color: black;
+		}
+
+		.nav {
+			padding-left: 0em;
+			width: 100%;
+		}
+
+		.nav>li {
+			margin: 0em 0.6em 0em 0.6em;
+		}
+
+		.nav,
+		.nav>li {
+			display: inline-block;
+		}
+	</style>
+	<script>
+		if (!Function.prototype.bind) {
+			Function.prototype.bind = function (oThis) {
+				if (typeof this !== 'function') {
+					// closest thing possible to the ECMAScript 5
+					// internal IsCallable function
+					throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+				}
+
+				var aArgs = Array.prototype.slice.call(arguments, 1),
+					fToBind = this,
+					fNOP = function () { },
+					fBound = function () {
+						return fToBind.apply(this instanceof fNOP && oThis
+							? this
+							: oThis,
+							aArgs.concat(Array.prototype.slice.call(arguments)));
+					};
 
 				fNOP.prototype = this.prototype;
 				fBound.prototype = new fNOP();
@@ -33,8 +119,8 @@
 				return fBound;
 			};
 		}
-		</script>
-		<script>
+	</script>
+	<script>
 		// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 		// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
@@ -42,60 +128,62 @@
 
 		// MIT license
 
-		(function() {
+		(function () {
 			var lastTime = 0;
 			var vendors = ['ms', 'moz', 'webkit', 'o'];
-			for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-				window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-				window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-				|| window[vendors[x]+'CancelRequestAnimationFrame'];
+			for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+				window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+				window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
+					|| window[vendors[x] + 'CancelRequestAnimationFrame'];
 			}
 
 			if (!window.requestAnimationFrame)
-				window.requestAnimationFrame = function(callback, element) {
+				window.requestAnimationFrame = function (callback, element) {
 					var currTime = new Date().getTime();
 					var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-					var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-					timeToCall);
+					var id = window.setTimeout(function () { callback(currTime + timeToCall); },
+						timeToCall);
 					lastTime = currTime + timeToCall;
 					return id;
 				};
 
-				if (!window.cancelAnimationFrame)
-				window.cancelAnimationFrame = function(id) {
+			if (!window.cancelAnimationFrame)
+				window.cancelAnimationFrame = function (id) {
 					clearTimeout(id);
 				};
-			}());
-		</script>
+		}());
+	</script>
 
-		<script>
-			if (typeof Object.assign != 'function') {
-				Object.assign = function(target) {
-					'use strict';
-					if (target == null) {
+	<script>
+		if (typeof Object.assign != 'function') {
+			Object.assign = function (target) {
+				'use strict';
+				if (target == null) {
 					throw new TypeError('Cannot convert undefined or null to object');
-					}
+				}
 
-					target = Object(target);
-					for (var index = 1; index < arguments.length; index++) {
+				target = Object(target);
+				for (var index = 1; index < arguments.length; index++) {
 					var source = arguments[index];
 					if (source != null) {
 						for (var key in source) {
-						if (Object.prototype.hasOwnProperty.call(source, key)) {
-							target[key] = source[key];
-						}
+							if (Object.prototype.hasOwnProperty.call(source, key)) {
+								target[key] = source[key];
+							}
 						}
 					}
-					}
-					return target;
-				};
-			}
-		</script>		    
+				}
+				return target;
+			};
+		}
+	</script>
 
 </head>
+
 <body>
 	<div id='container'></div>
 	<script id="twitter-wjs" src="https://platform.twitter.com/widgets.js"></script>
 	<script src='bundle.min.js'></script>
 </body>
+
 </html>

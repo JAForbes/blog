@@ -1,48 +1,13 @@
-/* global url */
+
 /* global twttr */
-var marked = require('marked')
-var Prism = require('prismjs');
-var j2c = require('j2c')
-var navbar = require('../navbar')
-var posts = require('../posts')
+const marked = require('marked')
+const Prism = require('prismjs');
+const navbar = require('../navbar')
+const Posts = require('../posts')
 
-var appStyle = require('../../css/style.css.js')
-var style = Object.assign(appStyle, {
-    '@font-face': {
-        font_family: 'Inconsolata'
-        ,src: 'url(../font/Inconsolata-Regular.ttf) format("truetype")'
-    }
-	,'h1': {
-		text_align: 'center'
-		,font_family: '"Inconsolata", sans-serif'
-	}
-	,'h1, h2': {
-		color: '#7588d3'
-	}
-    ,'.post': {
-        'text-align': 'left'
-		,'padding':'2em'
-		,'@media (min-width: 801px)': {
-			'width': '80%'
-			,'margin-left': '10%'
-		}
-    }
-    ,code: {
-        'font-size': '0.9em'
-    }
-    ,'code, code span': {
-        font_family: '"Inconsolata", sans-serif'
-        ,color: 'black'
-    }
-})
-var sheet = j2c.sheet(style)
-
-global.Promise = require('es6-promise').Promise
-if (!Array.from) Array.from = require('array-from');
-require('fetch-ie8')
-
-var h = require('../../framework')
-var R = {
+const m = require('mithril')
+m.stream = require('mithril/stream')
+const R = {
 	pipe: require('ramda/src/pipe')
 	,pipeP: require('ramda/src/pipeP')
 	,invoker: require('ramda/src/invoker')
@@ -52,136 +17,126 @@ var R = {
 	,when: require('ramda/src/when')
 }
 
-function Twitter(v, post){
+function Twitter(vnode){
 
-	var setupTwitter = R.once(function(node){
+	const post = vnode.attrs.post
+	function setupTwitter(node){
 
-		node.elm.innerHTML = ""
+		node.dom.innerHTML = ""
 
-		if(post().twitter){
+		console.log('setupTwitter', post())
+		if(post() && post().twitter && post().path){
 			try {
 				return twttr.widgets.createTweet(
 					post().twitter,
-					node.elm,
+					node.dom,
 					{ theme: 'light' }
 				)
 			} catch (e) {}
 		}
 
-	})
+		return null
 
-	var twitterHook =
-		h.redrawHook(
-			R.when(function(){
-				return post().path
-			}, setupTwitter)
-		)
+	}
 
-	var view = function(){
-		return h('div', {
-			key: 'twitter-view',
-			hook: twitterHook
+	return {
+		view: () => m('div', {
+			oncreate: setupTwitter
 		})
 	}
-
-	return view;
 }
 
-function Post(v, postBody, post){
+function Post({ attrs:{postBody, post}}){
 
-
-	var highlightCode = R.once(function(){
-		Prism.highlightAll()
-	})
-
-	var highlightHook =
-		h.redrawHook(
-			R.when(
-				R.path(['elm','children','length']),
-				highlightCode
-			)
+	const highlightCode =
+		R.when(
+			R.path(['dom','children','length']),
+			() => Prism.highlightAll()
 		)
 
-	var twitter = Twitter(v, post, postBody)
-
-	var model = h.merge(postBody, post);
-
-	var view = model.map(function(){
-		return h('div', { props: { className: sheet.post }}, [
-			h('div', {
-				key: 'post-view'
-				,props: { innerHTML: postBody() || "" }
-				,hook: highlightHook
-			})
-			,h('br')
-			,twitter()
-		])
-	})
-
-	return view
+	
+	return {
+		view: () => 
+		console.log({ post: post() }) ||
+		m('div.post'
+			,m('div', 
+				{ oncreate: highlightCode
+				}
+				,m.trust(postBody())
+			)
+			,m('br')
+			,m(Twitter, { post, key: post() && post().path })
+		)
+	}
 }
 
-function PostsModel(v, postsCache){
-	var text = R.invoker(0, 'text')
-	var fetchBlogHTML = R.pipeP(fetch,text,marked)
+function PostsModel(postsCache){
+	const fetchBlogHTML = x =>
+		[ x => m.request({ 
+			url: x
+			,headers: { "Content-Type": "text/markdown" }
+			,deserialize: marked
+		})
+		, x => console.log({ x }) || x
+		, postBody
+		]
+		.reduce( (x, f) => x.then(f), Promise.resolve(x) )
 
-	var markdown_url = v()
+	const markdown_url = m.stream()
 
-	if(url().indexOf('posts/') > -1){
-		markdown_url( url() + '.md')
+	if(m.route.param('post')){
+		markdown_url( 'posts/'+m.route.param('post') + '.md')
 	}
 
-	var postBody = markdown_url.map(fetchBlogHTML)
+	const postBody = m.stream()
+
+	postBody.map( () => m.redraw() )
+	
+	markdown_url.map(fetchBlogHTML)
 
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
-	var posts = v(postsCache())
-
-	var post = posts.map(function(posts){
-		var murl = markdown_url()
-		for(var i = 0; i < posts.length; i++){
+	const posts = m.stream()
+	postsCache().map(posts)
+	const post = posts.map(function(posts){
+		const murl = markdown_url()
+		for(let i = 0; i < posts.length; i++){
+			console.log(murl(), posts[i].path)
 			if( '/'+posts[i].path == murl ) return posts[i]
 		}
 		return {}
 	})
 
-	fetch('posts.json').then(function(response){
+	m.request('posts.json').then(function(response){
 		return response.json()
 	})
 		.then(R.pipe(
 			R.tap(posts),
 			postsCache
 		))
+		.then( () => m.redraw() )
 
 	return {
-		postBody: postBody,
-		post: post,
-		posts: posts
+		postBody: postBody
+		,post: post
+		,posts: posts
 	}
 }
 
-var postsCache = h.stream([])
+const postsCache = m.stream([])
 
-function PostsContainerView(v){
+function PostsContainerView(){
 
-	var model = PostsModel(v, postsCache)
-
-	var views = {
-		post: Post(v, model.postBody, model.post)
+	const model = PostsModel(postsCache)
+	const view = function(){
+		return m('div.container'
+			,navbar
+			,m(Post, model)
+			,m('br')
+			,m(Posts)
+		)
 	}
 
-	var subviews = h.throttleMerge(views.post)
-
-	var view = subviews.map(function(){
-		return h('div', { class: { container: true }}, [
-			h('style', String(sheet) )
-			,navbar
-			,views.post()
-			,h('br')
-			,posts
-		])
-	})
-
-	return view
+	return { view }
 }
 
 module.exports = PostsContainerView

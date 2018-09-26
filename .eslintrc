@@ -1,11 +1,10 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
+    "ecmaVersion": 2017
   },
-  "globals": {
-    "require": true,
-    "module": true,
+  "env": {
+    "node": true,
+    "es6": true
   },
   "rules": {
     "no-var": 1,

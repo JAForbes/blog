@@ -21,18 +21,12 @@
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
-    "array-from": "^2.0.2",
     "bss": "^1.2.13",
-    "es6-promise": "^3.0.2",
-    "fetch-ie8": "^1.4.0",
-    "flyd": "^0.2.0",
-    "j2c": "^0.11.2",
     "marked": "^0.3.9",
     "mithril": "^1.1.6",
     "npm-run-all": "^4.1.1",
     "prismjs": "^1.4.1",
     "ramda": "^0.19.1",
-    "snabbdom": "^0.2.8",
     "uglify-js": "^3.1.6"
   },
   "devDependencies": {

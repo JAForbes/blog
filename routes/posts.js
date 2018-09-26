@@ -1,6 +1,7 @@
 const posts = require("../posts");
 const css = require('bss')
 const m = require('mithril')
+m.stream = require('mithril/stream')
 const iso = function(date) {
     return new Date(date).toISOString().slice(0, 10);
 };
@@ -50,28 +51,30 @@ const style = {
         `)
 }
 
-function Post(p) {
-    return m("a",
-        { oncreate: m.route.link
-        , href: '/' + p.path.replace(".md", "")
-        }
-        , m("li.grow",
-            { class: { "bg-dark-red": p.featured, white: p.featured } }
-            , m("p", p.name)
-            , m("i", iso(p.created))
+function Post({ attrs: {p}}) {
+    return {
+        view: () => m("a",
+            { oncreate: m.route.link
+            , href: '/' + p.path.replace(".md", "")
+            }
+            , m("li.grow",
+                { class: { "bg-dark-red": p.featured, white: p.featured } }
+                , m("p", p.name)
+                , m("i", iso(p.created))
+            )
+        )
+    }
+}
+
+module.exports = {
+    view: () => m("div"
+        ,m("div"+style.featured
+            ,m("h3", "Recent Articles")
+            ,m("ul", posts.slice(0, 4).map( p => m(Post, { p }) ))
+        )
+        ,m("div"+style.posts + " " + style.featured, 
+            m("h3", "Other posts"),
+            m("ul", posts.slice(4).map( p => m(Post, { p })))
         )
     )
 }
-
-module.exports = 
-    m("div", {}, 
-        m("style", {}, String(style)),
-        m("div", { props: { className: style.featured } }, 
-            m("h3", "Recent Articles"),
-            m("ul", posts.slice(0, 4).map(Post))
-        ),
-        m("div", { props: { className: style.posts + " " + style.featured } }, 
-            m("h3", "Other posts"),
-            m("ul", posts.slice(4).map(Post))
-        )
-    )

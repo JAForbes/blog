@@ -1,37 +1,43 @@
-var h = require('../../framework')
-var style = require('../../css/style.css.js')
-var navbar = require('../navbar')
-var j2c = require('j2c')
-var posts = require('../posts')
+const m = require('mithril')
+m.stream = require('mithril/stream')
+const navbar = require('../navbar')
+const css = require('bss')
+const Posts = require('../posts')
 
-var R = require('ramda')
+const strings = {
+    bio: 
+        ["Interested in any type of design"
+        ,"and the individual componentry of calcified ideas."
+        ]
+        .join(' ')
+}
 
-var style = j2c.sheet(R.merge( style, {
-    '.bio': {
-        'border-radius': '100%'
-        ,'max-width': '8em'
-    }
-    ,'.intro': {
-        boxSizing: 'border-box'
-        ,padding: '1em'
-        ,maxWidth: '20em'
-        ,margin: '0 auto'
-    }
-}))
+const style = {
+    bio: css`
+        border-radius: 100%;
+        max-width: 8em
+    `
+    ,intro: css`
+        box-sizing: border-box;
+        padding: 1em;
+        max-width: 20em;
+        margin: 0 auto;
+    `
+}
 
-function Home(v){
-    return v(
-        h('div', [
-            h('style', String(style) )
+function Home(){
+    console.log('Home')
+    return {
+        view: () => m('div'
             ,navbar
-            ,h('img', { props: { className: style.bio, src: 'img/bio.jpeg'} })
-            ,h('p'
-                , { props: { className: style.intro } }
-                , "Interested in any type of design and the individual componentry of calcified ideas."
-             )
-             ,posts
-        ])
-    )
+            ,m('img'+style.bio, { src: 'img/bio.jpeg'})
+            ,m('p'+style.intro
+                , { className: style.intro }
+                , strings.bio
+            )
+            ,m(Posts)
+        )
+    }
 }
 
 

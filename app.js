@@ -1,40 +1,36 @@
-/* global container,scrollTo */
+/* global container */
 
 
 
-var h = require('./framework')
+const m = require('mithril')
+m.stream = require('mithril/stream')
+
+const routes = {
+	Home: require('./routes/home')
+	,Post: require('./routes/post')
+}
+m.route(container, '/', 
+	{ '/': routes.Home
+	, '/posts/:post': routes.Post
+	}
+)
 
 
+// todo-james use a route resolver?
+// url.map(function(page){
 
-global.url = h.url('search')
+// 	setTimeout(function(){
 
+// 		const heading = document.querySelector('h1,h2')
 
-
-var router = h.router('/', {
-
-	'/': require('./routes/home')
-
-	,'/posts': require('./routes/post')
-
-})
-
-
-
-url.map(function(page){
-
-	setTimeout(function(){
-
-		var heading = document.querySelector('h1,h2')
-
-		document.title = "James Forbes" + (heading ? ' - ' + heading.innerText : '')
+// 		document.title = 
+// 			"James Forbes" + (heading ? ' - ' + heading.innerText : '')
 
 		
 
-	}, 1000)
+// 	}, 1000)
 
-	scrollTo(0,0)
+// 	scrollTo(0,0)
 
-})
-
-h.route(container, url, router)
+// })
 

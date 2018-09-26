@@ -1,56 +1,38 @@
-var h = require('../framework')
-var j2c = require('j2c')
-
-var style = j2c.sheet({
-    '.nav': {
-        paddingLeft: '0em'
-        , width: '100%'
-    }
-    , '.nav > li': {
-        'margin': '0em 0.6em 0em 0.6em'
-    }
-    , '.nav, .nav > li': {
-        'display': 'inline-block'
-    }
-})
+const m = require('mithril')
+m.stream = require('mithril/stream')
 
 
-
-
-module.exports = h('div', {}, [
-    h('style', String(style))
-    , h('h3', 'James Forbes')
-    , h('ul', { props: { className: style.nav } }, [
-        h('li'
-            , [h('a.link.b.black.hover-dark-red'
-                , url.anchor('/'),
-                'Explore'
+module.exports = m('div', {}
+    , m('h3', 'James Forbes')
+    , m('ul.nav', 
+        m('li'
+            , m('a.link.b.black.hover-dark-red'
+                ,{oncreate: m.route.link, href: '/' }
+                ,'Explore'
             )
-            ]
         )
-        , h('li'
-            , [h('a.link.b.black.hover-dark-red'
-                , { props: { href: 'https://soundcloud.com/peopleofconcept' } }
+        , m('li'
+            , m('a.link.b.black.hover-dark-red'
+                , { href: 'https://soundcloud.com/peopleofconcept' }
                 , 'Listen')
-            ]
         )
-        , h('li'
-            , [h('a.link.b.black.hover-dark-red'
-                , { props: { href: 'https://canyon.itch.io/' } }
+        , m('li'
+            , m('a.link.b.black.hover-dark-red'
+                , { href: 'https://canyon.itch.io/' }
                 , 'Play')
-            ]
+            
         )
-        , h('li'
-            , [h('a.link.b.black.hover-dark-red'
-                , { props: { href: 'https://github.com/JAForbes/' } }
+        , m('li'
+            , m('a.link.b.black.hover-dark-red'
+                , { href: 'https://github.com/JAForbes/' }
                 , 'Parse')
-            ]
+            
         )
-        , h('li'
-            , [h('a.link.b.black.hover-dark-red'
-                , { props: { href: 'https://twitter.com/james_a_forbes' } }
+        , m('li'
+            , m('a.link.b.black.hover-dark-red'
+                , { href: 'https://twitter.com/james_a_forbes' }
                 , 'Follow')
-            ]
+            
         )
-    ])
-])
+    )
+)
