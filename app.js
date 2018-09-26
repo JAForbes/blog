@@ -3,8 +3,11 @@
 
 
 const m = require('mithril')
+const css = require('bss')
 m.stream = require('mithril/stream')
+const helpers = require('./bss-helpers')
 
+css.helper(helpers)
 
 const updateTitle = Component => ({
 	view(){

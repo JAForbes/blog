@@ -4,13 +4,11 @@ const m = require('mithril')
 m.stream = require('mithril/stream')
 const iso = function(date) {
     return new Date(date).toISOString().slice(0, 10);
-};
-
+}
 
 css.setDebug(true)
 
 const style = {
-
     featured: css({})
         .$nest('ul', `
             list-style: none;
@@ -53,8 +51,8 @@ function Post({ attrs: {p}}) {
             { oncreate: m.route.link
             , href: '/' + p.path.replace(".md", "")
             }
-            , m("li.grow" 
-                + css.bc( p.featured && 'red' ).c(p.featured && 'white')
+            , m("li"+css.grow 
+                + css.bc( p.featured && 'black' ).c(p.featured && 'white')
                 , m("p", p.name)
                 , m("i", iso(p.created))
             )
