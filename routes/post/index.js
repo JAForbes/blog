@@ -24,7 +24,6 @@ function Twitter(vnode){
 
 		vnode.dom.innerHTML = ""
 
-		console.log('setupTwitter', post())
 		if(post() && post().twitter && post().path){
 			try {
 				return twttr.widgets.createTweet(
@@ -57,7 +56,6 @@ function Post({ attrs:{postBody, post}}){
 	
 	return {
 		view: () => 
-		console.log({ post: post() }) ||
 		m('div.post'
 			,m('div', 
 				{ oncreate: highlightCode
@@ -78,7 +76,6 @@ function PostsModel(postsCache){
 			,headers: { "Content-Type": "text/markdown" }
 			,deserialize: marked
 		})
-		, x => console.log({ x }) || x
 		, postBody
 		]
 		.reduce( (x, f) => x.then(f), Promise.resolve(x) )
@@ -99,18 +96,12 @@ function PostsModel(postsCache){
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	const posts = m.stream()
 	postsCache().map(posts)
-	postsCache.map(
-		postsCache => console.log({ postsCache }
-	))
 	const post = posts.map(function(posts){
 		const murl = markdown_url()
 		return posts.find( x => x.path === murl ) || {}
 	})
 
 	m.request('posts.json')
-		.then(
-			x => console.log({ x }) || x
-		)
 		.then(R.pipe(
 			R.tap(posts),
 			postsCache

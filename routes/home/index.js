@@ -1,5 +1,4 @@
 const m = require('mithril')
-m.stream = require('mithril/stream')
 const navbar = require('../navbar')
 const css = require('bss')
 const Posts = require('../posts')
@@ -12,27 +11,20 @@ const strings = {
         .join(' ')
 }
 
-const style = {
-    bio: css`
-        border-radius: 100%;
-        max-width: 8em
-    `
-    ,intro: css`
-        box-sizing: border-box;
-        padding: 1em;
-        max-width: 20em;
-        margin: 0 auto;
-    `
-}
-
 function Home(){
-    console.log('Home')
     return {
         view: () => m('div'
             ,navbar
-            ,m('img'+style.bio, { src: 'img/bio.jpeg'})
-            ,m('p'+style.intro
-                , { className: style.intro }
+            ,m('img'
+                + css.br('100%').maxWidth('8em'), 
+                { src: 'img/bio.jpeg'}
+            )
+            ,m('p'
+                + css
+                    .boxSizing('border-box')
+                    .p('1em')
+                    .maxWidth('20em')
+                    .margin('0 auto')
                 , strings.bio
             )
             ,m(Posts)
