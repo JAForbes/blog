@@ -61,7 +61,7 @@ function Post({ attrs:{postBody, post}}){
 	}
 }
 
-function PostsModel(postsCache){
+function PostsModel(){
 	const fetchBlogHTML = x =>
 		[ x => m.request({ 
 			url: x
@@ -87,16 +87,17 @@ function PostsModel(postsCache){
 
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	const posts = m.stream()
-	postsCache().map(posts)
+	
+	posts.map(
+		posts => console.log({ posts })
+	)
 	const post = posts.map(function(posts){
 		const murl = markdown_url()
 		return posts.find( x => x.path === murl ) || {}
 	})
 
 	m.request('posts.json')
-		.then(
-			x => [posts(x), postsCache(x)]
-		)
+		.then(posts)
 		.catch( console.error )
 		.then( () => m.redraw() )
 		
@@ -108,11 +109,9 @@ function PostsModel(postsCache){
 	}
 }
 
-const postsCache = m.stream([])
-
 function PostsContainerView(){
 
-	const model = PostsModel(postsCache)
+	const model = PostsModel()
 	const view = function(){
 		return m('div.container'
 			,navbar
