@@ -20,16 +20,16 @@ const R = {
 function Twitter(vnode){
 
 	const post = vnode.attrs.post
-	function setupTwitter(node){
+	function setupTwitter(vnode){
 
-		node.dom.innerHTML = ""
+		vnode.dom.innerHTML = ""
 
 		console.log('setupTwitter', post())
 		if(post() && post().twitter && post().path){
 			try {
 				return twttr.widgets.createTweet(
 					post().twitter,
-					node.dom,
+					vnode.dom,
 					{ theme: 'light' }
 				)
 			} catch (e) {}
@@ -65,7 +65,8 @@ function Post({ attrs:{postBody, post}}){
 				,m.trust(postBody())
 			)
 			,m('br')
-			,m(Twitter, { post, key: post() && post().path })
+			,post() 
+			&& m(Twitter, { post, key: post().path })
 		)
 	}
 }
@@ -81,6 +82,7 @@ function PostsModel(postsCache){
 		, postBody
 		]
 		.reduce( (x, f) => x.then(f), Promise.resolve(x) )
+		.catch( console.error )
 
 	const markdown_url = m.stream()
 
@@ -97,23 +99,25 @@ function PostsModel(postsCache){
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	const posts = m.stream()
 	postsCache().map(posts)
+	postsCache.map(
+		postsCache => console.log({ postsCache }
+	))
 	const post = posts.map(function(posts){
 		const murl = markdown_url()
-		for(let i = 0; i < posts.length; i++){
-			console.log(murl(), posts[i].path)
-			if( '/'+posts[i].path == murl ) return posts[i]
-		}
-		return {}
+		return posts.find( x => x.path === murl ) || {}
 	})
 
-	m.request('posts.json').then(function(response){
-		return response.json()
-	})
+	m.request('posts.json')
+		.then(
+			x => console.log({ x }) || x
+		)
 		.then(R.pipe(
 			R.tap(posts),
 			postsCache
 		))
+		.catch( console.error )
 		.then( () => m.redraw() )
+		
 
 	return {
 		postBody: postBody
