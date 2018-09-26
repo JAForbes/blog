@@ -6,9 +6,10 @@ const m = require('mithril')
 m.stream = require('mithril/stream')
 
 const routes = {
-	Home: require('./routes/home')
-	,Post: require('./routes/post')
+	Home: require('./home')
+	,Post: require('./post')
 }
+
 m.route(container, '/', 
 	{ '/': routes.Home
 	, '/posts/:post': routes.Post

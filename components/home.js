@@ -1,7 +1,7 @@
 const m = require('mithril')
-const navbar = require('../navbar')
+const navbar = require('./navbar')
 const css = require('bss')
-const Posts = require('../posts')
+const Posts = require('./posts')
 
 const strings = {
     bio: 
