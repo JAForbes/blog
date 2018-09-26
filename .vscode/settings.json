@@ -1,4 +1,11 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "eslint.enable": true
+  "eslint.enable": true,
+  "files.eol": "\n",
+  "eslint.autoFixOnSave": false,
+  "prettier.disableLanguages": [
+    "javascript"
+  ],
+  "editor.autoIndent": false,
+  "javascript.format.enable": false
 }
