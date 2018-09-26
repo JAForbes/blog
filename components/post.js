@@ -43,38 +43,40 @@ function Post({ attrs:{postBody, post}}){
 
 	const highlightCode =
 		x => [x]
-		.filter( () => postBody() )
-		.forEach(
-			() => {
-				Prism.highlightAll()
-			}
-		)
+			.filter( () => postBody() )
+			.forEach(
+				() => {
+					Prism.highlightAll()
+				}
+			)
 
 	
 	return {
 		view: () => 
-		m('div.post'
-			,m('div', 
-				{ oncreate: highlightCode
-				, key: 
-					(post() && post().path) + (postBody() && postBody().length)
-				}
-				,m.trust(postBody())
+			m('div.post'
+				,m('div', 
+					{ oncreate: highlightCode
+					, key: 
+						(post() && post().path) 
+						+ (postBody() && postBody().length)
+					}
+					,m.trust(postBody())
+				)
+				,m('br')
+				,post() 
+				&& m(Twitter, { post, key: post().path })
 			)
-			,m('br')
-			,post() 
-			&& m(Twitter, { post, key: post().path })
-		)
 	}
 }
 
 function PostsModel(){
 	const fetchBlogHTML = x =>
-		[ x => m.request({ 
-			url: x
-			,headers: { "Content-Type": "text/markdown" }
-			,deserialize: marked
-		})
+		[ x => m.request(
+			{ url: x
+			, headers: { "Content-Type": "text/markdown" }
+			, deserialize: marked
+			}
+		)
 		, postBody
 		]
 		.reduce( (x, f) => x.then(f), Promise.resolve(x) )
