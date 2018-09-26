@@ -17,32 +17,32 @@ const style = css`
 module.exports = m('div', {}
     , m('h3', 'James Forbes')
     , m('ul'+style, 
-        m('li'
-            , m('a.link.b.black.hover-dark-red'
-                ,{oncreate: m.route.link, href: '/' }
+        m('li'+css.grow
+            , m('a', 
+                { oncreate: m.route.link, href: '/' }
                 ,'Explore'
             )
         )
-        , m('li'
-            , m('a.link.b.black.hover-dark-red'
-                , { href: 'https://soundcloud.com/peopleofconcept' }
+        , m('li'+css.grow
+            , m('a', 
+                { href: 'https://soundcloud.com/peopleofconcept' }
                 , 'Listen')
         )
-        , m('li'
-            , m('a.link.b.black.hover-dark-red'
-                , { href: 'https://canyon.itch.io/' }
+        , m('li'+css.grow
+            , m('a',
+                { href: 'https://canyon.itch.io/' }
                 , 'Play')
             
         )
-        , m('li'
-            , m('a.link.b.black.hover-dark-red'
-                , { href: 'https://github.com/JAForbes/' }
+        , m('li'+css.grow
+            , m('a',
+                { href: 'https://github.com/JAForbes/' }
                 , 'Parse')
             
         )
-        , m('li'
-            , m('a.link.b.black.hover-dark-red'
-                , { href: 'https://twitter.com/james_a_forbes' }
+        , m('li'+css.grow
+            , m('a', 
+                { href: 'https://twitter.com/james_a_forbes' }
                 , 'Follow')
             
         )
