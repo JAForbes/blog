@@ -56,7 +56,8 @@ function Post({ attrs:{postBody, post}}){
 		m('div.post'
 			,m('div', 
 				{ oncreate: highlightCode
-				, key: (post() && post().path) + (postBody() && postBody().length)
+				, key: 
+					(post() && post().path) + (postBody() && postBody().length)
 				}
 				,m.trust(postBody())
 			)
