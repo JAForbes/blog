@@ -10,36 +10,31 @@ const helpers = require('./bss-helpers')
 css.helper(helpers)
 
 // todo-james do this as a service
-const updateTitle = Component => ({
-	view(){
-		return m('div', 
-			{ oncreate(){
-				setTimeout(
-					() => {
+const updateTitle = Component => 
+	[
+		() => {
+			const heading = document.querySelector('h1,h2')
+			
+			document.title = 
+				"James Forbes" 
+					+ (heading ? ' - ' + heading.innerText : '')
+		}
+	]
+	.map( f => () => setTimeout(f, 1000) )
+	.map( f => ({ attrs }) => 
+		m('div', Object.assign({ oncreate: f }, attrs), m(Component)) 
+	)
+	.map( view => ({ view }))
+	.shift()
 
-						const heading = document.querySelector('h1,h2')
-						
-						document.title = 
-							"James Forbes" 
-								+ (heading ? ' - ' + heading.innerText : '')
-					}
-					,1000
-				)
-
-			}
-			}
-			, m(Component)
-		)
-	}
-})
 
 const routes = {
-	Home: updateTitle(require('./components/home'))
-	,Post: updateTitle(require('./components/post'))
+	Home: require('./components/home')
+	,Post: require('./components/post')
 }
 
 m.route(container, '/', 
 	{ '/': routes.Home
-	, '/posts/:post': routes.Post
+	, '/posts/:key': routes.Post
 	}
 )

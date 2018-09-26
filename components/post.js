@@ -11,6 +11,17 @@ require('prismjs/components/prism-bash');
 const m = require('mithril')
 m.stream = require('mithril/stream')
 
+/* globals scrollTo */
+
+function scrollTop(){
+    scrollTo(
+        { top: 0
+        , behavior: 'smooth'
+        }
+    )
+}
+
+
 function Twitter(vnode){
 
 	const post = vnode.attrs.post
@@ -52,7 +63,8 @@ function Post({ attrs:{postBody, post}}){
 
 	
 	return {
-		view: () => 
+		oncreate: () => setTimeout(scrollTop,1000)
+		,view: () => 
 			m('div.post'
 				,m('div', 
 					{ oncreate: highlightCode
@@ -84,8 +96,8 @@ function PostsModel(){
 
 	const markdown_url = m.stream()
 
-	if(m.route.param('post')){
-		markdown_url( 'posts/'+m.route.param('post') + '.md')
+	if(m.route.param('key')){
+		markdown_url( 'posts/'+m.route.param('key') + '.md')
 	}
 
 	const postBody = m.stream()
