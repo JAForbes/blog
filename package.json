@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm-run-all --parallel start:*",
-    "start:serve": "static -p 80",
+    "start:serve": "serve -p 80 -s",
     "start:watch": " watchify app.js -d -o bundle.min.js --verbose",
     "dist": "browserify app.js | uglifyjs -mc > bundle.min.js"
   },
@@ -31,11 +31,10 @@
   },
   "devDependencies": {
     "browserify": "^12.0.1",
-    "browserify-css": "^0.9.1",
     "conff": "^1.1.0",
     "eslint": "^2.11.1",
-    "eslint-plugin-immutable": "^1.0.0",
     "node-static": "^0.7.7",
+    "serve": "^10.0.2",
     "watchify": "^3.7.0"
   }
 }

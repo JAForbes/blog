@@ -6,49 +6,45 @@ const iso = function(date) {
     return new Date(date).toISOString().slice(0, 10);
 };
 
+
+css.setDebug(true)
+
 const style = {
 
     featured: css({})
-        .$nest('ul', css`
+        .$nest('ul', `
             list-style: none;
             width: 65vw;
             float: left;
         `)
         .$nest('h3',
             css
-                .$media('(max-width: 500px)', css`
+                .$media('(max-width: 500px)', `
                     float: left
                     width: 100vw
                     height: 3em
                 `)
-                .$media('(min-width: 501px)', css`
+                .$media('(min-width: 501px)', `
                     float: left
                     width: 20vw
                     height: 10em
                 `)
         )
-        .$nest('li',
-            css`
-                float: left;
-                width: 20em;
-                margin: 0em;
-                textAlign: left;
-                verticalAlign: bottom;
-                height: 8em;
-                padding: 1em;
-            `
-        )
+        .$nest('li', css`
+            float: left;
+            width: 20em;
+            text-align: left;
+            margin: 0em 0.5em;
+            vertical-align: bottom;
+            height: 8em;
+            padding: 1em;
+        `)
     , posts: css`
         width: 100%;
         float: left;
     `
-        .$nest('ul', `
-            list-style: none;
-            padding: 0em;
-        `)
-        .$nest('ul li', `
-            padding: 1em;
-        `)
+        .$nest('ul', css.listStyle('none').p('0em') )
+        .$nest('ul li', css.p('1em'))
 }
 
 function Post({ attrs: {p}}) {
@@ -57,8 +53,8 @@ function Post({ attrs: {p}}) {
             { oncreate: m.route.link
             , href: '/' + p.path.replace(".md", "")
             }
-            , m("li.grow",
-                { class: { "bg-dark-red": p.featured, white: p.featured } }
+            , m("li.grow" 
+                + css.bc( p.featured && 'red' ).c(p.featured && 'white')
                 , m("p", p.name)
                 , m("i", iso(p.created))
             )
@@ -68,11 +64,11 @@ function Post({ attrs: {p}}) {
 
 module.exports = {
     view: () => m("div"
-        ,m("div"+style.featured
+        ,m("div"+style.posts + style.featured
             ,m("h3", "Recent Articles")
             ,m("ul", posts.slice(0, 4).map( p => m(Post, { p }) ))
         )
-        ,m("div"+style.posts + " " + style.featured, 
+        ,m("div"+style.posts + style.featured, 
             m("h3", "Other posts"),
             m("ul", posts.slice(4).map( p => m(Post, { p })))
         )
