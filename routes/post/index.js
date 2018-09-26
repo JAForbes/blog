@@ -5,6 +5,9 @@ const Prism = require('prismjs');
 const navbar = require('../navbar')
 const Posts = require('../posts')
 
+require('prismjs/components/prism-json');
+require('prismjs/components/prism-bash');
+
 const m = require('mithril')
 m.stream = require('mithril/stream')
 
@@ -40,9 +43,11 @@ function Post({ attrs:{postBody, post}}){
 
 	const highlightCode =
 		x => [x]
-		.filter( x => x.dom.children.length )
+		.filter( () => postBody() )
 		.forEach(
-			() => Prism.highlightAll()
+			() => {
+				Prism.highlightAll()
+			}
 		)
 
 	
@@ -51,6 +56,7 @@ function Post({ attrs:{postBody, post}}){
 		m('div.post'
 			,m('div', 
 				{ oncreate: highlightCode
+				, key: (post() && post().path) + (postBody() && postBody().length)
 				}
 				,m.trust(postBody())
 			)
@@ -88,9 +94,6 @@ function PostsModel(){
 	//so the sidebar doesn't redraw with an empty posts.json every redraw
 	const posts = m.stream()
 	
-	posts.map(
-		posts => console.log({ posts })
-	)
 	const post = posts.map(function(posts){
 		const murl = markdown_url()
 		return posts.find( x => x.path === murl ) || {}
