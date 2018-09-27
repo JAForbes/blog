@@ -6,16 +6,23 @@
 		"featured": true,
 		"twitter": "928605350315532288"
 	},
-	{ 
+	{
 		"name": "Intro to Streams",
 		"path": "posts/intro-to-streams.md",
 		"created": "2017-11-04",
 		"featured": true,
 		"twitter": "926654105421996032"
-	}
-	,{
+	},
+	{
 		"name": "The versatility of Array methods",
 		"path": "posts/versatility-of-array-methods.md",
+		"created": "2017-01-25",
+		"featured": false,
+		"twitter": "824147407378190336"
+	},
+	{
+		"name": "Redefining Filter",
+		"path": "posts/redefining-filter.md",
 		"created": "2017-01-25",
 		"featured": false,
 		"twitter": "824147407378190336"
@@ -26,15 +33,15 @@
 		"created": "2016-10-24",
 		"featured": false,
 		"twitter": "790454297691467777"
-	}
-	,{
+	},
+	{
 		"name": "How to talk to a computer",
 		"path": "posts/how-to-talk-to-a-computer.md",
 		"created": "2016-09-11",
 		"featured": false,
 		"twitter": "776217784262926337"
-	}
-	,{
+	},
+	{
 		"name": "The Perfect API",
 		"path": "posts/the-perfect-api.md",
 		"created": "2016-05-13",
@@ -50,14 +57,14 @@
 	},
 	{
 		"name": "How I use mithril",
-		"path":"posts/how-i-use-mithril.md",
+		"path": "posts/how-i-use-mithril.md",
 		"created": "2016-04-21",
 		"featured": false,
 		"twitter": "723023456380407808"
 	},
 	{
 		"name": "The power of m.prop",
-		"path":"posts/power-of-m-prop.md",
+		"path": "posts/power-of-m-prop.md",
 		"created": "2016-01-08",
 		"featured": false,
 		"twitter": "685325683661258752"
@@ -83,8 +90,8 @@
 	{
 		"name": "A practical Ramda example: Scraping",
 		"path": "posts/ramdaScrape.md",
-		"created":"2015-01-08T02:38:59.976Z",
-		"featured": false
+		"created": "2015-01-08T02:38:59.976Z",
+		"featured": true
 	},
 	{
 		"name": "Currying vs Hurrying",
@@ -101,7 +108,7 @@
 	{
 		"name": "A better LeafletJS",
 		"path": "posts/noClasses.md",
-		"created":"2014-10-29T11:12:06.740Z",
+		"created": "2014-10-29T11:12:06.740Z",
 		"featured": false
 	},
 	{
