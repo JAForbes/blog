@@ -1,10 +1,17 @@
-const posts = require("../posts");
 const css = require('bss')
 const m = require('mithril')
 m.stream = require('mithril/stream')
+const { maybe } = require('static-sum-type/modules/yslashn')
+const { bifold } = require('static-sum-type')
+
 const iso = function(date) {
     return new Date(date).toISOString().slice(0, 10);
 }
+
+const Router = require('../src/route')
+
+
+const Loaded = maybe('Loaded')
 
 css.setDebug(true)
 
@@ -45,30 +52,36 @@ const style = {
         .$nest('ul li', css.p('1em'))
 }
 
-function Post({ attrs: {p}}) {
-    return {
-        view: () => m("a",
-            { oncreate: m.route.link
-            , href: '/' + p.path.replace(".md", "")
-            }
-            , m("li"+css.grow 
-                + css.bc( p.featured && 'black' ).c(p.featured && 'white')
-                , m("p", p.name)
-                , m("i", iso(p.created))
+const Post = update => () => p => m("a",
+    { oncreate: 
+        Router.link 
+            ( update ) 
+            ( Router.Route.Post ( { path: '/' + p.path.replace(".md", "") }) )
+    }
+    , m("li"+css.grow 
+        + css.bc( p.featured && 'black' ).c(p.featured && 'white')
+        , m("p", p.name)
+        , m("i", iso(p.created))
+    )
+)
+
+const getLoadedPosts = model => 
+    bifold (Loaded) (() => [], xs => xs) (model.posts)
+
+module.exports = 
+    update => model => m("div"
+        , m("div"+style.posts + style.featured
+            , m("h3", "Recent Articles")
+            , m("ul"
+            , getLoadedPosts(model).slice(0, 4)
+                .map( p => m(Post, { p }) )
             )
         )
-    }
-}
-
-module.exports = {
-    view: () => m("div"
-        ,m("div"+style.posts + style.featured
-            ,m("h3", "Recent Articles")
-            ,m("ul", posts.slice(0, 4).map( p => m(Post, { p }) ))
+        , m("div"+style.posts + style.featured
+            , m("h3", "Other posts")
+            , m("ul"
+                , getLoadedPosts(model).slice(0, 4)
+                    .map( Post (update) (model) )
+            )
         )
-        ,m("div"+style.posts + style.featured, 
-            m("h3", "Other posts"),
-            m("ul", posts.slice(4).map( p => m(Post, { p })))
         )
-    )
-}

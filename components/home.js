@@ -11,25 +11,24 @@ const strings = {
         .join(' ')
 }
 
-function Home(){
-    return {
-        view: () => m('div'
-            ,navbar
-            ,m('img'
+
+const Home = update => model => {
+	return m('div'
+        , navbar (update) (model)
+        , m('img'
                 + css.br('100%').maxWidth('8em'), 
                 { src: 'img/bio.jpeg'}
-            )
-            ,m('p'
+        )
+        , m('p'
                 + css
                     .boxSizing('border-box')
                     .p('1em')
                     .maxWidth('20em')
                     .margin('0 auto')
                 , strings.bio
-            )
-            ,m(Posts)
         )
-    }
+        , Posts (update) (model)
+	)
 }
 
 

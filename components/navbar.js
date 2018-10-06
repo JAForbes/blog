@@ -22,16 +22,21 @@ const style =
     `)
 
 
-module.exports = m('div', {}
-    , m('h3', 'James Forbes'),
-    [ links ]
-    .map(
-        xs => xs
-            .map(
-                ([title, href]) => 
-                    m('a', { oncreate: m.route.link, href }, title)
-            )
-            .map( x => m('li'+css.grow, x) )
+module.exports = () => () => 
+    m('div'
+        , m('h3', 'James Forbes'),
+        [ links ]
+        .map(
+            xs => xs
+                .map(
+                    ([title, href]) => 
+                        m('a', 
+                            { href 
+                            }
+                            , title
+                        )
+                )
+                .map( x => m('li'+css.grow, x) )
+        )
+        .map( xs => m('ul'+style, xs ) )
     )
-    .map( xs => m('ul'+style, xs ) )
-)
