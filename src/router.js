@@ -27,7 +27,7 @@ const Router = (
 	const fromURL = theirFromURL(Route)
 	const $route = f => o => Object.assign({}, o, { route: f(o.route )})
 
-	const Router = (
+	const Router =
 		{ getPath
 		, formatPath
 		, $
@@ -87,7 +87,6 @@ const Router = (
 
 		}
 		}
-	)
 
 	return Router
 }
