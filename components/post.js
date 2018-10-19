@@ -39,7 +39,7 @@ function Twitter(vnode){
 
 		vnode.dom.innerHTML = ""
 
-		if(post() && post().twitter && post().path){
+		if(post && post.twitter && post.path){
 			try {
 				return twttr.widgets.createTweet(
 					post().twitter,
@@ -61,7 +61,9 @@ function Twitter(vnode){
 }
 
 const isPostLoaded = isPostLoaded => 
-	Loaded.bifold (False, True) (isPostLoaded.post)
+	bifold (Loaded) (False, True) (isPostLoaded.post)
+
+const assertLoaded = x => bifold (Loaded) ( () => [],  x => [x]) (x)
 
 const Post = () => model => {
 
@@ -76,39 +78,41 @@ const Post = () => model => {
 			)
 
 	
-	return () => 
-		m('div.post',
-			// todo-james also make a service
-			// scroll to the top if y > n and the url has changed to a new post
-			{ oncreate: () => setTimeout(scrollTop,1000)}
-			,m('div', 
-				{ oncreate: highlightCode
-				, key: 
-					isPostLoaded( model )
-					&& model.post.value.path 
-						+ model.post.value.body.length
-					
-				}
-				// ,m.trust(postBody())
-			)
-			,m('br')
-			,Loaded.bifold 
-				( () => null
-				, () => m(Twitter, 
-					{ post: model.post.value, key: model.post.value.path }
-					)
-				) 
-				(isPostLoaded.post)
+	return m('div.post',
+		// todo-james also make a service
+		// scroll to the top if y > n and the url has changed to a new post
+		{ oncreate: () => setTimeout(scrollTop,1000)}
+		,m('div', 
+			{ oncreate: highlightCode
+			, key: 
+				isPostLoaded( model )
+				&& model.post.value.path 
+					+ model.post.value.body.length
+				
+			}
+			, [model.post]
+				.flatMap( assertLoaded )
+				.map( x => m.trust(x.body) )
 		)
+		,m('br')
+		,[ model.post ]
+			.flatMap( assertLoaded )
+			.map( x => x.meta )
+			.flatMap( assertLoaded )
+			.map( meta => 
+				m(Twitter
+					, { post: meta, key: meta.path }
+				)
+			)
+	)
 }
 
 const service = theirModel$ => {
 
 	const update$ = stream()
 
-	const model$ = dropRepeats(
-		theirModel$.map( ({ route }) => route )
-	)
+	
+	const model$ = dropRepeats( ({ route }) => ({ route }) ) ( theirModel$ )
 
 	// Cache promise to ensure blog html fetched after metadata fetched
 	// while also avoiding refetching again and again
@@ -117,7 +121,7 @@ const service = theirModel$ => {
 	const fetchBlogHTML = x =>
 		fetchingPostsJSON.then(
 			() => m.request(
-				{ url: x
+				{ url: '/'+x
 				, headers: { "Content-Type": "text/markdown" }
 				, deserialize: marked
 				}
@@ -129,7 +133,7 @@ const service = theirModel$ => {
 			posts => Loaded.Y(posts)
 		)
 		.then(
-			posts => model => update$( Object.assign({}, model, { posts }) )
+			posts => update$( model => Object.assign({}, model, { posts }) )
 		)
 
 	model$.map(
@@ -142,7 +146,6 @@ const service = theirModel$ => {
 				) (model.route)
 
 			path
-			.map( x => x + '.md' )
 			.map(
 				path => fetchBlogHTML(path)
 					.then(
@@ -154,7 +157,7 @@ const service = theirModel$ => {
 									bifold ( Loaded ) (
 										() => [],
 										xs => xs
-									)
+									) (model.posts)
 									// Technically the meta data may not be
 									// found (old url no longer in posts.json)
 									.filter( x => x.path == path )
@@ -165,36 +168,39 @@ const service = theirModel$ => {
 								}
 							)
 					)
-					
 			)
-			.map( Loaded.Y )
+			.map( then(Loaded.Y) )
 			.concat(
 				Promise.resolve( Loaded.N() )
 			)
 			.slice(0,1)
 			.map(
 				then(
-					post => model => Object.assign({}, model, { post })
+					post => update$(
+						model => Object.assign({}, model, { post })
+					)
 				)
 			)
-			.map( then( update$ ) )
 			.map( x => x.catch(console.error) )
 
 			return null
 		}
 	)
+
+	return update$
 }
 
 const component = update => model => {
 	
 	return m('div.container'
-		,navbar
+		,navbar(update)(model)
 		,Post(update)(model)
 		,m('br')
 		,Posts(update)(model)
 	)
 }
-module.exports = {
-	component,
-	service
-}
+
+module.exports = 
+	{ component
+	, service
+	}

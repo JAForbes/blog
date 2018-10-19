@@ -52,6 +52,9 @@ Router
 	.start ( model )
 	.map ( update )
 
+routes.Post.service ( model )
+  .map ( update )
+
 view.map( vtree => m.render(container, vtree))
 
 // eslint-disable-next-line no-undef

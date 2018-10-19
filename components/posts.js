@@ -52,18 +52,21 @@ const style = {
         .$nest('ul li', css.p('1em'))
 }
 
-const Post = update => () => p => m("a",
-    { oncreate: 
-        Router.link 
-            ( update ) 
-            ( Router.Route.Post ( { path: '/' + p.path.replace(".md", "") }) )
-    }
-    , m("li"+css.grow 
-        + css.bc( p.featured && 'black' ).c(p.featured && 'white')
-        , m("p", p.name)
-        , m("i", iso(p.created))
+const Post = update => () => p => 
+    m("a",
+        { oncreate: 
+            Router.link 
+                ( update ) 
+                ( Router.Route.Post ( 
+                    { path: p.path }) 
+                )
+        }
+        , m("li"+css.grow 
+            + css.bc( p.featured && 'black' ).c(p.featured && 'white')
+            , m("p", p.name)
+            , m("i", iso(p.created))
+        )
     )
-)
 
 const getLoadedPosts = model => 
     bifold (Loaded) (() => [], xs => xs) (model.posts)
@@ -74,7 +77,7 @@ module.exports =
             , m("h3", "Recent Articles")
             , m("ul"
             , getLoadedPosts(model).slice(0, 4)
-                .map( p => m(Post, { p }) )
+                .map( Post (update) (model) )
             )
         )
         , m("div"+style.posts + style.featured

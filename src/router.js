@@ -37,10 +37,10 @@ const Router = (
 			const symbolicHref = toURL(route)
 			const realHref = formatPath( symbolicHref )
 			vnode.dom.href = realHref
-			
+
 			vnode.dom.addEventListener('click', function(e){
 				e.preventDefault()
-				update( symbolicHref )
+				update( $route( () => route ) )
 			})
 		}
 		
@@ -48,7 +48,7 @@ const Router = (
 			
 			const popstates = stream()
 
-			dropRepeats(url).map(
+			dropRepeats (x=>x) (url) .map(
 				(url) => {
 					if( url !== getPath() ){
 						history.pushState({}, '', formatPath(url))

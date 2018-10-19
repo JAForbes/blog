@@ -1,13 +1,16 @@
 const equals = require('ramda/src/equals')
 const stream = require('mithril/stream')
-module.exports = s => {
+module.exports = select => s => {
     const s2 = stream()
+    let hasVal = false
     s.map(
         newVal => {
-        if( !equals(newVal, s2()) ) {
-            s2( newVal)
-        }
-        return null
+            console.log({ newVal, s2: s2() })
+            if( !hasVal || !equals(select(newVal), select(s2())) ) {
+                s2( newVal)
+            }
+            hasVal = true
+            return null
         } 
     )
     return s2

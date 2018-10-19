@@ -9,7 +9,7 @@ module.exports =
 
         , toURL:
             { List: () => '/'
-            , Post: ({ path }) => '/posts/' + path
+            , Post: ({ path }) => path.replace('.md', '')
             }
 
         , fromURL: ({
