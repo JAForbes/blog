@@ -30,7 +30,7 @@ const Router = (
 	const Router =
 		{ getPath
 		, formatPath
-		, $
+		, $: $route
 		, toURL
 		, fromURL
 		, link: update => route => vnode => {
@@ -76,12 +76,15 @@ const Router = (
 						.shift()
 				)
 
+
 			return Router
 				.startURL( url$ )
 				.map( 
 					url => [url]
-						.map(Router.$)
 						.map(fromURL)
+						.map(route => model => {
+							return $route($.set(route))(model)
+						})
 					.shift()
 				)
 

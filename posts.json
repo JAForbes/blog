@@ -1,119 +1,119 @@
 [
 	{
 		"name": "An alternative to npm scripts",
-		"path": "posts/alternative-to-npm-scripts.md",
+		"path": "/posts/alternative-to-npm-scripts.md",
 		"created": "2017-11-09",
 		"featured": true,
 		"twitter": "928605350315532288"
 	},
 	{
 		"name": "Intro to Streams",
-		"path": "posts/intro-to-streams.md",
+		"path": "/posts/intro-to-streams.md",
 		"created": "2017-11-04",
 		"featured": true,
 		"twitter": "926654105421996032"
 	},
 	{
 		"name": "The versatility of Array methods",
-		"path": "posts/versatility-of-array-methods.md",
+		"path": "/posts/versatility-of-array-methods.md",
 		"created": "2017-01-25",
 		"featured": false,
 		"twitter": "824147407378190336"
 	},
 	{
 		"name": "Redefining Filter",
-		"path": "posts/redefining-filter.md",
+		"path": "/posts/redefining-filter.md",
 		"created": "2017-01-25",
 		"featured": false,
 		"twitter": "824147407378190336"
 	},
 	{
 		"name": "Fantasy Land: The Power is Yours",
-		"path": "posts/the-power-is-yours.md",
+		"path": "/posts/the-power-is-yours.md",
 		"created": "2016-10-24",
 		"featured": false,
 		"twitter": "790454297691467777"
 	},
 	{
 		"name": "How to talk to a computer",
-		"path": "posts/how-to-talk-to-a-computer.md",
+		"path": "/posts/how-to-talk-to-a-computer.md",
 		"created": "2016-09-11",
 		"featured": false,
 		"twitter": "776217784262926337"
 	},
 	{
 		"name": "The Perfect API",
-		"path": "posts/the-perfect-api.md",
+		"path": "/posts/the-perfect-api.md",
 		"created": "2016-05-13",
 		"featured": true,
 		"twitter": "731053058814152704"
 	},
 	{
 		"name": "The road from Backbone to Mithril",
-		"path": "posts/backbone-to-mithril.md",
+		"path": "/posts/backbone-to-mithril.md",
 		"created": "2016-05-02",
 		"featured": true,
 		"twitter": "726865342450954240"
 	},
 	{
 		"name": "How I use mithril",
-		"path": "posts/how-i-use-mithril.md",
+		"path": "/posts/how-i-use-mithril.md",
 		"created": "2016-04-21",
 		"featured": false,
 		"twitter": "723023456380407808"
 	},
 	{
 		"name": "The power of m.prop",
-		"path": "posts/power-of-m-prop.md",
+		"path": "/posts/power-of-m-prop.md",
 		"created": "2016-01-08",
 		"featured": false,
 		"twitter": "685325683661258752"
 	},
 	{
 		"name": "Philosophies.  Not Frameworks.",
-		"path": "posts/philosophies-vs-frameworks.md",
+		"path": "/posts/philosophies-vs-frameworks.md",
 		"created": "2015-10-16T22:38:58.538Z",
 		"featured": false
 	},
 	{
 		"name": "Self currying function",
-		"path": "posts/selfCurrying.md",
+		"path": "/posts/selfCurrying.md",
 		"created": "2015-06-08T01:38:58.538Z",
 		"featured": false
 	},
 	{
 		"name": "Hardcoding is great",
-		"path": "posts/hardcoding.md",
+		"path": "/posts/hardcoding.md",
 		"created": "2015-01-31T03:37:30.456Z",
 		"featured": false
 	},
 	{
 		"name": "A practical Ramda example: Scraping",
-		"path": "posts/ramdaScrape.md",
+		"path": "/posts/ramdaScrape.md",
 		"created": "2015-01-08T02:38:59.976Z",
 		"featured": true
 	},
 	{
 		"name": "Currying vs Hurrying",
-		"path": "posts/CurryingHurrying.md",
+		"path": "/posts/CurryingHurrying.md",
 		"created": "2014-11-12T11:18:49.210Z",
 		"featured": false
 	},
 	{
 		"name": "Grokking Lodash",
-		"path": "posts/grokDash.md",
+		"path": "/posts/grokDash.md",
 		"created": "2014-11-22T08:56:20.959Z",
 		"featured": false
 	},
 	{
 		"name": "A better LeafletJS",
-		"path": "posts/noClasses.md",
+		"path": "/posts/noClasses.md",
 		"created": "2014-10-29T11:12:06.740Z",
 		"featured": false
 	},
 	{
 		"name": "Google Glass",
-		"path": "posts/GoogleGlass.md",
+		"path": "/posts/GoogleGlass.md",
 		"created": "2014-08-03T23:52:20Z",
 		"featured": false
 	}

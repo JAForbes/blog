@@ -5,7 +5,6 @@ module.exports = select => s => {
     let hasVal = false
     s.map(
         newVal => {
-            console.log({ newVal, s2: s2() })
             if( !hasVal || !equals(select(newVal), select(s2())) ) {
                 s2( newVal)
             }

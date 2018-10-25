@@ -9,19 +9,28 @@ module.exports =
 
         , toURL:
             { List: () => '/'
-            , Post: ({ path }) => path.replace('.md', '')
+            , Post: ({ path }) => {
+
+                const out = path.replace('.md', '')
+                return out
+            }
             }
 
         , fromURL: ({
             Post, List
-        }) => url => url
-            .split('posts/')
-            .slice(1)
-            .flatMap( x => ['?','#']
-                .flatMap( y => x.split(y).slice(0,1)) 
-            )
-            .map( path => Post({ path }))
-            .concat( List() )
-            .shift()
+        }) => url => {
+            const out = 
+                url
+                .split('posts/')
+                .slice(1)
+                .flatMap( x => ['?','#']
+                    .flatMap( y => x.split(y).slice(0,1) ) 
+                )
+                .map( path => Post({ path: '/posts/'+path+'.md' }))
+                .concat( List() )
+                .shift()
+
+            return out
+        }
         }
     )

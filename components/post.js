@@ -116,12 +116,12 @@ const service = theirModel$ => {
 
 	// Cache promise to ensure blog html fetched after metadata fetched
 	// while also avoiding refetching again and again
-	const fetchingPostsJSON = m.request('posts.json')
+	const fetchingPostsJSON = m.request('/posts.json')
 	
 	const fetchBlogHTML = x =>
 		fetchingPostsJSON.then(
 			() => m.request(
-				{ url: '/'+x
+				{ url: x
 				, headers: { "Content-Type": "text/markdown" }
 				, deserialize: marked
 				}
