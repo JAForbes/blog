@@ -82,9 +82,7 @@ const Router = (
 				.map( 
 					url => [url]
 						.map(fromURL)
-						.map(route => model => {
-							return $route($.set(route))(model)
-						})
+						.map($.compose($route,$.set))
 					.shift()
 				)
 
