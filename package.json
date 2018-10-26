@@ -9,7 +9,8 @@
     "dev:serve": "serve -p 80 -s",
     "dev:watch": " watchify app.js -d -o bundle.min.js --verbose",
     "build": "browserify app.js | terser -mc > bundle.min.js",
-    "start": "serve -p 80 -s"
+    "start": "serve -p 80 -s",
+    "deploy": "now --static"
   },
   "repository": {
     "type": "git",
