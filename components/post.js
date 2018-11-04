@@ -121,7 +121,7 @@ const service = theirModel$ => {
 	const fetchBlogHTML = x =>
 		fetchingPostsJSON.then(
 			() => m.request(
-				{ url: x
+				{ url: x+'.md'
 				, headers: { "Content-Type": "text/markdown" }
 				, deserialize: marked
 				}

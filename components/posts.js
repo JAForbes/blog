@@ -57,8 +57,8 @@ const Post = update => () => p =>
         { oncreate: 
             Router.link 
                 ( update ) 
-                ( Router.Route.Post ( 
-                    { path: p.path }) 
+                ( Router.Route.of.Post ( 
+                    { path: p.path.replace('.md', '') }) 
                 )
         }
         , m("li"+css.grow 
