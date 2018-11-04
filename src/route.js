@@ -1,6 +1,6 @@
 const superouter = require('superouter')
 
-const Router = require('./router')
+const Router = require('mithril-stream-router')
 
 const Route = superouter.type('Route', 
     { List: '/'
@@ -8,10 +8,13 @@ const Route = superouter.type('Route',
     }
 )
 
+exports.Route = Route
+
 const toURL = Route.toURL
 const fromURL = url => Route.matchOr( () => Route.of.List(), url)
 
-module.exports =
+
+exports.Router =
     Router({ 
         toURL
         , fromURL

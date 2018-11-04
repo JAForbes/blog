@@ -3,13 +3,12 @@ const m = require('mithril')
 m.stream = require('mithril/stream')
 const { maybe } = require('static-sum-type/modules/yslashn')
 const { bifold } = require('static-sum-type')
-const superouter = require('superouter')
 
 const iso = function(date) {
     return new Date(date).toISOString().slice(0, 10);
 }
 
-const Router = require('../src/route')
+const { Route, Router } = require('../src/route')
 
 
 const Loaded = maybe('Loaded')
@@ -52,13 +51,6 @@ const style = {
         .$nest('ul', css.listStyle('none').p('0em') )
         .$nest('ul li', css.p('1em'))
 }
-
-
-const Route = superouter.type('Route', 
-    { List: '/'
-    , Post: 'posts/:path'
-    }
-)
 
 const Post = update => () => p => 
     m("a",

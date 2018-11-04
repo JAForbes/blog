@@ -5,19 +5,11 @@ const css = require('bss')
 const { maybe } = require('static-sum-type/modules/yslashn')
 const stream = require('mithril/stream')
 const helpers = require('./bss-helpers')
-const Router = require('./src/route')
+const { Router, Route } = require('./src/route')
 const Action = require('./src/action')
 css.helper(helpers)
 
 const Loaded = maybe('Loaded')
-
-const superouter = require('superouter')
-
-const Route = superouter.type('Route', 
-    { List: '/'
-    , Post: 'posts/:path'
-    }
-)
 
 const update = stream()
 

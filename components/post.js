@@ -7,13 +7,7 @@ const { bifold } = require('static-sum-type')
 const navbar = require('./navbar')
 const Posts = require('./posts')
 
-const superouter = require('superouter')
-
-const Route = superouter.type('Route', 
-    { List: '/'
-    , Post: 'posts/:path'
-    }
-)
+const { Route } = require('../src/route')
 
 require('prismjs/components/prism-json');
 require('prismjs/components/prism-bash');
