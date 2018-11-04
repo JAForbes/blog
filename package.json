@@ -10,7 +10,7 @@
     "dev:watch": " watchify app.js -d -o bundle.min.js --verbose",
     "build": "browserify app.js | terser -mc > bundle.min.js",
     "start": "serve -p 80 -s",
-    "deploy": "now --static"
+    "deploy": "now --public && now --alias"
   },
   "repository": {
     "type": "git",
@@ -43,6 +43,9 @@
     "watchify": "^3.11.0"
   },
   "now": {
-    "alias": "jaforbes.app"
+    "alias": "jaforbes.app",
+    "engines": {
+      "node": "11.x.x"
+    }
   }
 }
