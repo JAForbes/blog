@@ -6,7 +6,14 @@ const { maybe } = require('static-sum-type/modules/yslashn')
 const { bifold } = require('static-sum-type')
 const navbar = require('./navbar')
 const Posts = require('./posts')
-const Router = require('../src/route')
+
+const superouter = require('superouter')
+
+const Route = superouter.type('Route', 
+    { List: '/'
+    , Post: 'posts/:path'
+    }
+)
 
 require('prismjs/components/prism-json');
 require('prismjs/components/prism-bash');
@@ -139,7 +146,7 @@ const service = theirModel$ => {
 	model$.map(
 		model => {
 			const path = 
-				Router.Route.fold(
+				Route.fold(
 					{ List: () => []
 					, Post: ({ path }) => [path]
 					}

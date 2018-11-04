@@ -11,20 +11,31 @@ css.helper(helpers)
 
 const Loaded = maybe('Loaded')
 
+const superouter = require('superouter')
+
+const Route = superouter.type('Route', 
+    { List: '/'
+    , Post: 'posts/:path'
+    }
+)
+
 const update = stream()
 
 const model = stream.scan( 
 	(x,f) => f(x)
-	, initial({ path: Router.getPath() })
+	, initial()
 	, update
 )
 
-function initial({ path }){
+function initial(){
 	return (
-		{ route: Router.fromURL(path)
-		, post: Loaded.N()
-		, posts: Loaded.N()
-		}
+		[
+			{ post: Loaded.N()
+			, posts: Loaded.N()
+			}
+		]
+		.map( Router.initial )
+		.shift()
 	)
 }
 
@@ -37,7 +48,7 @@ const routes =
 	}
 
 const routeToView = 
-	Router.Route.fold(
+	Route.fold(
 		{ List: () => routes.List.component
 		, Post: () => routes.Post.component
 		}
