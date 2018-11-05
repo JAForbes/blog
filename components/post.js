@@ -22,17 +22,6 @@ const True = () => true
 const False = () => false
 const then = f => p => p.then(f)
 
-/* globals scrollTo */
-
-function scrollTop(){
-    scrollTo(
-        { top: 0
-        , behavior: 'smooth'
-        }
-    )
-}
-
-
 function Twitter(vnode){
 
 	const post = vnode.attrs.post
@@ -79,10 +68,7 @@ const Post = () => model => {
 			)
 
 	
-	return m('div.post',
-		// todo-james also make a service
-		// scroll to the top if y > n and the url has changed to a new post
-		{ oncreate: () => setTimeout(scrollTop,1000)}
+	return m('div.post'
 		,m('div', 
 			{ oncreate: highlightCode
 			, key: 
@@ -139,12 +125,23 @@ const service = theirModel$ => {
 
 	model$.map(
 		model => {
+
 			const path = 
 				Route.fold(
 					{ List: () => []
 					, Post: ({ path }) => [path]
 					}
 				) (model.route)
+
+			path.map(
+				// scroll to the top if the url has changed to a new post
+				// eslint-disable-next-line no-undef
+				() => scrollTo(
+					{ top: 0
+					, behavior: 'smooth'
+					}
+				)
+			)
 
 			path
 			.map(
