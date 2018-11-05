@@ -85,7 +85,7 @@ module.exports =
         , m("div"+style.posts + style.featured
             , m("h3", "Other posts")
             , m("ul"
-                , getLoadedPosts(model).slice(0, 4)
+                , getLoadedPosts(model).slice(4)
                     .map( Post (update) (model) )
             )
         )

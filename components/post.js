@@ -99,7 +99,72 @@ const service = theirModel$ => {
 	const update$ = stream()
 
 	
-	const model$ = dropRepeats( ({ route }) => ({ route }) ) ( theirModel$ )
+	const routeModel$ = 
+		dropRepeats( ({ route }) => ({ route }) ) ( theirModel$ )
+
+	const metaModel$ = 
+		dropRepeats( ({ post }) => ({ post }) ) ( theirModel$ )
+
+	const loadedMeta = ({ post }) =>
+		[post]
+			.flatMap( 
+				x => bifold ( Loaded ) (
+					() => [],
+					post => [post.meta]
+				) (x)
+			)
+			.flatMap(
+				x => bifold (Loaded) (
+					() => [],
+					(meta) => [meta]
+				) (x)
+			)
+
+	metaModel$.map(
+		model => 
+			loadedMeta(model)
+			.map(
+				({ name }) => ['James Forbes - '+name]
+			)
+			.concat('James Forbes')
+			.slice(0,1)
+			.map(
+				// eslint-disable-next-line
+				s => document.title = s
+			)
+	)
+
+	
+	metaModel$.map(
+		model => 
+			loadedMeta(model)
+			.map(
+				({ name }) => ['James Forbes - '+name]
+			)
+			.concat('James Forbes')
+			.slice(0,1)
+			.map(
+				// eslint-disable-next-line
+				s => document.title = s
+			)
+	)
+
+	metaModel$.map(
+		model => loadedMeta(model)
+			.map(
+				() => setTimeout(
+					// eslint-disable-next-line no-undef
+					() => scrollTo(
+						{ top: 0
+						, behavior: 'smooth'
+						}
+					)
+					,500
+				)
+			)
+	)
+
+
 
 	// Cache promise to ensure blog html fetched after metadata fetched
 	// while also avoiding refetching again and again
@@ -123,7 +188,7 @@ const service = theirModel$ => {
 			posts => update$( model => Object.assign({}, model, { posts }) )
 		)
 
-	model$.map(
+	routeModel$.map(
 		model => {
 
 			const path = 
@@ -133,38 +198,26 @@ const service = theirModel$ => {
 					}
 				) (model.route)
 
-			path.map(
-				// scroll to the top if the url has changed to a new post
-				// eslint-disable-next-line no-undef
-				() => scrollTo(
-					{ top: 0
-					, behavior: 'smooth'
-					}
-				)
-			)
-
 			path
 			.map(
 				path => fetchBlogHTML(path)
 					.then(
-						body => 
-							Object.assign(
-								{ body
-								, path
-								, meta:
-									bifold ( Loaded ) (
-										() => [],
-										xs => xs
-									) (model.posts)
-									// Technically the meta data may not be
-									// found (old url no longer in posts.json)
-									.filter( x => x.path == path )
-									.slice(0,1)
-									.map( Loaded.Y )
-									.concat( Loaded.N() )
-									.shift()
-								}
-							)
+						body =>  
+							({ body
+							, path
+							, meta:
+								bifold ( Loaded ) (
+									() => [],
+									xs => xs
+								) (theirModel$().posts)
+								// Technically the meta data may not be
+								// found (old url no longer in posts.json)
+								.filter( x => x.path == '/posts/'+path+'.md' )
+								.slice(0,1)
+								.map( Loaded.Y )
+								.concat( Loaded.N() )
+								.shift()
+							})
 					)
 			)
 			.map( then(Loaded.Y) )
