@@ -10,7 +10,7 @@
     "dev:watch": " watchify app.js -d -o bundle.min.js --verbose",
     "build": "browserify app.js | terser -mc > bundle.min.js",
     "start": "serve -p 80 -s",
-    "deploy": "now --public && now --alias"
+    "deploy": "now --public && now alias"
   },
   "repository": {
     "type": "git",

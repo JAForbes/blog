@@ -32,7 +32,7 @@ function Twitter(vnode){
 		if(post && post.twitter && post.path){
 			try {
 				return twttr.widgets.createTweet(
-					post().twitter,
+					post.twitter,
 					vnode.dom,
 					{ theme: 'light' }
 				)
@@ -87,6 +87,7 @@ const Post = () => model => {
 			.map( x => x.meta )
 			.flatMap( assertLoaded )
 			.map( meta => 
+				console.log({ meta, twitter: 1 }) || 
 				m(Twitter
 					, { post: meta, key: meta.path }
 				)
