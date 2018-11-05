@@ -27,7 +27,7 @@
     "hickery": "^0.26.3",
     "marked": "^0.3.9",
     "mithril": "^1.1.6",
-    "mithril-stream-router": "0.0.6",
+    "mithril-stream-router": "0.0.7",
     "npm-run-all": "^4.1.1",
     "prismjs": "^1.15.0",
     "ramda": "^0.25.0",
