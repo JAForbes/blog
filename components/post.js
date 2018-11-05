@@ -87,7 +87,6 @@ const Post = () => model => {
 			.map( x => x.meta )
 			.flatMap( assertLoaded )
 			.map( meta => 
-				console.log({ meta, twitter: 1 }) || 
 				m(Twitter
 					, { post: meta, key: meta.path }
 				)
