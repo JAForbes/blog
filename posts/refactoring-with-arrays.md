@@ -1,15 +1,31 @@
 Refactoring with Arrays
 -----------------------
 
-Recently, I posted a snippet of code on Twitter, as I do, and accidentally angered one of the TC39 gods.
+Recently, I posted a snippet of code on Twitter.  The snippet was mostly received well.  But there were a few people questioning the readability of a pattern I was using.
 
-I was using a pattern for transforming data that I elaborated on [here](http://james-forbes.com/#!/posts/versatility-of-array-methods) and someone thought it was somewhat upsetting that I [didn't use a ternary](https://mobile.twitter.com/awbjs/status/1085557705371078657).
+I've introduced this pattern before in another post [here](http://james-forbes.com/#!/posts/versatility-of-array-methods), but that was in the abstract.  I use this pattern so often I thought I'd take you all on a tour through a "real world" refactoring as a demonstration of its utility.
 
-Putting aside how [no-one really enjoy's anyone else's ternary style](https://github.com/prettier/prettier/issues/737).  And putting aside that "readability" is completely subjective and based largely on familiarity.  There are practical reasons I default to placing a value into an array context when I don't trust the data I'm working with.
+I don't always use this pattern, there are situations where I would write a standard ternary.  But when I don't trust the data I'm working with, I think it's beneficial to use an array context to represent the lack of safety and trust.  This is a common pattern in many mainstream languages now.  In _Java_ there is a language level `Option` type.  In almost all FP languages we can find `Option`, `Result`, `Maybe` and other aliases.
 
-The posted example was an `x` that could be nullable, `undefined`, `Infinity`, `NaN`, `-Infinity`, `0`.  A lot of edge cases pop up when formatting numbers.  It's very rare all we ever want to do is run a simple `.toFixed`.  We might want to extract the sign, transform the decimal and the whole numbers separately.  Do we want to comma separate groupings of magnitude, summarise at certain points?  We may have varying responses for the edge cases.  Doesn't help if we accidentally divide by zero either!
+Placing unsafe data in a separate context allows us to declare what we'd _like_ to happen without necessarily having direct access to the value.  Having indirect access prevents us from accidentally treating untrusted data as trusted.
 
-I find placing unsafe data in a list of 1 is a great way to encourage safe transforms and inspection with a minimal diff.  It's easy to review, and easy to rollback.  And it remains _flat_.
+In Javascript itself we see this all the time with `Promise`.  Each `.then` call is not immediately run, the value has not arrived yet, and may never arrive. But the indirect access allows us to declare what we'd like to happen upfront.
+
+#### The Example
+
+A lot of edge cases pop up when formatting numbers.  The posted example was an `x` value that could be nullable, `undefined`, `Infinity`, `NaN`, `-Infinity`, `0`.  It's very rare to only run a simple `.toFixed(2)`.  We might want to extract the sign, transform the decimal and the whole numbers separately.  Do we want to comma separate groupings of magnitude, summarise at certain points?  We may have varying responses for varying edge cases.  It doesn't help if we accidentally divide by zero either!
+
+Small details appear that only make sense in certain contexts.  Notice when formatting negative dollars, the `-` symbol is before the `$` currency symbol.  
+
+```
+-$4.00
+```
+
+And that problem only arises for certain currencies.
+
+The point is, it's non-trivial.
+
+I find placing unsafe data in a list is a great way to encourage safe extensible transforms - with a minimal diff.  It's easy to review, and easy to rollback.  And it remains _flat_.
 
 Let's imagine how the original sample may evolve as requirements change.
 
@@ -25,7 +41,7 @@ Let's imagine how the original sample may evolve as requirements change.
 // .map( groupByThounsands )
 // .map( abbrevToSIUnits )
 .map( x => x.toFixed(2) )
-.concat('N/A/')
+.concat('N/A')
 .shift()
 ```
 
@@ -76,7 +92,7 @@ function getItem(key){
 }
 ```
 
-Despite being longer than the original, this code is far easier to iterate upon within a repl due to it's flat and pure structure.  We can comment out lines and see the results at each interval.  We can really _play_ in a way that's much harder in other styles.
+Despite being longer than the original, this code is far easier to iterate upon within a REPL due to it's flat and pure structure.  We can comment out lines and see the results at each interval.  We can really _play_ in a way that's much harder in other styles.
 
 
 #### Safety
@@ -135,7 +151,7 @@ This isn't true at all in other styles, we might see unrelated lines in a diff b
 
 #### Determining Structures
 
-Some background, this is some real world refactoring here.  The source of the error is migration from one library to another.  They are similar but have distinct structures.
+For background, this is some real world refactoring here: The source of the error is migration from one library to another; they are similar but have distinct structures.
 
 We need to establish which shape the `localStorage` structure is and then convert it to the new structure if possible.  
 
@@ -145,7 +161,7 @@ There are 3 possibilities.
 2. The old structure, we'll call that `SumType` because it uses [sum-type](https://github.com/JAForbes/sum-type)
 3. It's not anything we recognize.  We'll return an empty array for that case.
 
-We'll use some duck typing to establish to a reasonable level of confidence that we're dealing with a particular case.
+We'll use some duck-typing to establish to a reasonable level of confidence that we're dealing with a particular case.
 
 
 ```js
@@ -161,27 +177,27 @@ const Schema = {
 	name: 'Schema'
 	, SST: value => ({ type: 'Schema', case: 'SST', value })
 	, SumType: value => ({ type: 'Schema', case: 'SST', value })
-	, isSST: x => [x.case, x.type].every( x => x != null )
-	, isSumType: x => [x._case, x._name, x._keys].every( x => x != null )
+	, asSST: x => [x.case, x.type].every( x => x != null ) ? [Schema.SST(x)] : []
+	, asSumType: x => [x._case, x._name, x._keys].every( x => x != null ) ? [Schema.SumType(x)] : []
 	, infer: x => [x]
 		.filter( x => x != null )
 		.flatMap( x =>
-			Schema.isSST(x)
-				? [Schema.SST(x)]
-			: Schema.isSumType(x)
-				? [Schema.SumType(x)]
-				: []
+			[ Schema.asSST
+			, Schema.asSumType
+			]
+				.flatMap( f => f(x) )
 		)
-  ,handle: S => ({
-	  SST: x => x
-		,SumType: x => (
-      { case: x._case
-		  , type: x._name
-		  , values: x._keys
-					.reduce( (p,n) => Object.assign(p, {[n]: x[n] }), {})
+	,handle: S => (
+		{ SST: x => x
+		, SumType: x => (
+			{ case: x._case
+			, type: x._name
+			, values: x._keys
+					.reduce( (p,n) => ({...p, [n]: x[n] }), {} )
 			}
 		)
-  })
+  	}
+	)
 }
 
 function getItem(key){
@@ -201,9 +217,9 @@ Ok so that's a mouthful and it's very domain specific, but essentially it's conv
 
 The specific business logic of `infer` and `handle` isn't important.  What's important is, we're not using `boolean` at all as an interface.  If the data is valid, we return the data in a context that implies it's valid.  If the response is invalid, we return `[]`.  
 
-We've solved the problem, but more importantly, we've escaped the boolean trap and created a logical reusuable structure to help us perform this migration in other areas of the codebase.  You should try this anytime you have a function that returns `true/false`, try returning `[input]` or `[]`.
+We've solved the problem, but more importantly, we've escaped the boolean trap and created a logical reusuable structure to help us perform this migration in other areas of the codebase.  You should try this anytime you have a function that returns `true`/`false`, try returning `[input]` or `[]`.
 
-It's likely if your boolean function returned true, you'd immediately want to use the input for some other operation.  This approach streamlines that workflow. 
+It's likely if your boolean function returned `true`, you'd immediately want to use the input for some other operation.  This approach streamlines that workflow. 
 
 #### Shifting away from unsafe code
 
@@ -223,31 +239,33 @@ const safe = f => x => {
 	}
 }
 
+
+
 const Schema = {
 	name: 'Schema'
 	, SST: value => ({ type: 'Schema', case: 'SST', value })
 	, SumType: value => ({ type: 'Schema', case: 'SST', value })
-	, isSST: x => [x.case, x.type].every( x => x != null )
-	, isSumType: x => [x._case, x._name, x._keys].every( x => x != null )
+	, asSST: x => [x.case, x.type].every( x => x != null ) ? [Schema.SST(x)] : []
+	, asSumType: x => [x._case, x._name, x._keys].every( x => x != null ) ? [Schema.SumType(x)] : []
 	, infer: x => [x]
 		.filter( x => x != null )
 		.flatMap( x =>
-			Schema.isSST(x)
-				? [Schema.SST(x)]
-			: Schema.isSumType(x)
-				? [Schema.SumType(x)]
-				: []
+			[ Schema.asSST
+			, Schema.asSumType
+			]
+				.flatMap( f => f(x) )
 		)
-	,handle: S => ({
-		SST: x => x
-		,SumType: x => (
+	,handle: S => (
+		{ SST: x => x
+		, SumType: x => (
 			{ case: x._case
 			, type: x._name
 			, values: x._keys
-					.reduce( (p,n) => Object.assign(p, {[n]: x[n] }), {})
+					.reduce( (p,n) => ({...p, [n]: x[n] }), {} )
 			}
 		)
-	})
+  	}
+	)
 }
 
 const getItemSafe = key => o =>
@@ -266,7 +284,7 @@ const getItem =
 
 ```
 
-We've pulled `localStorage` out of `getItemSafe` because it made our function technically impure because accessing localStorage directly ties out otherwise generic function to a particular browser environment.
+We've pulled `localStorage` out of `getItemSafe` because it made our function technically impure because accessing localStorage directly ties out otherwise generic function to a particular browser environment.  More practically, it makes it harder to test.
 
 Now for the fun part.  I already have `safe` in my existing codebase.  And, that schema code anyway would need to be written irregardless of code style.  So what we're really dealing with is this snippet:
 
@@ -279,13 +297,13 @@ const getItemSafe = o => key =>
     .map( Schema.handle )
 ```
 
-Seems pretty readable to me.
+Which to my eyes, is legible and extensible.
 
 #### Conclusion and Reflection
 
-Yes ternaries are nice, you use them I use them.  Infact I think we should use them more!  But arrays are really helpful when dealing with unsafe, unstructured data.  We have an _array_ of combinators at our disposal, and we get a nice fluent, flat, composeable interface that encourages purity, clarity and separation of concerns.
+Yes, ternaries are nice: you use them, I use them. In fact, I think we should use them more!  But arrays are really helpful when dealing with unsafe, unstructured data.  We have an _array_ of combinators at our disposal, and we get a nice fluent, flat, composeable interface that encourages purity, clarity and separation of concerns.
 
-It might seem unreadable at first to some.  But so does a bunch of useful things at first (e.g. CSS Selectors).  But, I recommend taking some time experimenting with this approach, I can't ever see a time I'd use something else.
+I recommend taking some time experimenting with this approach, I can't ever see a time I'd use something else.
 
 Unless of course, if TC39 ships the `|>` [pipeline operator](https://github.com/tc39/proposal-pipeline-operator).  😉
 
