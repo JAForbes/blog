@@ -174,30 +174,30 @@ const safe = f => x => {
 }
 
 const Schema = {
-	name: 'Schema'
-	, SST: value => ({ type: 'Schema', case: 'SST', value })
-	, SumType: value => ({ type: 'Schema', case: 'SST', value })
-	, asSST: x => [x.case, x.type].every( x => x != null ) ? [Schema.SST(x)] : []
-	, asSumType: x => [x._case, x._name, x._keys].every( x => x != null ) ? [Schema.SumType(x)] : []
-	, infer: x => [x]
-		.filter( x => x != null )
-		.flatMap( x =>
-			[ Schema.asSST
-			, Schema.asSumType
-			]
-				.flatMap( f => f(x) )
-		)
-	,handle: S => (
-		{ SST: x => x
-		, SumType: x => (
-			{ case: x._case
-			, type: x._name
-			, values: x._keys
-					.reduce( (p,n) => ({...p, [n]: x[n] }), {} )
-			}
-		)
-		}
-	)
+  name: 'Schema'
+  , SST: value => ({ type: 'Schema', case: 'SST', value })
+  , SumType: value => ({ type: 'Schema', case: 'SST', value })
+  , asSST: x => [x.case, x.type].every( x => x != null ) ? [Schema.SST(x)] : []
+  , asSumType: x => [x._case, x._name, x._keys].every( x => x != null ) ? [Schema.SumType(x)] : []
+  , infer: x => [x]
+    .filter( x => x != null )
+    .flatMap( x =>
+      [ Schema.asSST
+      , Schema.asSumType
+      ]
+        .flatMap( f => f(x) )
+    )
+  ,handle: S => (
+    { SST: x => x
+    , SumType: x => (
+      { case: x._case
+      , type: x._name
+      , values: x._keys
+          .reduce( (p,n) => ({...p, [n]: x[n] }), {} )
+      }
+    )
+    }
+  )
 }
 
 function getItem(key){
@@ -232,55 +232,55 @@ Here goes!
 ```js
 
 const safe = f => x => {
-	try {
-	  return [f(x)]
-	} catch (e) {
-	  return []
-	}
+  try {
+    return [f(x)]
+  } catch (e) {
+    return []
+  }
 }
 
 
 
 const Schema = {
-	name: 'Schema'
-	, SST: value => ({ type: 'Schema', case: 'SST', value })
-	, SumType: value => ({ type: 'Schema', case: 'SST', value })
-	, asSST: x => [x.case, x.type].every( x => x != null ) ? [Schema.SST(x)] : []
-	, asSumType: x => [x._case, x._name, x._keys].every( x => x != null ) ? [Schema.SumType(x)] : []
-	, infer: x => [x]
-		.filter( x => x != null )
-		.flatMap( x =>
-			[ Schema.asSST
-			, Schema.asSumType
-			]
-				.flatMap( f => f(x) )
-		)
-	,handle: S => (
-		{ SST: x => x
-		, SumType: x => (
-			{ case: x._case
-			, type: x._name
-			, values: x._keys
-					.reduce( (p,n) => ({...p, [n]: x[n] }), {} )
-			}
-		)
-		}
-	)
+  name: 'Schema'
+  , SST: value => ({ type: 'Schema', case: 'SST', value })
+  , SumType: value => ({ type: 'Schema', case: 'SST', value })
+  , asSST: x => [x.case, x.type].every( x => x != null ) ? [Schema.SST(x)] : []
+  , asSumType: x => [x._case, x._name, x._keys].every( x => x != null ) ? [Schema.SumType(x)] : []
+  , infer: x => [x]
+    .filter( x => x != null )
+    .flatMap( x =>
+      [ Schema.asSST
+      , Schema.asSumType
+      ]
+        .flatMap( f => f(x) )
+    )
+  ,handle: S => (
+    { SST: x => x
+    , SumType: x => (
+      { case: x._case
+      , type: x._name
+      , values: x._keys
+          .reduce( (p,n) => ({...p, [n]: x[n] }), {} )
+      }
+    )
+    }
+  )
 }
 
 const getItemSafe = key => o =>
-	[o]
-	.map( x => x[key] )
-	.flatMap( safe(JSON.parse) )
-	.flatMap( Schema.infer )
-	.map( Schema.handle )
+  [o]
+  .map( x => x[key] )
+  .flatMap( safe(JSON.parse) )
+  .flatMap( Schema.infer )
+  .map( Schema.handle )
 
 const getItem =
-	key => [localStorage]
-	.filter( x => x != null )
-	.flatMap( getItemSafe(key) )
-	.concat(null)
-	.shift()
+  key => [localStorage]
+  .filter( x => x != null )
+  .flatMap( getItemSafe(key) )
+  .concat(null)
+  .shift()
 
 ```
 
