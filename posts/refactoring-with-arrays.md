@@ -196,7 +196,7 @@ const Schema = {
 					.reduce( (p,n) => ({...p, [n]: x[n] }), {} )
 			}
 		)
-  	}
+		}
 	)
 }
 
@@ -264,7 +264,7 @@ const Schema = {
 					.reduce( (p,n) => ({...p, [n]: x[n] }), {} )
 			}
 		)
-  	}
+		}
 	)
 }
 
