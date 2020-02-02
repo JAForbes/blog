@@ -28,8 +28,7 @@ module.exports = m('div', {}
     .map(
         xs => xs
             .map(
-                ([title, href]) => 
-                    m('a', { oncreate: m.route.link, href }, title)
+                ([title, href]) => m('a', { href }, title)
             )
             .map( x => m('li'+css.grow, x) )
     )
