@@ -43,12 +43,15 @@ const AWS = require('aws-sdk')
 const profile = 'harth'
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+    new AWS.SharedIniFileCredentials({ 
+        profile 
+    });
 
 const s3 = new AWS.S3()
 
 async function main(){
-    const buckets = await s3.listBuckets().promise()
+    const buckets = 
+        await s3.listBuckets().promise()
     console.log(buckets)
 }
 
