@@ -82,18 +82,18 @@ const profile = 'harth'
 const Bucket = 'papertrail-harth'
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({
-         profile
-    });
+  new AWS.SharedIniFileCredentials({
+      profile
+  });
 
 const s3 = new AWS.S3()
 
 async function main(){
-    const xs = await s3.listObjectsV2({
-        Bucket 
-    })
-    .promise()
-    console.log(xs)
+  const xs = await s3.listObjectsV2({
+      Bucket 
+  })
+  .promise()
+  console.log(xs)
 }
 
 main()
@@ -112,7 +112,7 @@ const Bucket = 'papertrail-harth'
 
 AWS.config.credentials =
   new AWS.SharedIniFileCredentials({ 
-      profile 
+    profile 
   });
 
 const s3 = new AWS.S3()
@@ -157,7 +157,9 @@ const Bucket = 'papertrail-harth'
 const MaxKeys = 1000
 
 AWS.config.credentials =
-  new AWS.SharedIniFileCredentials({ profile });
+  new AWS.SharedIniFileCredentials({ 
+    profile 
+  });
 
 const s3 = new AWS.S3()
 
@@ -167,22 +169,21 @@ async function main(){
   let ContinuationToken = undefined
 
   do {
+    const { 
+      Contents, 
+      NextContinuationToken 
+    } = 
+      await s3.listObjectsV2({
+        Bucket, 
+        MaxKeys, 
+        ContinuationToken
+      })
+      .promise()
 
-      const { 
-        Contents, 
-        NextContinuationToken 
-      } = 
-        await s3.listObjectsV2({
-          Bucket, 
-          MaxKeys, 
-          ContinuationToken
-        })
-        .promise()
-
-      ContinuationToken =
-        NextContinuationToken
-      xs.push(...Contents)
-      console.log(xs.length)
+    ContinuationToken =
+      NextContinuationToken
+    xs.push(...Contents)
+    console.log(xs.length)
   } while (ContinuationToken)
 
   console.log(xs)
@@ -220,17 +221,17 @@ async function listAllObjects({
     const { 
       Contents, 
       NextContinuationToken 
-    }  =
-        await s3.listObjectsV2({
-          Bucket, 
-          MaxKeys, 
-          ContinuationToken
-        })
-        .promise()
+    } =
+      await s3.listObjectsV2({
+        Bucket, 
+        MaxKeys, 
+        ContinuationToken
+      })
+      .promise()
 
-      ContinuationToken =
-        NextContinuationToken
-      xs.push(...Contents)
+    ContinuationToken =
+      NextContinuationToken
+    xs.push(...Contents)
 
   } while (ContinuationToken)
   return xs
@@ -238,9 +239,10 @@ async function listAllObjects({
 
 async function main(){
 
-  const xs = await listAllObjects({ 
-    Bucket 
-  })
+  const xs = 
+    await listAllObjects({ 
+      Bucket 
+    })
 
   console.log(xs)
 }
@@ -389,20 +391,20 @@ async function listAllObjects({
   let ContinuationToken = undefined
 
   do {
-      const { 
-        Contents, 
-        NextContinuationToken 
-      } =
-        await s3.listObjectsV2({
-            Bucket, 
-            MaxKeys, 
-            ContinuationToken
-        })
-        .promise()
+    const { 
+      Contents, 
+      NextContinuationToken 
+    } =
+      await s3.listObjectsV2({
+        Bucket, 
+        MaxKeys, 
+        ContinuationToken
+      })
+      .promise()
 
-      ContinuationToken = 
-        NextContinuationToken
-      xs.push(...Contents)
+    ContinuationToken = 
+      NextContinuationToken
+    xs.push(...Contents)
 
   } while (ContinuationToken)
   return xs
