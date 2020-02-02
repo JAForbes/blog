@@ -4,17 +4,18 @@ node.js is often thought of as a langauge for writing web servers.  And that it'
 
 I want to dispel you of this notion.
 
+I think the best way to think about node is as a facilitator.  It's really good at letting other tools do the heavy lifting, and organizing and managing those external resources.  Things like calling shell scripts, waiting for network requests, database calls etc.  It's async, which makes it fast.  But being async is also what makes people reach for python because it's got a giant standard library and it's very easy to get started.
+
+
 I've got a small task I need to do right now, so let's get started
 
 ## The task
 
-Downloading some log archives and analyzing product usage by user and organization.
+I need to download some log archives and analyzing product usage by user and organization.
 
-So how do we get started.  Well the first thing we need to do is get access to the logs.  They happen to be on a bucket, automatically uploaded with write only permissions from papertrail.
+So how do we get started?  The first thing we need to do is get access to the logs.  They happen to be on a bucket, automatically uploaded with write only permissions from papertrail.
 
 They are stored as gzipped tsv files. by time range in day bracketed folders.
-
-I think the best way to think about node is as a facilitator.  It's really good at letting other tools do the heavy lifting, and organizing and managing those external resources.  Things like calling shell scripts, waiting for network requests, database calls etc.  It's async, which makes it fast.  But being async is also what makes people reach for python because it's got a giant standard library and it's very easy to get started.
 
 So I think the first thing to do is just get the files.  Be comfortable hard coding within the file but using variables to make your life easier later.
 
