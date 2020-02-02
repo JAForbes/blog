@@ -89,10 +89,12 @@ AWS.config.credentials =
 const s3 = new AWS.S3()
 
 async function main(){
-  const xs = await s3.listObjectsV2({
-      Bucket 
-  })
-  .promise()
+  const xs = 
+    await s3.listObjectsV2({
+        Bucket 
+    })
+      .promise()
+
   console.log(xs)
 }
 
@@ -396,9 +398,9 @@ async function listAllObjects({
       NextContinuationToken 
     } =
       await s3.listObjectsV2({
-        Bucket, 
-        MaxKeys, 
-        ContinuationToken
+          Bucket, 
+          MaxKeys, 
+          ContinuationToken
       })
       .promise()
 
@@ -413,7 +415,9 @@ async function listAllObjects({
 async function main(){
 
   const xs = (
-    await listAllObjects({ Bucket })
+    await listAllObjects({ 
+      Bucket 
+    })
   )
   .slice(-2)
 
@@ -516,7 +520,9 @@ async function listAllObjects({
 async function main(){
 
   const xs = (
-    await listAllObjects({ Bucket })
+    await listAllObjects({ 
+      Bucket 
+    })
   )
   .slice(-2)
 
@@ -650,9 +656,10 @@ Next let's bring in some real data.
 
 ```js
 async function list(){
-  const xs = await listAllObjects({ 
-    Bucket 
-  })
+  const xs = 
+    await listAllObjects({ 
+      Bucket 
+    })
 
   xs.map(
     ({ Key }) => {
@@ -677,7 +684,9 @@ What if someone drops a file in our bucket that doesn't match our pattern, our d
 ```js
 async function list(){
   const xs = 
-    await listAllObjects({ Bucket })
+    await listAllObjects({ 
+      Bucket 
+    })
 
   xs
   .flatMap(
@@ -704,43 +713,46 @@ Remember the `before` and `after` arguments we parsed via commander?  We can add
 
 ```js
 async function list({ after, before }){
-    const xs = await listAllObjects({ Bucket })
+  const xs = 
+    await listAllObjects({ 
+      Bucket 
+    })
 
-    xs
-    .flatMap(
-      ({ Key }) => {
-        const end = 
-          df.parse( 
-            path.basename(Key,'tsv.gz')
-            , 'yyyy-MM-dd-HH' 
-          )
-    
-        const start = 
-          df.subHours( end, 1 )
+  xs
+  .flatMap(
+    ({ Key }) => {
+      const end = 
+        df.parse( 
+          path.basename(Key,'tsv.gz')
+          , 'yyyy-MM-dd-HH' 
+        )
+  
+      const start = 
+        df.subHours( end, 1 )
 
-        return df.isValid(end) 
-          ? [{ Key, start, end }]
-          : []
-      }
+      return df.isValid(end) 
+        ? [{ Key, start, end }]
+        : []
+    }
+  )
+  .filter(
+    ({ start, end }) =>
+    // if there's an after option:
+    // check our start time is 
+    // after it
+    (
+      !after 
+      || df.parseISO(after) < start
     )
-    .filter(
-      ({ start, end }) =>
-      // if there's an after option:
-      // check our start time is 
-      // after it
-      (
-        !after 
-        || df.parseISO(after) < start
-      )
-      && 
-      // if there's a before option:
-      // check our end time is before it
-      (
-        !before 
-        || end < df.parseISO(before)
-      )
+    && 
+    // if there's a before option:
+    // check our end time is before it
+    (
+      !before 
+      || end < df.parseISO(before)
     )
-    .forEach( x => console.log(x) ) 
+  )
+  .forEach( x => console.log(x) ) 
 }
 ```
 
@@ -796,11 +808,12 @@ async function listAllObjects({
 
 async function main({ before, after }){
 
-  const xs = await list({ 
-    before, 
-    after, 
-    Bucket 
-  }) // NEW!!!
+  const xs = 
+    await list({ 
+      before, 
+      after, 
+      Bucket 
+    }) // NEW!!!
 
   xs
   .map( ({ Key }) =>
@@ -864,41 +877,39 @@ async function list({
       Bucket 
     }) 
 
-    return xs
-      .flatMap(
-        ({ Key }) => {
+  return xs
+    .flatMap( ({ Key }) => {
 
-          const end =
-            df.parse(
-              path.basename(Key, '.tsv.gz')
-              ,'yyyy-MM-dd-HH'
-              ,new Date()
-            )
+      const end =
+        df.parse(
+          path.basename(Key, '.tsv.gz')
+          ,'yyyy-MM-dd-HH'
+          ,new Date()
+        )
 
-          const start =
-            df.subHours(end, 1)
+      const start =
+        df.subHours(end, 1)
 
-          return df.isValid(end)
-            ? [{ start, end, Key }]
-            : []
-        }
+      return df.isValid(end)
+        ? [{ start, end, Key }]
+        : []
+    })
+    .filter( ({ start, end }) =>
+      // if there's an after option:
+      // check our start time is 
+      // after it
+      (
+        !after 
+        || df.parseISO(after) < start
       )
-      .filter( ({ start, end }) =>
-        // if there's an after option:
-        // check our start time is 
-        // after it
-        (
-          !after 
-          || df.parseISO(after) < start
-        )
-        && 
-        // if there's a before option:
-        // check our end time is before it
-        (
-          !before 
-          || end < df.parseISO(before)
-        )
-    )
+      && 
+      // if there's a before option:
+      // check our end time is before it
+      (
+        !before 
+        || end < df.parseISO(before)
+      )
+  )
 }
 
 if( app.list ) {
