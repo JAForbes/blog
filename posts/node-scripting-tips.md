@@ -4,24 +4,27 @@ node.js is often thought of as a langauge for writing web servers.  And that it'
 
 I want to dispel you of this notion.
 
-I think the best way to think about node is as a facilitator.  It's really good at letting other tools do the heavy lifting, and organizing and managing those external resources.  Things like calling shell scripts, waiting for network requests, database calls etc.  It's async, which makes it fast.  But being async is also what makes people reach for python because it's got a giant standard library and it's very easy to get started.
+I think the best way to think about node is as a facilitator.  It's very good at letting other tools do the heavy lifting, and organizing and managing those external resources.  It's not a good language.  It's strength is handing off work to external services, native binaries, databases etc and because it "async all the way down" you are sort of forced to write fast code.
 
+But being async is also what makes people reach for python.  Python is a one stop shop, it has a giant standard library, massive community (almost rivaling JS') and there's no async to think about, scripts are very linear, first this thing finishes, then the next thing starts and so on.
 
-I've got a small task I need to do right now, so let's get started
+I think python is a fine tool for scripting, but if you've already got a big JS project it's nice to not have 1 language for your application and another for your scripts.
 
-## The task
+## A scripting task
 
 I need to download some log archives and analyze product usage by user and organization.
 
-So how do we get started?  The first thing we need to do is get access to the logs.  They happen to be on a bucket, automatically uploaded with write only permissions from papertrail.
+The logs are sitting on an AWS S3 Bucket.  They are automatically uploaded with write only permissions from the loggin service: papertrail.
 
-They are stored as gzipped tsv files. by time range in day bracketed folders.
+The files are stored as gzipped tsv files. by time range in day bracketed folders.
 
-So I think the first thing to do is just get the files.  Be comfortable hard coding within the file but using variables to make your life easier later.
+So how do we start?  I suggest making sure any intergrations work first.  Don't focus too much on the specific bucket, file structure etc.  Step 1 will be to just connect to S3 over the network.
 
 ## Where should my script live?
 
-The first pro-tip I want to give you is, don't create a new npm project or repo for every little script.  Have a git ignored folder in your main project repo, and use it for odd scripts.  When things mature you can move them into the project or their own project, but let's be honest, most of the time that doesn't happen (or need to happen).
+But before we write code - where should the code live?
+
+The first pro-tip I want to give you is, _don't create a new npm project or repo for every little script_.  Have a git ignored folder in your main project repo, and use it for odd scripts.  When things mature you can move them into the project or their own project, but let's be honest, most of the time that doesn't happen (or need to happen).
 
 The benefits are, you can make use of existing dependencies in your project and you don't obsess over which package manager to use or how to structure your project.  
 
