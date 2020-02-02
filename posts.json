@@ -1,5 +1,11 @@
 [
 	{
+		"name": "Node Scripting: Tips and tricks",
+		"path": "posts/alternative-to-npm-scripts.md",
+		"created": "2020-02-02",
+		"featured": false
+	},
+	{
 		"name": "An alternative to npm scripts",
 		"path": "posts/alternative-to-npm-scripts.md",
 		"created": "2017-11-09",
