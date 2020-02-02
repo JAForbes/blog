@@ -1,4 +1,4 @@
-# Tips and Tricks when using node.js as a scripting language.
+# Using node.js as a scripting language.
 
 node.js is often thought of as a langauge for writing web servers.  And that it's not suited for day to day scripting tasks.
 
