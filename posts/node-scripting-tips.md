@@ -82,12 +82,17 @@ const profile = 'harth'
 const Bucket = 'papertrail-harth'
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+    new AWS.SharedIniFileCredentials({
+         profile
+    });
 
 const s3 = new AWS.S3()
 
 async function main(){
-    const xs = await s3.listObjectsV2({ Bucket }).promise()
+    const xs = await s3.listObjectsV2({
+        Bucket 
+    })
+    .promise()
     console.log(xs)
 }
 
@@ -106,28 +111,36 @@ const profile = 'harth'
 const Bucket = 'papertrail-harth'
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+  new AWS.SharedIniFileCredentials({ 
+      profile 
+  });
 
 const s3 = new AWS.S3()
 
 async function main(){
 
-    let xs = []
-    let ContinuationToken = undefined
+  let xs = []
+  let ContinuationToken = undefined
 
-    do {
+  do {
+      const { 
+          Contents, 
+          NextContinuationToken 
+      } = 
+        await s3.listObjectsV2({
+            Bucket, 
+            MaxKeys: 50, 
+            ContinuationToken
+        })
+        .promise()
 
-        const { Contents, NextContinuationToken }  =
-            await s3.listObjectsV2({
-                Bucket, MaxKeys: 50, ContinuationToken
-            }).promise()
+      ContinuationToken = 
+        NextContinuationToken
+      xs.push(...Contents)
+      console.log(xs.length)
+  } while (ContinuationToken)
 
-        ContinuationToken = NextContinuationToken
-        xs.push(...Contents)
-        console.log(xs.length)
-    } while (ContinuationToken)
-
-    console.log(xs)
+  console.log(xs)
 }
 
 main()
@@ -144,28 +157,35 @@ const Bucket = 'papertrail-harth'
 const MaxKeys = 1000
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+  new AWS.SharedIniFileCredentials({ profile });
 
 const s3 = new AWS.S3()
 
 async function main(){
 
-    let xs = []
-    let ContinuationToken = undefined
+  let xs = []
+  let ContinuationToken = undefined
 
-    do {
+  do {
 
-        const { Contents, NextContinuationToken }  =
-            await s3.listObjectsV2({
-                Bucket, MaxKeys, ContinuationToken
-            }).promise()
+      const { 
+        Contents, 
+        NextContinuationToken 
+      } = 
+        await s3.listObjectsV2({
+          Bucket, 
+          MaxKeys, 
+          ContinuationToken
+        })
+        .promise()
 
-        ContinuationToken = NextContinuationToken
-        xs.push(...Contents)
-        console.log(xs.length)
-    } while (ContinuationToken)
+      ContinuationToken =
+        NextContinuationToken
+      xs.push(...Contents)
+      console.log(xs.length)
+  } while (ContinuationToken)
 
-    console.log(xs)
+  console.log(xs)
 }
 
 main()
@@ -184,38 +204,49 @@ const Bucket = 'papertrail-harth'
 const MaxKeys = 1000
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+  new AWS.SharedIniFileCredentials({
+    profile
+  });
 
 const s3 = new AWS.S3()
 
 async function listAllObjects({
     Bucket
 }){
-    let xs = []
-    let ContinuationToken = undefined
+  let xs = []
+  let ContinuationToken = undefined
 
-    do {
-        const { Contents, NextContinuationToken }  =
-            await s3.listObjectsV2({
-                Bucket, MaxKeys, ContinuationToken
-            }).promise()
+  do {
+    const { 
+      Contents, 
+      NextContinuationToken 
+    }  =
+        await s3.listObjectsV2({
+          Bucket, 
+          MaxKeys, 
+          ContinuationToken
+        })
+        .promise()
 
-        ContinuationToken = NextContinuationToken
-        xs.push(...Contents)
+      ContinuationToken =
+        NextContinuationToken
+      xs.push(...Contents)
 
-    } while (ContinuationToken)
-    return xs
+  } while (ContinuationToken)
+  return xs
 }
 
 async function main(){
 
-    const xs = await listAllObjects({ Bucket })
+  const xs = await listAllObjects({ 
+    Bucket 
+  })
 
-    console.log(xs)
+  console.log(xs)
 }
 
 main()
-    .catch(console.error)
+  .catch(console.error)
 ```
 
 Ok.  Now we may not actually want to download all log files in the bucket.  And to test our script, we only really need to download 1 or 2.  It's not super important if this script takes a bit to run because it's not part of an API or app, it's just hitting a bucket not a webserver, it can be as inefficient as we want.
@@ -228,10 +259,10 @@ First let's stream the file from s3 to stdout.
 
 ```js
 xs.slice(0,1).map(
-        ({ Key }) =>
-            s3.getObject({ Key, Bucket })
-            .createReadStream()
-            .pipe(process.stdout)
+  ({ Key }) =>
+    s3.getObject({ Key, Bucket })
+      .createReadStream()
+      .pipe(process.stdout)
 )
 ```
 
@@ -251,11 +282,11 @@ Now, that works, but it outputs some garbage to stdout, and at first I didn't kn
 
 ```js
 xs.slice(0,1).map(
-        ({ Key }) =>
-            console.log({ Key }) ||
-            s3.getObject({ Key, Bucket })
-            .createReadStream()
-            .pipe(process.stdout)
+  ({ Key }) =>
+    console.log({ Key }) ||
+    s3.getObject({ Key, Bucket })
+      .createReadStream()
+      .pipe(process.stdout)
 )
 ```
 
@@ -269,11 +300,11 @@ So I add this import `const zlib = require('zlib')`  and this to our `pipe`
 
 ```js
 xs.slice(0,1).map(
-    ({ Key }) =>
-            s3.getObject({ Key, Bucket })
-                .createReadStream()
-                .pipe(zlib.createUnzip())
-                .pipe(process.stdout)
+  ({ Key }) =>
+    s3.getObject({ Key, Bucket })
+      .createReadStream()
+      .pipe(zlib.createUnzip())
+      .pipe(process.stdout)
 )
 ```
 
@@ -292,16 +323,16 @@ Then we add the import and the new `pipe` line.  I'm just scanning the documenta
 ```js
 // ⚠ WARNING DOES NOT WORK
 xs.slice(0, 1).map(
-    ({ Key }) =>
-        s3.getObject({ Key, Bucket })
-        .createReadStream()
-        .pipe(zlib.createUnzip())
-        .pipe(
-            Papa.parse(Papa.NODE_STREAM_INPUT, {
-                delimiter: '\t'
-            })
-        )
-        .pipe(process.stdout)
+  ({ Key }) =>
+    s3.getObject({ Key, Bucket })
+    .createReadStream()
+    .pipe(zlib.createUnzip())
+    .pipe(
+      Papa.parse(Papa.NODE_STREAM_INPUT, {
+          delimiter: '\t'
+      })
+    )
+    .pipe(process.stdout)
 )
 ```
 
@@ -311,19 +342,20 @@ To inspect what a stream is doing we can add a  `.on('data', x => ... )` callbac
 
 ```js
 xs.slice(0, 1).map(
-    ({ Key }) =>
-        s3.getObject({ Key, Bucket })
-        .createReadStream()
-        .pipe(zlib.createUnzip())
-        .pipe(
-            Papa.parse(Papa.NODE_STREAM_INPUT, {
-                delimiter: '\t'
-            })
-        )
-        .on('data', x => {
-            console.log(x)
-        })
-        // .pipe(process.stdout)
+  ({ Key }) =>
+    s3.getObject({ Key, Bucket })
+      .createReadStream()
+      .pipe(zlib.createUnzip())
+      .pipe(
+          Papa.parse(
+            Papa.NODE_STREAM_INPUT, {
+              delimiter: '\t'
+          })
+      )
+      .on('data', x => {
+          console.log(x)
+      })
+      // .pipe(process.stdout)
 )
 ```
 
@@ -344,74 +376,85 @@ const MaxKeys = 1000
 
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+  new AWS.SharedIniFileCredentials({
+    profile
+  });
 
 const s3 = new AWS.S3()
 
 async function listAllObjects({
     Bucket
 }){
-    let xs = []
-    let ContinuationToken = undefined
+  let xs = []
+  let ContinuationToken = undefined
 
-    do {
-        const { Contents, NextContinuationToken }  =
-            await s3.listObjectsV2({
-                Bucket, MaxKeys, ContinuationToken
-            }).promise()
+  do {
+      const { 
+        Contents, 
+        NextContinuationToken 
+      } =
+        await s3.listObjectsV2({
+            Bucket, 
+            MaxKeys, 
+            ContinuationToken
+        })
+        .promise()
 
-        ContinuationToken = NextContinuationToken
-        xs.push(...Contents)
+      ContinuationToken = 
+        NextContinuationToken
+      xs.push(...Contents)
 
-    } while (ContinuationToken)
-    return xs
+  } while (ContinuationToken)
+  return xs
 }
 
 async function main(){
 
-    const xs = (await listAllObjects({ Bucket })).slice(-2)
+  const xs = (
+    await listAllObjects({ Bucket })
+  )
+  .slice(-2)
 
 
-    xs.map(
-        ({ Key }) =>
-            s3.getObject({ Key, Bucket })
-            .createReadStream()
-            .pipe(zlib.createUnzip())
-            .pipe(
-                Papa.parse(Papa.NODE_STREAM_INPUT, {
-                    delimiter: '\t'
-                })
-            )
-            .on('data', x => {
-                console.log(
-                    JSON.stringify(
-                        R.merge(
-                            { Key },
-                            R.zipObj(
-                                [
-                                    'id'
-                                    ,'generated_at'
-                                    ,'received_at'
-                                    ,'source_id'
-                                    ,'source_name'
-                                    ,'source_ip'
-                                    ,'facility_name'
-                                    ,'severity_name'
-                                    ,'program'
-                                    ,'message'
-                                ]
-                                ,x
-                            )
-                        )
-
-                    )
-                )
-            })
+xs.map( ({ Key }) =>
+  s3.getObject({ Key, Bucket })
+    .createReadStream()
+    .pipe(zlib.createUnzip())
+    .pipe(
+      Papa.parse(
+        Papa.NODE_STREAM_INPUT, {
+          delimiter: '\t'
+      })
     )
+    .on('data', x => {
+      console.log(
+        JSON.stringify(
+          R.merge(
+            { Key },
+            R.zipObj(
+              [
+                'id'
+                ,'generated_at'
+                ,'received_at'
+                ,'source_id'
+                ,'source_name'
+                ,'source_ip'
+                ,'facility_name'
+                ,'severity_name'
+                ,'program'
+                ,'message'
+              ]
+              ,x
+            )
+          )
+        )
+      )
+    })
+  )
 }
 
 main()
-    .catch(console.error)
+  .catch(console.error)
 ```
 
 I've gone and read the papertrail docs to figure out what each columns header is, and brought in ramda as a utility library.
@@ -437,96 +480,103 @@ const MaxKeys = 1000
 
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+  new AWS.SharedIniFileCredentials({
+    profile 
+  });
 
 const s3 = new AWS.S3()
 
 async function listAllObjects({
-    Bucket
+  Bucket
 }){
-    let xs = []
-    let ContinuationToken = undefined
+  let xs = []
+  let ContinuationToken = undefined
 
-    do {
-        const { Contents, NextContinuationToken }  =
-            await s3.listObjectsV2({
-                Bucket, MaxKeys, ContinuationToken
-            }).promise()
+  do {
+    const { 
+      Contents, 
+      NextContinuationToken 
+    } =
+      await s3.listObjectsV2({
+        Bucket, 
+        MaxKeys, 
+        ContinuationToken
+      })
+      .promise()
 
-        ContinuationToken = NextContinuationToken
-        xs.push(...Contents)
+    ContinuationToken = NextContinuationToken
+    xs.push(...Contents)
 
-    } while (ContinuationToken)
-    return xs
+  } while (ContinuationToken)
+  return xs
 }
 
 async function main(){
 
-    const xs = (await listAllObjects({ Bucket })).slice(-2)
+  const xs = (
+    await listAllObjects({ Bucket })
+  )
+  .slice(-2)
 
-
-    xs.map(
-        ({ Key }) =>
-            s3.getObject({ Key, Bucket })
-            .createReadStream()
-            .pipe(zlib.createUnzip())
-            .pipe(
-                Papa.parse(Papa.NODE_STREAM_INPUT, {
-                    delimiter: '\t'
-                })
+  xs.map( ({ Key }) =>
+    s3.getObject({ Key, Bucket })
+      .createReadStream()
+      .pipe(zlib.createUnzip())
+      .pipe(
+        Papa.parse(Papa.NODE_STREAM_INPUT, {
+            delimiter: '\t'
+        })
+      )
+      .on('data', x => {
+        console.log(
+          JSON.stringify(
+            R.merge(
+              { Key },
+              R.zipObj(
+                  [ 'id'
+                  , 'generated_at'
+                  , 'received_at'
+                  , 'source_id'
+                  , 'source_name'
+                  , 'source_ip'
+                  , 'facility_name'
+                  , 'severity_name'
+                  , 'program'
+                  , 'message'
+                  ]
+                  ,x
+              )
             )
-            .on('data', x => {
-                console.log(
-                    JSON.stringify(
-                        R.merge(
-                            { Key },
-                            R.zipObj(
-                                [
-                                    'id'
-                                    ,'generated_at'
-                                    ,'received_at'
-                                    ,'source_id'
-                                    ,'source_name'
-                                    ,'source_ip'
-                                    ,'facility_name'
-                                    ,'severity_name'
-                                    ,'program'
-                                    ,'message'
-                                ]
-                                ,x
-                            )
-                        )
-
-                    )
-                )
-            })
-    )
+          )
+        )
+      })
+  )
 }
 
 app
-    .option(
-        '--after <isodate>'
-        , 'Only fetch log files after a certain date.'
-    )
-    .option(
-        '--before <isodate>'
-        , 'Only fetch log files before a certain date.'
-    )
-    .option(
-        '--list'
-        , 'list available log files instead of downloading their contents'
-    )
-    .parse(process.argv)
+  .option(
+    '--after <isodate>'
+    , 'Only fetch log files after a certain date.'
+  )
+  .option(
+    '--before <isodate>'
+    , 'Only fetch log files before a certain date.'
+  )
+  .option(
+    '--list'
+    , 'list available log files instead of downloading their contents'
+  )
+  .parse(process.argv)
 
 function list(){
-console.log('list')
+  console.log('list')
 }
 
 if( app.list ) {
-list()
+  list()
 } else {
-    main()
-        .catch(console.error)
+  main()
+    .catch(console.error)
 }
 ```
 
@@ -544,9 +594,13 @@ The built in Date object gets a bad name in JS.  I think it's not that bad if yo
 
 ```js
 function list(){
-    var Key = "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" 
-    // logs 2019-10-24-21
-    console.log( path.basename(Key,'tsv.gz') )
+  const Key = 
+    "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" 
+  
+  // logs 2019-10-24-21
+  console.log( 
+    path.basename(Key,'tsv.gz') 
+  )
 }
 ```
 
@@ -554,12 +608,18 @@ Then we bring in df.parse
 
 ```js
 function list(){
-    var Key = "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" 
-    // logs 2019-10-24-21
-    const end = df.parse( path.basename(Key,'tsv.gz'), 'yyyy-MM-dd-HH' )
+  const Key = 
+    "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" 
+  
+  // logs 2019-10-24-21
+  const end = 
+    df.parse( 
+      path.basename(Key,'tsv.gz')
+      ,'yyyy-MM-dd-HH' 
+    )
 
-    // logs 2019-10-24T10:00:00.000Z
-    console.log( end )
+  // logs 2019-10-24T10:00:00.000Z
+  console.log( end )
 }
 ```
 
@@ -567,13 +627,20 @@ Then we can use `df.subHours` to subtract 1 hour to get the start time of the lo
 
 ```js
 function list(){
-    var Key = "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" 
-    // logs 2019-10-24-21
-    const end = df.parse( path.basename(Key,'tsv.gz'), 'yyyy-MM-dd-HH' )
-    const start = df.subHours( end, 1 )
+  const Key = 
+    "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" 
+  
+  // logs 2019-10-24-21
+  const end = 
+    df.parse( 
+      path.basename(Key,'tsv.gz')
+      , 'yyyy-MM-dd-HH' 
+    )
 
-    // logs 2019-10-24T09:00:00.000Z
-    console.log( start )
+  const start = df.subHours( end, 1 )
+
+  // logs 2019-10-24T09:00:00.000Z
+  console.log( start )
 }
 ```
 
@@ -581,20 +648,25 @@ Next let's bring in some real data.
 
 ```js
 async function list(){
-    const xs = await listAllObjects({ Bucket })
+  const xs = await listAllObjects({ 
+    Bucket 
+  })
 
-    xs.map(
-        ({ Key }) => {
-            const end = 
-                df.parse( path.basename(Key,'tsv.gz'), 'yyyy-MM-dd-HH' )
-        
-            const start = 
-                df.subHours( end, 1 )
+  xs.map(
+    ({ Key }) => {
+      const end = 
+        df.parse( 
+          path.basename(Key,'tsv.gz')
+          , 'yyyy-MM-dd-HH' 
+        )
+  
+      const start = 
+        df.subHours( end, 1 )
 
-            return { Key, start, end }
-        }
-    )
-    .forEach( x => console.log(x) ) 
+      return { Key, start, end }
+    }
+  )
+  .forEach( x => console.log(x) ) 
 }
 ```
 
@@ -602,23 +674,27 @@ What if someone drops a file in our bucket that doesn't match our pattern, our d
 
 ```js
 async function list(){
-    const xs = await listAllObjects({ Bucket })
+  const xs = 
+    await listAllObjects({ Bucket })
 
-    xs
-    .flatMap(
-        ({ Key }) => {
-            const end = 
-                df.parse( path.basename(Key,'tsv.gz'), 'yyyy-MM-dd-HH' )
-        
-            const start = 
-                df.subHours( end, 1 )
+  xs
+  .flatMap(
+    ({ Key }) => {
+      const end = 
+        df.parse( 
+          path.basename(Key,'tsv.gz')
+          , 'yyyy-MM-dd-HH' 
+        )
+  
+      const start = 
+        df.subHours( end, 1 )
 
-            return df.isValid(end) 
-                ? [{ Key, start, end }]
-                : []
-        }
-    )
-    .forEach( x => console.log(x) ) 
+      return df.isValid(end) 
+        ? [{ Key, start, end }]
+        : []
+    }
+  )
+  .forEach( x => console.log(x) ) 
 }
 ```
 
@@ -630,27 +706,37 @@ async function list({ after, before }){
 
     xs
     .flatMap(
-        ({ Key }) => {
-            const end = 
-                df.parse( path.basename(Key,'tsv.gz'), 'yyyy-MM-dd-HH' )
-        
-            const start = 
-                df.subHours( end, 1 )
+      ({ Key }) => {
+        const end = 
+          df.parse( 
+            path.basename(Key,'tsv.gz')
+            , 'yyyy-MM-dd-HH' 
+          )
+    
+        const start = 
+          df.subHours( end, 1 )
 
-            return df.isValid(end) 
-                ? [{ Key, start, end }]
-                : []
-        }
+        return df.isValid(end) 
+          ? [{ Key, start, end }]
+          : []
+      }
     )
     .filter(
-        ({ start, end }) =>
-        // if there's an after option:
-            // check our start time is after it
-            (!after || df.parseISO(after) < start)
-            && 
-            // if there's a before option:
-            // check our end time is before it
-            (!before || end < df.parseISO(before))
+      ({ start, end }) =>
+      // if there's an after option:
+      // check our start time is 
+      // after it
+      (
+        !after 
+        || df.parseISO(after) < start
+      )
+      && 
+      // if there's a before option:
+      // check our end time is before it
+      (
+        !before 
+        || end < df.parseISO(before)
+      )
     )
     .forEach( x => console.log(x) ) 
 }
@@ -676,127 +762,158 @@ const MaxKeys = 1000
 
 
 AWS.config.credentials =
-    new AWS.SharedIniFileCredentials({ profile });
+    new AWS.SharedIniFileCredentials({
+      profile
+    });
 
 const s3 = new AWS.S3()
 
 async function listAllObjects({
     Bucket
 }){
-    let xs = []
-    let ContinuationToken = undefined
+  let xs = []
+  let ContinuationToken = undefined
 
-    do {
-        const { Contents, NextContinuationToken }  =
-            await s3.listObjectsV2({
-                Bucket, MaxKeys, ContinuationToken
-            }).promise()
+  do {
+    const { 
+      Contents, 
+      NextContinuationToken 
+    } =
+      await s3.listObjectsV2({
+        Bucket, 
+        MaxKeys, 
+        ContinuationToken
+      }).promise()
 
-        ContinuationToken = NextContinuationToken
-        xs.push(...Contents)
+  ContinuationToken = NextContinuationToken
+  xs.push(...Contents)
 
-    } while (ContinuationToken)
-    return xs
+  } while (ContinuationToken)
+  return xs
 }
 
 async function main({ before, after }){
 
-    const xs = await list({ before, after, Bucket }) // NEW!!!
+  const xs = await list({ 
+    before, 
+    after, 
+    Bucket 
+  }) // NEW!!!
 
-    xs
-    .map(
-        ({ Key }) =>
-            s3.getObject({ Key, Bucket })
-            .createReadStream()
-            .pipe(zlib.createUnzip())
-            .pipe(
-                Papa.parse(Papa.NODE_STREAM_INPUT, {
-                    delimiter: '\t'
-                })
+  xs
+  .map( ({ Key }) =>
+    s3.getObject({ Key, Bucket })
+      .createReadStream()
+      .pipe(zlib.createUnzip())
+      .pipe(
+        Papa.parse(
+          Papa.NODE_STREAM_INPUT, {
+            delimiter: '\t'
+        })
+      )
+      .on('data', x => {
+        console.log(
+          JSON.stringify(
+            R.merge(
+              { Key },
+              R.zipObj(
+                [ 'id'
+                , 'generated_at'
+                , 'received_at'
+                , 'source_id'
+                , 'source_name'
+                , 'source_ip'
+                , 'facility_name'
+                , 'severity_name'
+                , 'program'
+                , 'message'
+                ]
+                ,x
+              )
             )
-            .on('data', x => {
-                console.log(
-                    JSON.stringify(
-                        R.merge(
-                            { Key },
-                            R.zipObj(
-                                [
-                                    'id'
-                                    ,'generated_at'
-                                    ,'received_at'
-                                    ,'source_id'
-                                    ,'source_name'
-                                    ,'source_ip'
-                                    ,'facility_name'
-                                    ,'severity_name'
-                                    ,'program'
-                                    ,'message'
-                                ]
-                                ,x
-                            )
-                        )
-
-                    )
-                )
-            })
-    )
+          )
+        )
+      })
+  )
 }
 
 app
-    .option(
-        '--after <isodate>'
-        , 'Only fetch log files after a certain date.'
-    )
-    .option(
-        '--before <isodate>'
-        , 'Only fetch log files before a certain date.'
-    )
-    .option(
-        '--list'
-        , 'list available log files instead of downloading their contents'
-    )
-    .parse(process.argv)
+  .option(
+    '--after <isodate>'
+    , 'Only fetch log files after a certain date.'
+  )
+  .option(
+    '--before <isodate>'
+    , 'Only fetch log files before a certain date.'
+  )
+  .option(
+    '--list'
+    , 'list available log files instead of downloading their contents'
+  )
+  .parse(process.argv)
 
-async function list({ after, before, Bucket }){ // NEW !!!
-    const xs = await listAllObjects({ Bucket }) // NEW !!!
+async function list({ 
+  after
+  , before
+  , Bucket // NEW !!!
+}){ 
+  const xs = 
+    await listAllObjects({ 
+      Bucket 
+    }) 
 
     return xs
-        .flatMap(
-            ({ Key }) => {
+      .flatMap(
+        ({ Key }) => {
 
-                const end =
-                    df.parse(
-                        path.basename(Key, '.tsv.gz')
-                        ,'yyyy-MM-dd-HH'
-                        ,new Date()
-                    )
+          const end =
+            df.parse(
+              path.basename(Key, '.tsv.gz')
+              ,'yyyy-MM-dd-HH'
+              ,new Date()
+            )
 
-                const start =
-                    df.subHours(end, 1)
+          const start =
+            df.subHours(end, 1)
 
-                return df.isValid(end)
-                    ? [{ start, end, Key }]
-                    : []
-            }
+          return df.isValid(end)
+            ? [{ start, end, Key }]
+            : []
+        }
+      )
+      .filter( ({ start, end }) =>
+        // if there's an after option:
+        // check our start time is 
+        // after it
+        (
+          !after 
+          || df.parseISO(after) < start
         )
-        .filter(
-            ({ start, end }) =>
-                (!after || df.parseISO(after) < start)
-                && (!before || end < df.parseISO(before))
+        && 
+        // if there's a before option:
+        // check our end time is before it
+        (
+          !before 
+          || end < df.parseISO(before)
         )
+    )
 }
 
 if( app.list ) {
-    // NEW !!!
-    list({
-        Bucket, after: app.after, before: app.before
-    })
-        .then( xs => JSON.stringify(xs, null, 2) )
-        .then(console.log)
-        .catch(console.error)
+  // NEW !!!
+  list({
+    Bucket, 
+    after: app.after, 
+    before: app.before
+  })
+    .then( 
+      xs => JSON.stringify(xs, null, 2) 
+    )
+    .then(console.log)
+    .catch(console.error)
 } else {
-    main(app)
-        .catch(console.error)
+  main(app)
+    .catch(console.error)
 }
 ```
 
