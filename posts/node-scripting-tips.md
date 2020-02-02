@@ -11,7 +11,7 @@ I've got a small task I need to do right now, so let's get started
 
 ## The task
 
-I need to download some log archives and analyzing product usage by user and organization.
+I need to download some log archives and analyze product usage by user and organization.
 
 So how do we get started?  The first thing we need to do is get access to the logs.  They happen to be on a bucket, automatically uploaded with write only permissions from papertrail.
 
