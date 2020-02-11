@@ -24,11 +24,11 @@ So python is good, but I prefer node for some of the reasons mentioned.
 
 I need to download some log archives and analyze product usage by user and organization.
 
-The logs are sitting on an AWS S3 Bucket.  They are automatically uploaded with write only permissions from the loggin service: papertrail.
+The logs are sitting on an AWS S3 Bucket.  They are automatically uploaded with write only permissions from the loggin service papertrail.
 
-The files are stored as gzipped tsv files. by time range in day bracketed folders.
+The files are stored as gzipped tsv files.  Each file represents 1 hours of logs.  All the logs for 1 day are stored in the same folder.
 
-So how do we start?  The first and most important thing is checking intergrations work first.  I recommend not focusing too much on the specific bucket, file structure etc.  Just connecting to S3 over the network is the first hurdle... or is it?
+I recommend not focusing too much on the specific bucket, file structure etc.  Just connecting to S3 over the network is the first hurdle... or is it?
 
 ## Where should my script live?
 
