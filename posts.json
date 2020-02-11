@@ -3,7 +3,8 @@
 		"name": "Node Scripting: Tips and tricks",
 		"path": "posts/node-scripting-tips.md",
 		"created": "2020-02-02",
-		"featured": false
+		"featured": false,
+		"twitter": "1227215792376168448"
 	},
 	{
 		"name": "An alternative to npm scripts",
