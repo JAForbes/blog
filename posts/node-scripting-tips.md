@@ -1,14 +1,24 @@
 # Using node.js as a scripting language.
 
-node.js is often thought of as a langauge for writing web servers.  And that it's not suited for day to day scripting tasks.
+node isn't the first language people think of for day to day scripting tasks.  Usually python is recommended, maybe bash.  I think there's some good reasons for this notion; node is async by default which can make simple operations seem convoluted or complex.  But it's not bad, it's just different.  So today I want to share some of the tricks I've learned to make the most of JS as a general purpose scripting tool.
 
-I want to dispel you of this notion.
+## Node is a facilitator.
 
-I think the best way to think about node is as a facilitator.  It's very good at letting other tools do the heavy lifting, and organizing and managing those external resources.  It's not a good language.  It's strength is handing off work to external services, native binaries, databases etc and because it "async all the way down" you are sort of forced to write fast code.
+Node is very good at letting other tools do the heavy lifting.  It's designed to wait efficiently in the background until some task is done and then fire off the next task.  And it's able to handle many parallel queues of work.  Node streams allow you to fire off thousands of requests and yet only process data or request information when it's logical. Node's built in modules and ecosystem is by default - async.  That means while you're talking to a DB, you can also be reading a file.  Turns out that's a very nice quality for writing scripts that aren't painfully slow.
 
-But being async is also what makes people reach for python.  Python is a one stop shop, it has a giant standard library, massive community (almost rivaling JS') and there's no async to think about, scripts are very linear, first this thing finishes, then the next thing starts and so on.
+Put another way - node is good at efficiently organizing and managing external resources.  Its strength is in handing off work to external services, native binaries, databases etc and because it is "async all the way down" you are sort of _forced_ to write fast code.
 
-I think python is a fine tool for scripting, but if you've already got a big JS project it's nice to not have 1 language for your application and another for your scripts.
+## Python
+
+But being async is also what makes people reach for python.  Python is a one stop shop, it has a giant standard library, massive community (almost rivaling JS') and there's no async to think about (unless if you reach for it). Scripts in python are linear, simple and obvious - first this thing finishes, then the next thing starts and so on.
+
+I think python is a _fine_ tool for scripting, but if you've already got a big JS project it's nice to not have 1 language for your application and another for your scripts.  I've also found the moment I want to use a library in python I end up spending hours configuring things and reading blogs because pypy didn't work, or because libraries are shared globally.
+
+Some say, "use docker!" and sure, that works.  But now you've got two problems.
+
+_But_ python's standard lib is second to none.  It probably does everything you need, and arguable python's module game being a little weak probably encourages people to write first party code more often, which is good for scripts, we want them to almost be ignorant and immutable to change in the outside world.
+
+So python is good, but I prefer node for some of the reasons mentioned.
 
 ## A scripting task
 
@@ -18,27 +28,31 @@ The logs are sitting on an AWS S3 Bucket.  They are automatically uploaded with 
 
 The files are stored as gzipped tsv files. by time range in day bracketed folders.
 
-So how do we start?  I suggest making sure any intergrations work first.  Don't focus too much on the specific bucket, file structure etc.  Step 1 will be to just connect to S3 over the network.
+So how do we start?  The first and most important thing is checking intergrations work first.  I recommend not focusing too much on the specific bucket, file structure etc.  Just connecting to S3 over the network is the first hurdle... or is it?
 
 ## Where should my script live?
 
-But before we write code - where should the code live?
+Before we write any code we need to know - where should the code live?
 
-The first pro-tip I want to give you is, _don't create a new npm project or repo for every little script_.  Have a git ignored folder in your main project repo, and use it for odd scripts.  When things mature you can move them into the project or their own project, but let's be honest, most of the time that doesn't happen (or need to happen).
+The first protip (™) I want to give you:
 
-The benefits are, you can make use of existing dependencies in your project and you don't obsess over which package manager to use or how to structure your project.  
+> 💡 Don't create a new npm project or repo for every little script.  
 
-I've got an `output` directory in my project and within it I'm going to make a folder called `papertrail-logs`
+Have a git ignored folder in your main project repo, and use it for odd scripts.  When things mature you can move them into the project or their own project, but let's be honest, most of the time that doesn't happen (or need to happen).
+
+The benefits:, you can make use of existing dependencies in your project and skip obsessing over which package manager to use or how to structure your project.  
+
+I've got an `output` directory in all my projects.  Within my current project it I'm going to make a folder called `papertrail-logs`:
 
 `mkdir output/papertrail-logs`
 
-Ok now I'm going to create a script inside that folder called `index.js` because in node, that means I can just require('papertrail-logs') or call `node output/papertrail-logs` and node will find my index.js script, but I can have an entire directory to store resources, other scripts, whatever.
+Now I'm going to create a script inside that folder called `index.js` because in node, that means I can just require('papertrail-logs') or call `node output/papertrail-logs` and node will find my index.js script, but I can have an entire directory to store resources, other scripts, whatever.
 
-Next I'm going to use `aws-sdk`
+> 🤓 I usually really dislike the overuse of index.js in web apps and libraries.  But it's so logical for scripting because we tend to have input and output files, and having it all in the same directory for your script is a nice sensible default.
 
-aws-sdk isn't my favourite library, it actually leaves a lot to be desired, but what choice do we have?
+Next I'm going to use `aws-sdk`, because, we have to.
 
-Now in my project I've already got `aws-sdk` so I don't need to install it, that's true of a lot of projects.  If you don't have it `npm install aws-sdk` and do so in your main project's `package.json` don't worry about having separate dependencies for scripts.
+Now in my project I've already got `aws-sdk` so I don't need to install it, that's true of a lot of projects.  If you don't have it `npm install aws-sdk` and do so in your main project's `package.json` - don't worry about having separate dependencies for scripts.
 
 ```js
 const AWS = require('aws-sdk')
@@ -66,17 +80,22 @@ Few things to note already.  Firstly, I'm on an old aws-sdk API.  Your instinct 
 
 You'll notice I need to call `.promise()` to get AWS to use promises.  I don't even know if that's still required, it's a wart, it's annoying but I'm deliberately embracing that instead of getting distracted.
 
-The next thing is authentication.  Best practices dictates passing in environment variables and letting the aws-sdk detect how to connect to their services from there.  That way you're able to reuse that script in different environments.  Again, this is a distraction, connect any way you can.  You can even hard code credentials because we're in a gitignored directory, but I'd recommend against doing that, aws profile's are great.
+The next thing is authentication.  Best practices dictates passing in environment variables and letting the aws-sdk detect how to connect to their services from there.  That way you're able to reuse that script in different environments.  Again, this is a distraction, connect any way you can.  You can even hard code credentials (don't though) because we're in a gitignored directory.  I'm personally a fan of using aws profiles.
 
-You'll also notice I've got a `main` function.  You might think that's so I can use async-await, and while that is true, top level await isn't standard yet, that's actually not why I'm doing that.  I've written *a lot* of scripts, and they very commonly turn into cli's, with options, and it's really helpful to be able to validate inputs before actually executing the main operation.  So including that main operation in a function makes that really easy.
+You'll also notice I've got a `main` function.  You might think that's so I can use async-await, and while that is true (top level await isn't generally available at the time of writing), that's actually not why I'm doing that.  I've written *a lot* of scripts, and they very commonly turn into cli's, with options, and it's really helpful to be able to validate inputs before actually executing the main operation.  So including that main operation in a function makes it really easy to control exeuction optionally later.
 
-Another advantage is, you can export your main function and allow some other module to call that function at a time of their convenience.  I think generally, even for scripts, having side effects at the top level is a bad idea.
+Another advantage: you can export your main function and allow some other module to call that function at a time of their convenience.  
 
-You'll also notice, we're calling listBuckets, but I don't need to list buckets.  That's just a safe operation to test my connection.  One trick I have for keeping productive is to not write too much code before testing, especially testing integration.  So just knowing I'm connected before I do anything else is pivotal.
+But generally, even for scripts, having side effects at the top level leads to issues.
 
-I run it like so `node output/papertrail-logs`
+You'll also notice, we're calling `listBuckets`, but I don't need to list buckets.  That's just a safe operation to test my connection.  One trick I have for keeping productive is to not write too much code before testing, especially testing integration.  So just knowing I'm connected before I do anything else is _pivotal_.
 
-And I get output printed to the screen, that shows my request worked.  Great thing is, I can see my bucket is there `papertrail-harth` I'm going to make that a variable and try listing the prefixes at the top level next.
+---
+
+We run it like so `node output/papertrail-logs`
+
+The output printed to the screen shows the request worked.  Great thing is, we can see the bucket is there. 
+I'm going to make that a variable and try listing the prefixes at the top level of the bucket as a safe next step.
 
 ```js
 const AWS = require('aws-sdk')
@@ -152,7 +171,7 @@ main()
     .catch(console.error)
 ```
 
-So that just logs 50, 100, 150 and so on until it's got all the data.  Now I can up that MaxKeys to 1000 and put it up the top as a variable.  It should still work.
+So that just logs 50, 100, 150 and so on until it's got all the data.  Now I can up the `MaxKeys` to `1000` and it will still work.
 
 ```js
 const AWS = require('aws-sdk')
@@ -198,9 +217,9 @@ main()
     .catch(console.error)
 ```
 
-It does!  It just logs the total and then the results.  Now those who know me well may be suprised I used a while loop for that as I'm all about functional programming.  Why not use recursion, especially as it's async?
+Those who know me well may be suprised I used a `while` loop as I'm all about functional programming.  Why not use recursion, especially as it's `async` (where stack overflow is impossible)?
 
-The main reason is, I just knew that pattern, it's probably in the archives of my brain from many years ago, and I'm not trying to make it elegant just easy to understand.  And the takeaway there is, for scripting, don't worry about elegance, use what you're comfortable with.  But... I am going to extract that part out into a function though, not so it's reusable, but so the main function reads with clarity of intent.
+The answer: I just knew that pattern, it's in the archives of my brain from many years ago, and I'm not trying to make it elegant just easy to understand.  The takeaway there is, for scripting, don't worry about elegance, use what you're comfortable with.  But... I am going to extract that part out into a function, not for reusability but for clarity of intent.
 
 ```js
 const AWS = require('aws-sdk')
@@ -256,7 +275,7 @@ main()
   .catch(console.error)
 ```
 
-Ok.  Now we may not actually want to download all log files in the bucket.  And to test our script, we only really need to download 1 or 2.  It's not super important if this script takes a bit to run because it's not part of an API or app, it's just hitting a bucket not a webserver, it can be as inefficient as we want.
+It's likely we only want to download a subset of log files in the bucket.  To test our script, we only really need to download 1 or 2.  It's not important if this script takes a while to run as it's not part of an API or app, it's just hitting a bucket not a webserver, it can be as inefficient as we want.
 
 So I'm just going to take the last 2 items from `xs`, even though I just downloaded ~800 items.
 
@@ -273,15 +292,13 @@ xs.slice(0,1).map(
 )
 ```
 
-Few things to note here, we're not using `xs[0]` so if the bucket was empty, our code doesn't crash, and we don't need an if statement to check if the list is empty.
+Few things to note here, we're not using `xs[0]` so if the bucket was empty, our code doesn't crash, and we don't need an `if` statement to check if the list is empty.
 
-Next thing is, the node stream API looks kind of nice... and it can be if you use it in a certain way.  I'll try to demonstrate that.  
+Next thing is, the node stream API looks kind of nice... and it can be if you use it in a certain way.  Which I'll try to demonstrate.  
 
-Quick aside for those not familiar with the Node streams API, this tiny snippet is actually doing a lot behind the scenes.  We only download from AWS as we pipe to stdout.  So we can create as many read streams as we want, and they don't actually do anything until we attach them to a write stream.
+When we `pipe` each `getObject` into `process.stdout` you may think we're going to download way too much data at once.  But each stream has an internal buffer that is pretty small and when that buffer is full the download is paused and only resumed when there's sufficient space again.  So we're actually only downloading tiny chunks from each file in parallel.
 
-When we pipe each getObject into process.stdout you may think we're going to download way too much data at once.  But each stream has an internal buffer that is pretty small and when that buffer is full the download is paused and only resumed when there's sufficient space again.  So we're actually only download tiny chunks from each file in parallel.
-
-That process is called back pressure.  Which is a weird name, but all it means is how much pressure (data) is in the read stream waiting to be written to the next write stream.
+That process is called back pressure.  Which is a weird name, but all it means is: how much pressure (data) is in the read stream, waiting to be written to the next write stream.
 
 So there's a lot of powerful bidirectional communication happening between each stream in that call to `.pipe`.
 
@@ -317,13 +334,13 @@ xs.slice(0,1).map(
 
 And that works!
 
-Ok now I've got tsv streaming in, it'd be nice to be able to analyse the logs.  And having all the data in tsv doesn't make that simple.  Really the best tool for the job is a database.  And we may do that!  But it'd be nice to get the data into a native format first for analysis.
+We've got tsv streaming in - it'd be nice to be able to analyse the logs.  And having all the data in tsv form doesn't make that simple.  The best tool for data analysis is a database.  And we may do that!  But it'd be nice to get the data into a native format first for analysis.
 
-At the time of writing, probably the best csv/tsv parsing library out there is papa parse.  And it supports node streams too.
+At the time of writing, probably the best csv/tsv parsing library out there is `papaparse`.  And it supports node streams too!
 
 So let's continue piping!
 
-So far I haven't had to install any libraries because I use all of these libraries are in my larger application, but you may need to `npm install papaparse` if you are following along.
+So far I haven't had to install any libraries because all of these libraries are in my larger application, but you may need to `npm install papaparse` if you are following along.
 
 Then we add the import and the new `pipe` line.  I'm just scanning the documentation quickly for "node streams" and figuring it out from there.
 
@@ -343,9 +360,9 @@ xs.slice(0, 1).map(
 )
 ```
 
-So I tried the obvious, and got an error about chunks needing to be strings or buffers but instead got type object.  After a bit of googling I found nothing, but thought I'd just inspect what the`Papa.parse` output was.
+I tried the obvious, and immediately got an error about chunks needing to be strings or buffers but instead got type object.  After a bit of googling I found nothing, but thought I'd just inspect what the`Papa.parse` output was.
 
-To inspect what a stream is doing we can add a  `.on('data', x => ... )` callback.
+> 💡 To inspect what a stream is doing we can add a  `.on('data', x => ... )` callback.
 
 ```js
 xs.slice(0, 1).map(
@@ -366,9 +383,9 @@ xs.slice(0, 1).map(
 )
 ```
 
-After I did that, I saw `Papa.parse` was emitting an array, as soon as I saw that the error was obvious, we're trying to pipe the parsed output (an array of values) to stdout which needs a string or a buffer.
+Now we can see `Papa.parse` is emitting an array. Now the error is obvious - we're trying to pipe the parsed output (an array of values) to stdout which needs a string or a buffer.
 
-The general lesson here is, test often, and after every change, that way you know what the likely cause of an error is.
+The general lesson here is, test often, and after every change, that way you know what the likely cause of an error is.  If you can confirm the type of the inputs and outputs of every step in a composition it's hard to get _too_ lost.
 
 We've now got a stream of parsed tsv's.  Let's do some quick clean up and then output each row as JSON.
 
@@ -468,7 +485,7 @@ main()
 
 I've gone and read the papertrail docs to figure out what each columns header is, and brought in ramda as a utility library.
 
-R.zipObj takes an array of keys and an array of values and mashes them into an object.  The native equivalent is Object.fromEntries.  But I've developed a habit not to use that everywhere yet because it's not supported in all environments.  Also, we're scripting, and I know ramda quite well, so I'm using what feels effortless for me.  You might want to use lodash, or some other approach - and that's exactly what I recommend when scripting.  Don't copy me!  Use what you're familiar and comfortable with.
+`R.zipObj` takes an array of keys and an array of values and mashes them into an object.  The native equivalent is `Object.fromEntries`.  But I've developed a habit not to use that everywhere yet, because it's not supported in all environments.  Also, we're scripting, and I know `ramda` quite well, so I'm using what feels easy for me.  You might want to use `lodash` (don't), or some other approach - and that's exactly what I recommend when scripting.  Don't copy me!  Use what you're familiar and comfortable with.
 
 One thing left.  I want to filter which log files to download.  And I need to know what log files are available to download.
 
@@ -593,15 +610,15 @@ if( app.list ) {
 
 Now we can do a few things already.
 
-We can run our script with `--help` and it will output a nicely formatted help screen based on what we passed to `app.option`.  If we call it with the `--list` option our main function won't run, and instead we'll just log "list" to the screen then exit.
+We can run our script with `--help` and it will output a nicely formatted help screen based on what we passed to `app.option`.  If we call it with the `--list` option our main function won't run, and instead we'll just log `"list"` to the screen then exit.
 
-I want to be able to list all the available log files between a date range, and I want to be able to view all logs between a date range.  The list function will be where we retrieve and filter the available log files.  Main will continue to render out the parsed logs.
+I want to be able to list all the available log files between a date range, and I want to be able to view all logs between a date range.  The `list` function will be where we retrieve and filter the available log files.  Main will continue to render out the parsed logs.
 
-The log files path looks like this "papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz" where each file represents one hour of the day.
+The log files path looks like this `"papertrail/logs/dt=2019-10-24/2019-10-24-21.tsv.gz"`, where each file represents one hour of the day.
 
 So if we want to filter by date we need to be able to parse that string and then compare it to the provided args.
 
-The built in Date object gets a bad name in JS.  I think it's not that bad if you learn about its idiosyncrasies.  But we're scripting, there's no reason not to bring in whatever module will make our life easier.  So I'm going to use date-fns' parse function.  First thing is use node's built in `path.basename` function to get the last segment of the filename.
+The built in `Date` object gets a bad name in JS.  I think it's not that bad if you learn about its idiosyncrasies.  But we're scripting, there's no reason not to bring in whatever module will make our life easier.  So I'm going to use `date-fns` `parse` function.  Node's built in `path.basename` function will get us the last segment of the filename.
 
 ```js
 function list(){
@@ -615,7 +632,7 @@ function list(){
 }
 ```
 
-Then we bring in df.parse
+Then we bring in `df.parse`
 
 ```js
 function list(){
@@ -682,7 +699,9 @@ async function list(){
 }
 ```
 
-What if someone drops a file in our bucket that doesn't match our pattern, our dates will be invalid.  And our script will crash - so let's use flatMap to only return our date if the end date is valid.
+What if someone drops a file in our bucket that doesn't match our pattern, our dates will be invalid.  And our script will crash - so let's use `flatMap` to only return our date if the end date is valid.
+
+> 💡 flatMap is a great tool for modelling conditionals, I've [ranted](https://twitter.com/jmsfbs/status/1195892933557309440) and [written](https://james-forbes.com/#!/posts/versatility-of-array-methods) about that in the past.
 
 ```js
 async function list(){
@@ -712,7 +731,7 @@ async function list(){
 }
 ```
 
-Remember the `before` and `after` arguments we parsed via commander?  We can add a `filter` after the `flatMap` that brackets the dates by the provided iso times, but only if that range was provided.
+Remember the `before` and `after` arguments we parsed via `commander`?  We can add a `filter` after the `flatMap` that brackets the dates by the provided iso times, but only if that range was provided.
 
 ```js
 async function list({ after, before }){
@@ -933,9 +952,13 @@ if( app.list ) {
 }
 ```
 
-We've made the `list` function return data instead of logging directly, and then we simply add the logging to the list call site.  In the main function we're now using `list` instead of `listAllObjects` which gives the `main` function the same date filtering functionality as `list`.  
+We've made the `list` function return data instead of logging directly, and then we simply add the logging to the list call site.  In the main function we're now using our new `list` function instead of `listAllObjects` which gives the `main` function the same date filtering functionality as `list`.  
 
-Which means we've now got a pretty nice script with cli documentation, paginated data fetching, date filtering and it's all lazily evaluated using node streams which means it's memory efficient and fast with less than 150 lines of code.
+Which means we've now got a pretty nice script with cli documentation, paginated data fetching, date filtering and it's all lazily evaluated using node streams which means it's memory efficient and _fast_ with less than 150 lines of code.
+
+Yes, we did need to reach into the third party ecosystem to be productive, probably unlike python.  But with a little know how we can avoid a lot of the normal analysis paralysis that entails.
+
+---
 
 What's next?  Well that's up to you!  But my goal here was to show both that node can script with the best of them, and to impart some tips and tricks when scripting with node including:
 
@@ -947,9 +970,9 @@ What's next?  Well that's up to you!  But my goal here was to show both that nod
 - Keep side effects out of the top level scope, it's easier to test, share and extend functionality.
 - And finally: Test frequently.
 
-For me, I'll be adding a new script that uses the built-in `readline` module.   That second script will parse the outputted json log lines to analyze the data and parse ids.  From there, I'll probably pipe that into a postgres or sqlite database for long term querying.
+For me, I'll be adding a new script that uses the built-in `readline` module.   That second script will parse the outputted json log lines to analyze the data and parse ids.  From there, I'll probably pipe that into a `postgres` or `sqlite` database for long term querying.
 
-Node.JS has a lot of great built ins and a huge library ecosystem.  With some discipline and know how - it can be an incredibly powerful scripting language.
+Node has a lot of great built-ins and a huge library ecosystem.  With some discipline Node can be an incredibly powerful and suitable scripting language of choice.
 
 I hope you found that interesting and helpful.
 
