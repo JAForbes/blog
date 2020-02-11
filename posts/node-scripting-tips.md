@@ -16,7 +16,7 @@ I think python is a _fine_ tool for scripting, but if you've already got a big J
 
 Some say, "use docker!" and sure, that works.  But now you've got two problems.
 
-_But_ python's standard lib is second to none.  It probably does everything you need, and arguable python's module game being a little weak probably encourages people to write first party code more often, which is good for scripts, we want them to almost be ignorant and immutable to change in the outside world.
+_But_ python's standard lib is second to none.  It probably does everything you need, and arguable python's module game being a little weak probably encourages people to write first party code more often, which is good for scripts - we want scripts to almost be ignorant and immutable to change in the outside world.
 
 So python is good, but I prefer node for some of the reasons mentioned.
 
