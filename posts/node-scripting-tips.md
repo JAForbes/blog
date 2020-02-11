@@ -46,7 +46,7 @@ I've got an `output` directory in all my projects.  Within my current project it
 
 `mkdir output/papertrail-logs`
 
-Now I'm going to create a script inside that folder called `index.js` because in node, that means I can just require('papertrail-logs') or call `node output/papertrail-logs` and node will find my index.js script, but I can have an entire directory to store resources, other scripts, whatever.
+Now I'm going to create a script inside that folder called `index.js` because in node, that means I can just `require('papertrail-logs')` or call `node output/papertrail-logs` and node will find my index.js script, but I can have an entire directory to store resources, other scripts, whatever.
 
 > 🤓 I usually really dislike the overuse of index.js in web apps and libraries.  But it's so logical for scripting because we tend to have input and output files, and having it all in the same directory for your script is a nice sensible default.
 
@@ -360,7 +360,7 @@ xs.slice(0, 1).map(
 )
 ```
 
-I tried the obvious, and immediately got an error about chunks needing to be strings or buffers but instead got type object.  After a bit of googling I found nothing, but thought I'd just inspect what the`Papa.parse` output was.
+I tried the obvious, and immediately got an error about chunks needing to be strings or buffers but instead got type object.  After a bit of googling I found nothing, but thought I'd just inspect what the `Papa.parse` output was.
 
 > 💡 To inspect what a stream is doing we can add a  `.on('data', x => ... )` callback.
 
