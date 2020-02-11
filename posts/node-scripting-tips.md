@@ -1,6 +1,6 @@
 # Using node.js as a scripting language.
 
-node isn't the first language people think of for day to day scripting tasks.  Usually python is recommended, maybe bash.  I think there's some good reasons for this notion; node is async by default which can make simple operations seem convoluted or complex.  But it's not bad, it's just different.  So today I want to share some of the tricks I've learned to make the most of JS as a general purpose scripting tool.
+node isn't the first language people think of for day to day scripting tasks.  Usually python is recommended, maybe bash.  I think there's some good reasons for this notion - node is async by default which can make simple operations seem convoluted or complex.  But it's not bad, it's just different.  So today I want to share some of the tricks I've learned to make the most of JS as a general purpose scripting tool.
 
 ## Node is a facilitator.
 
