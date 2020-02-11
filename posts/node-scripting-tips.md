@@ -485,7 +485,7 @@ main()
 
 I've gone and read the papertrail docs to figure out what each columns header is, and brought in ramda as a utility library.
 
-`R.zipObj` takes an array of keys and an array of values and mashes them into an object.  The native equivalent is `Object.fromEntries`.  But I've developed a habit not to use that everywhere yet, because it's not supported in all environments.  Also, we're scripting, and I know `ramda` quite well, so I'm using what feels easy for me.  You might want to use `lodash` (don't), or some other approach - and that's exactly what I recommend when scripting.  Don't copy me!  Use what you're familiar and comfortable with.
+`R.zipObj` takes an array of keys and an array of values and mashes them into an object.  The native equivalent is `Object.fromEntries`.  But I've developed a habit not to use that everywhere yet, because it's not supported in all environments.  Also, we're scripting, and I know `ramda` quite well, so I'm using what feels easy for me.  You might want to use `lodash` ([don't](https://james-forbes.com/#!/posts/the-power-is-yours)), or some other approach - and that's exactly what I recommend when scripting.  Don't copy me!  Use what you're familiar and comfortable with.
 
 One thing left.  I want to filter which log files to download.  And I need to know what log files are available to download.
 
