@@ -3,32 +3,31 @@ Hooks and Streams
 
 [Dan Abramov](https://twitter.com/dan_abramov) wrote an excellent post on his [blog](https://overreacted.io) about making a declarative `setInterval`using React Hooks.
 
-Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/).  It's a great read.
+Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/). It's a great read.
 
-I think Hooks are really cool, especially from a technical perspective.  But they are also a leaky abstration?  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine, but I hope to convince you there's a better solution with all the same benefits and without the trade offs.
+I think Hooks are really cool, especially from a technical perspective.  But they are also a leaky abstration?  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine, but I hope to convince you there's a better solution to the same underlying problems.
 
-Hooks received a lot of criticism when first announced, and I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people think Hooks are a good idea I want to explain an alternative approach with all the same advantages, none of the [caveats](https://reactjs.org/docs/hooks-rules.html) but with only 1 requirement, you need to learn about streams.
+Hooks received a lot of criticism when first announced, and I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people think Hooks are a good idea I want to explain an alternative approach with all the same advantages and none of the [caveats](https://reactjs.org/docs/hooks-rules.html), but with only 1 requirement you need to learn about streams.
 
-Hooks have these aforementioned [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like your accessing persistent state within a function call.  That's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
+Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like your accessing persistent state within a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
 
 Before explaining the alternative, let's imagine why you'd need or want this behaviour?  Because it turns out to be super useful.
 
 #### A short history revision
 
-Within the context of React, components were originally modelled after classes.  You'd create a class via `React.createClass`, because each rendered component was the instance of a class, it had state.  You could control this local component state via `this.setState(newState)`.
-Having local component state allowed you to keep track of input values, validation, anything you wanted.  This paradigm wasn't new at the time, but it wasn't exactly common place either.  The React team began evangelizing component oriented design as "Thinking in React".
+Within the context of React, components were originally modelled after classes.  You'd create a class via `React.createClass`, because each rendered component was the instance of a class, it had state.  You could control this local component state via `this.setState(newState)`. Having local component state allowed you to keep track of input values, validation, anything you wanted.  This paradigm wasn't new at the time, but it wasn't exactly commonplace either.  The React team began evangelizing component-oriented design as "Thinking in React".
 
-After React exploded onto the scene, a lot of other frameworks were born, inspired by React's component oriented design.  But it didn't take long for component oriented design to show its limitations on actual projects.  Having state inside components made it difficult for two components to share information reliably.  It was seen as bad practice to let another component directly modify another components state, and so the alternative solution was callback parsing.  The parent component would pass a function to the child component which would allow the child component to signal to the parent component that the state should be updated to a new value.
+After React exploded onto the scene, a lot of other frameworks were born, inspired by React's component oriented design.  But it didn't take long for this pattern to show its limitations on actual projects:  Having state inside components made it difficult for two components to share information reliably. It was seen as bad practice to let another component directly modify another components state, and so the alternative solution was callback-passing: The parent component would pass a function to the child component which would allow the child component to signal to the parent component that the state should be updated to a new value.
 
-For any non trivial app, there ends up being a lot of cross component communication.  In the past, the common solution was relying on events.  But we'd all collectively learnt that wasn't a good general solution either.  Event oriented UI architectures very quickly led to the same problems as allowing another component to mutate your state.  It was very difficult to debug why a change occurred and what ultimately triggered it.
+For any non trivial app, there ends up being a lot of cross-component communication.  In the past, the common solution was relying on events, but we'd collectively learnt that wasn't a good general solution either: Event oriented UI architectures very quickly led to the same problems as allowing another component to mutate your state; it was very difficult to debug why a change occurred and what ultimately triggered it.
 
-So passing callbacks didn't scale, using events was out of the question (though some did try).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
+So passing callbacks didn't scale, using events was out of the question (though some did try).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture, which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
 
 This pattern ended up becoming incorporated by Dan Abramov into the React ecosystem as [Redux](https://redux.js.org/introduction/getting-started).
 
 Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there wasn't much need for component state anymore.  But Redux introduced 2 new problems.  
 
-The first problem, it was extremely verbose.  Redux was an interpretation of an FP pattern that relies heavily on union types and pattern matching.  This was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you, the JS community wasn't ready then for sum types.  I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands.
+Firstly, it was extremely verbose.  Redux was an interpretation of an FP pattern that relies heavily on union types and pattern matching, which was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you - the JS community wasn't ready for sum types back then (I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands).
 
 The other problem with Redux was performance.  Dispatching an action meant the central store would need to be recalculated and then a new state patch would be passed down to every component.  This spawned a bunch of new patterns, like prop memoization and granular redraws of subtrees.  But now we're diffing not just the virtual dom but also the props, and diffing props naively could lead to more issues as reference equality won't detect mutations.
 
@@ -40,11 +39,11 @@ But all these solutions rely on inference.  We try to infer what changed by comp
 
 There's a data structure that does exactly what we need, without relying on inference - it's called a stream.
 
-#### A brief aside, Pure Functional Components
+#### A brief aside: Pure Functional Components
 
-Unfortunately even if you learn about streams, within React, you might struggle to take advantage of them without relying on classes or hooks.
+Unfortunately, even with a mastery of streams, React's high level API means that we still end up depending on classes or hooks.
 
-The value proposition of hooks is effectively the same as having a closure.  So why not just have a closure?
+The value proposition of hooks is effectively the same as having a closure - so why not just have a closure?
 
 Because a closure is a function that returns a function, and in React functions are components:
 
@@ -54,10 +53,9 @@ function Hello({ name }){
 }
 ```
 
-We can't return a function because when React sees a function in a call to `React.createElement` it assumes the result of calling the function will be JSX.
+We can't return a function because when React sees a function in a call to `React.createElement` it assumes the result of calling the function will be JSX. It needs to execute that function every time it encounters it.
 
 If instead the design were like this, we could have intermediate state in a component without relying on hooks/classes/redux etc.
-
 
 ```js
 // What if components were functions
@@ -67,8 +65,7 @@ function Hello({ name }){
 }
 ```
 
-Literally `() =>` is all React would have needed to have component state within a function without hooks or classes.  Let's imagine for a moment how much simpler state manangement would have been if React had closure components.
-
+`() =>` is all React would have needed to have component state within a function without hooks or classes.  Let's imagine for a moment how much simpler state manangement would have been if React had closure components:
 
 ```js
 function Counter({ name }){
@@ -81,25 +78,25 @@ function Counter({ name }){
 }
 ```
 
-But uh -oh - another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead, that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
+But uh-oh - another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead, that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
 
-> 💡 If that seems wasteful, think why would you ever bind an event listener if not to update some state that would immediately  need to be rendered?  Exactly.
+> 💡 If that seems wasteful, think why would you ever bind an event listener if not to update some state that would immediately need to be rendered? Exactly.
 
-Adding this feature, negates a lot of the needs for Hooks and in my mind justifies a semver major change to React.  Beyond `useState` hooks are advertised as a way to compose effects.  And this is where we finally get to streams.
+Adding this feature negates a lot of the needs for Hooks and in my mind justifies a semver major version change to React. 
 
-Streams are a composeable, customizable, time independent data structure that does everything hooks do and more - without the compromise.
+Beyond `useState` hooks are advertised as a way to compose effects.  And this is where we finally get to streams: Streams are a composeable, customizable, time-independent data structure that does everything hooks do and more - without the compromise.
 
-#### A declarative useInterval
+#### A declarative `useInterval`
 
-I'm going to walk through writing a declarative `setInterval` just like Dan's hooks example.  But my version will be using streams for effect composition and data sharing.  Central to the entire exercise is closure components (which React doesn't have (but should!)).  I'm going to assume you've read Dan's blog as we'll be bouncing off his work as prior art.
+I'm going to walk through writing a declarative `setInterval` just like Dan's hooks example.  But my version will be using streams for effect composition and data sharing.  Central to the entire exercise is closure components - which React doesn't have (but should!).  I'm going to assume you've read Dan's blog as we'll be bouncing off his work as prior art.
 
-Because of the aforementioned caveats - I'm going to use mithril, which is very similar to React but it does have closures, and does automatically render after event callbacks fire.
+Because of the aforementioned caveats, I'm going to use Mithril - which is very similar to React but allows closure components, and automatically renders after event callbacks fire.
 
-But don't worry, before we starting we'll do a quick introduction / refresher into Mithril, Closure Components and Mithril Streams.
+But don't worry, before we starting we'll do a quick introduction / refresher to Mithril, Closure Components and Mithril Streams.
 
 #### Refresher / Introduction
 
-In Mithril, we have a concept of a `vnode`.  It's a well documented structure that represents the virtual dom node.  It's literally the data representation of a component or a hyperscript expression.  A `vnode` might look like this:
+In Mithril, we have a concept of a `vnode`.  It's a well-documented structure that represents the virtual dom node - it's literally the data representation of a component or a hyperscript expression.  A `vnode` might look like this:
 
 ```js
 // vnode = virtual dom node
@@ -139,9 +136,9 @@ Or in JSX this:
 />
 ```
 
-You'll notice the vnode has lifecycle methods right there in the view.  This is a hugely useful feature, it means we can respond to the changes in an individual dom node without defining a component.
+You'll notice the vnode has lifecycle methods right there in the view. This is a hugely useful feature, it means we can respond to the changes in an individual dom node without defining a component.
 
-Components have a very similar data representation and one form of component is a function that returns some lifecycle methods.  The simplest may look like this:
+Components have a very similar data representation and one form of component is a function that returns some lifecycle methods. The simplest may look like this:
 
 ```js
 function MyComponent({ attrs }){
@@ -157,12 +154,11 @@ m(MyComponent, { name: 'Mithril' })
 <MyComponent name="mithril" />
 ```
 
-The above is called a Closure Component.  There are other forms of component in mithril, this is my favourite.  It's idiomatic to reach for a Closure Component whenever you need state (instead of a class).
+The above is called a Closure Component.  There are other forms of component in Mithril, but this is my favourite: it's idiomatic to reach for a Closure Component whenever you need state (instead of a class).
 
-A really clever aspect of mithril is that the `vnode` is passed in to _every_ lifecycle method.  So if you need access to your own component representation - to do something really fancy - it's always available:
+A really clever aspect of Mithril is that the `vnode` is passed in to _every_ lifecycle method - So if you need access to your own component representation - to do something really fancy - it's always available:
 
 ```js
-
 function MyComponent(vnode){
   console.log(vnode) // { attrs, children, tag, view, ...etc }
   return {
@@ -175,11 +171,11 @@ function MyComponent(vnode){
 }
 ```
 
-So we don't need ref's to access the dom, The dom node is on `vnode.dom`.  This component API design means the framework rarely gets in the way when you need to convert some non declarative side effectful work into a declarative component interface.  Mithril is very transparent and extensible.
+So we don't need `ref`s to access the dom: the dom node is on `vnode.dom`. This component API design means the framework rarely gets in the way when you need to convert some non-declarative side-effectful work into a declarative component interface.  Mithril is very transparent and extensible.
 
 #### Streams
 
-Mithril has a stream module importable as `import('mithril/stream')` it's a very light weight reactive data store.  This is the API.
+Mithril has a stream module importable as `import('mithril/stream')` it's a very lightweight reactive data store. This is the API.
 
 ```js
 import stream from 'mithril/stream'
@@ -202,7 +198,7 @@ double() // read inferred value
 
 Spend a minute or two internalizing that.  We can get and set a value, and we can create new streams that respond to values changing.
 
-You can also finalize a stream which will end the current stream and any dependencies.  This is a really helpful for clean up.
+You can also finalize a stream which will end the current stream and any dependencies.  This is really helpful for clean up:
 
 ```js
 
@@ -233,19 +229,18 @@ double()
 
 Turns out streams are super useful for sending messages and sharing data across component boundaries.  They solve the same problems as React Hooks, React Context, prop callbacks, Redux and... well really a lot.
 
-#### useInterval
+#### `useInterval`
 
-Assuming you've read Dan's post on making `useInterval` declarative (if not, go read it), we can now see how we'd do something very similar using component lifecycle hooks, closures and streams.
+When Dan writes about making `useInterval` declarative, we can now see how we'd do something very similar using component lifecycle hooks, closures and streams.
 
-First I'm going to define it using just the stream primatives you've learned so far, get: `stream()`, set: `stream(newVal)` and map: `stream.map( x => f(x))`.
+First I'm going to define it using just the stream primitives you've learned so far: get `stream()`, set `stream(newVal)` and map `stream.map(x => f(x))`.
 
-Here's a complete example, you check out the live version and then we'll break it down step by step.
+Here's a complete example - you check out the live version and then we'll break it down step by step.
 
 ```js
 const stream = m.stream
 
 function useInterval({delay}){
-  
   const id = stream()
   const tick = stream()
   
@@ -276,10 +271,9 @@ function App(){
   return {
     onremove: () => delay.end(true),
     view: () => {
-      
       return [
         m('p', 'Count: ' + count() )
-        , m('label'
+        ,m('label'
           ,'Delay: '
           ,m('input', {
             type: 'number'
@@ -299,7 +293,7 @@ m.mount(document.body, App)
 
 ---
 
-The first thing we'll look at is the function `useInterval`.  It's just a function that takes a stream as input and returns a stream as output.  There's no tricks or rules, it's that simple.
+The first thing we'll look at is the function `useInterval`.  It's just a function that takes a stream as input and returns a stream as output.  There's no tricks or caveats, it's that simple.
 
 ```js
 function useInterval({
@@ -308,7 +302,6 @@ function useInterval({
   // in the call to `setInterval`
   delay
 }){
-  
   // `setInterval` returns an identifier that can be used
   // in a call to `clearInterval`
   // we store it in a stream so we can know when it changes
@@ -350,11 +343,11 @@ function useInterval({
 }
 ```
 
-A function that takes a streams as input and returns a new stream has a fancy name: a combinator.  Because we're combining streams together to form a new stream.  You can probably imagine writing your own combinators in the same way you write hooks.  But the difference is we're not relying on an ambient global state tracker that is tied to a framework, we're just using a very simple data structure that can be used anywhere, in any framework, in any context.
+A function that takes a stream as input and returns a new stream has a fancy name: a combinator.  Because we're combining streams together to form a new stream.  You can probably imagine writing your own combinators in the same way you write hooks.  But the difference is we're not relying on an ambient global state tracker that is tied to a framework, we're just using a very simple data structure that can be used anywhere, in any framework, in any context.
 
 Next we'll look at the usage code in `App`.
 
-```
+```js
 // This stream stores the current value
 // of our delay.
 // We can get the current value like so
@@ -381,16 +374,16 @@ tick.map(() => count( count() + 1 ))
       
 // And when the count changes, we can render
 // so the view updates
-count.map(m.redraw)      
+count.map(m.redraw)   
 ```
 
-Note all our "model layer" stuff sits in the closure, it is logically grouped.  In the view we can access these streams directly and read and write to them.  We can also share them with other components which sidesteps all the problems from the History Revision section elegantly.
+Note all our 'model layer' stuff sits in the closure: it is logically grouped.  In the view we can access these streams directly and read and write to them.  We can also share them with other components, which sidesteps all the problems from the History Revision section elegantly.
 
 Now for the view code:
 
 ```js
 return [
-  This is a paragraph tag that renders the current count.
+  // This is a paragraph tag that renders the current count.
   m('p', 'Count: ' + count() )
   
   // This is a number input that allows us to edit the delay.
@@ -413,9 +406,9 @@ return [
 ]
 ```
 
-Note our view layer is completely decoupled from `useInterval`, it doesn't know it exists, it doesn't need to.  We simply read the outputs and write to the inputs.
+Note our view layer is completely decoupled from `useInterval` - it doesn't know it exists, it doesn't need to - we simply read the outputs and write to the inputs.
 
-This is a great aspect about streams, you can define relationships in an external context but share the inputs and outputs with other contexts.  To prove that out, let's make our delay input, our count paragraph and our interval model logic different functions.
+This is a great aspect of streams: you can define relationships in an external context but share the inputs and outputs with other contexts.  To prove this, let's make our delay input, our count paragraph and our interval model logic different functions.
 
 ```js
 // Not a component, just a function
@@ -434,7 +427,7 @@ const input = ({ delay }) =>
 const paragraph = ({ count }) => 
   m('p', 'Count: ' + count() )
   
-// Also... a function
+// Also a function
 // but this returns some streams
 const model = () => {
   const delay = m.stream(250)
@@ -445,6 +438,7 @@ const model = () => {
   tick.map(() => count( count() + 1 ))
       
   count.map(m.redraw)
+
   return { count, delay }
 }
 
@@ -455,7 +449,7 @@ const App = () => {
     onremove: () => delay.end(true)
     , view: () => [
       paragraph({ count })
-      , m('label','Delay: ',input({ delay }) )
+      , m('label', 'Delay: ', input({ delay }) )
     ]
   }
 }
@@ -467,13 +461,13 @@ const App = () => {
 
 #### Combinators Compose
 
-Recall that `useInterval` is a stream combinator.  It takes streams as input and returns streams as output.  Well `model` is a combinator too.  It's just a combinator that ignores (or takes no) input.
+Recall that `useInterval` is a stream combinator: It takes streams as input and returns streams as output.  Well `model` is a combinator too.  It's just a combinator that ignores (or takes no) input.
 
 And so we've got a combinator being used to define the logic for another combinator.  That composition can repeat indefinitely.  You can refactor, share and combine stream behaviour as effortlessly as passing a stream to a function that returns new streams.
 
-#### refs and useEffect
+#### `ref`s & `useEffect`
 
-Here's an excerpt from Dan's blog (seriously go read it) about impedance mismatch between the imperative setInterval model and the declarative React model.
+Here's an excerpt from Dan's blog (seriously go read it) about impedance mismatch between the imperative `setInterval` model and the declarative React model.
 
 > A React component may be mounted for a while and go through many different states, but its render result describes all of them at once.
 > ```js
@@ -495,9 +489,9 @@ Here's an excerpt from Dan's blog (seriously go read it) about impedance mismatc
 >
 > That’s the mismatch between the React model and the setInterval API.
 
-What Dan is describing, is what in FP we call: a functor.
+What Dan is describing is what in FP we call: a functor.
 
-A Functor is defined with [two laws](https://github.com/fantasyland/fantasy-land#functor), I'll leave that for [another post](https://james-forbes.com/#!/posts/the-perfect-api), but a solid intution on functors is: an interface to some state that isn't directly accessed but can be transformed into a new functor by mapping over the state.
+A Functor is defined with [two laws](https://github.com/fantasyland/fantasy-land#functor) - I'll leave that for [another post](https://james-forbes.com/#!/posts/the-perfect-api), but a solid intution on functors is: an interface to some state that isn't directly accessed, but can be transformed into a new functor by mapping over the state.
 
 We can map over streams, we can map over lists, we can map over ... a lot of things.  But we don't tend to think of React components as something we map over.  But here's Dan again...
 
@@ -528,7 +522,6 @@ Dan's example stops the counter if the value of `delay` is `null`.  The logical 
 ```js
 
 function useInterval({ delay }){
-  
   const id = stream()
   const tick = stream()
   
@@ -569,29 +562,24 @@ You could solve this problem so many ways with streams.  We could actually chang
 
 #### A personal note
 
-Something I've found while working with streams for UI development for the past 5 or 6 years is, I reach for components less often, because streams are simpler and there more composable than components.  So I tend to rely on view functions and streams for most UI work.  I tend to have one big top level component for every route that defines some streams, and then everything else is just functions.  There's occasions where I use components, sometimes that interface can be preferable, especially when you need to interact directly with the DOM and do cleanup afterwards.
+Something I've found while working with streams for UI development for the past 5 or 6 years is that I reach for components less often, because streams are simpler and more composable than components.  So I tend to rely on view functions and streams for most UI work.  I tend to have one big top level component for every route that defines some streams, and then everything else is just functions.  There's occasions where I use components - sometimes that interface can be preferable - especially when you need to interact directly with the DOM and do cleanup afterwards.
 
 So when hooks were announced, my honest initial reaction was, that solves real problems, but they are problems I don't have.  I have closures for local state and I have composable transforms and effects via streams.  I personally think streams are a stronger, more precise abstraction.  I prefer to work with them, but hooks are still an intriguing worthwhile solution to the same problem domain.  It's worth experimenting with both and making up your own mind.
 
-But I've always contended, hooks would never have been invented if React had closures because necessity is the mother of invention, and with closures, there's no _necessity_.
+Having said that, I've always contended that hooks would never have been invented if React had closures because necessity is the mother of invention, and with closures, there's no _necessity_.
 
 To illustrate my point, I recommend reading this section of Dan's post: (Refs to the rescue)[https://overreacted.io/making-setinterval-declarative-with-react-hooks/#refs-to-the-rescue] and then think about how that entire scenario only occurred because the view context was transient and stateless.  If there was a closure there, you'd just define the hook in the closure context and make use of it in the view, there'd be no invocation counting or need for refs.
 
-There's this trend of diffing values to determine intent, we diff the DOM, we diff props, we diff refs.  It gets the job done, but because it never completely solves the problem unambiguously, it's inelegant.  Closures and streams let us stop inferring what changed and instead _know_ what changed.  There is a little bit to learn initially, but once you've learned how streams work you'll find there's no rules or compromises. Streams are the perfect data structure for reacting to data changes without ambiguity, and even better - they are fun!
+There's this trend of diffing values to determine intent, we diff the DOM, we diff props, we diff refs: It gets the job done, but because it never completely solves the problem unambiguously, it's inelegant.  Closures and streams let us stop inferring what changed and instead _know_ what changed.  There is a little bit to learn initially, but once you've learned how streams work you'll find there's no rules or compromises. Streams are the perfect data structure for reacting to data changes without ambiguity, and even better - they are fun!
 
-Hooks are deeply fascinating, and they are definitely an improvement over prior solutions, but I personally don't think it's worth the trade offs.  I heartily recommend experimenting with streams in your framework of choice.
+Hooks are deeply fascinating, and they are definitely an improvement over prior solutions, but I personally don't think it's worth the trade-offs.  I heartily recommend experimenting with streams in your framework of choice.
 
-Mithril's stream module is completely decoupled from mithril itself.  But if you'd like to use a stream library that is a bit more removed from any given framework, check out [flyd](https://github.com/paldepind/flyd).  
+Mithril's stream module is completely decoupled from Mithril itself.  But if you'd like to use a stream library that is a bit more removed from any given framework, check out [flyd](https://github.com/paldepind/flyd).  
 
 As for other stream libraries, xstream / Rx.JS / most.js are all great but might require a little more time to get up to speed and I personally don't know if it's worth the time investment.  The central reason those frameworks are more involved is because of a distinction between Subjects and Objects, which is a distinction I don't make nor find useful when doing UI programming - but that's a blog post for another day!
 
-Thanks so much for reading and I hope it was interesting and useful to you.
+Thanks so much for reading - I hope it was interesting and useful to you.
 
 If you've got any questions about streams or mithril.js - I recommend jumping in the gitter at https://gitter.im/mithriljs/mithril.js - the community is extremely responsive, friendly and helpful.
 
 You can also reach me via twitter [here](https://twitter.com/jmsfbs).
-
- 
-
-
-
