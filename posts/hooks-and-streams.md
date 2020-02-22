@@ -5,7 +5,7 @@ Hooks and Streams
 
 Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/). It's a great read.
 
-I think Hooks are really cool, especially from a technical perspective.  But they are also a leaky abstration?  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine, but I hope to convince you there's a better solution to the same underlying problems.
+I think Hooks are really cool, especially from a technical perspective.  But they are also a leaky abstration.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine, but I hope to convince you there's a better solution to the same underlying problems.
 
 Hooks received a lot of criticism when first announced, and I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people think Hooks are a good idea I want to explain an alternative approach with all the same advantages and none of the [caveats](https://reactjs.org/docs/hooks-rules.html).
 
@@ -25,7 +25,7 @@ For any non trivial app, there ends up being a lot of cross-component communicat
 
 So passing callbacks didn't scale, using events was out of the question (though some did try).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture, which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
 
-This pattern ended up becoming incorporated by Dan Abramov into the React ecosystem as [Redux](https://redux.js.org/introduction/getting-started).
+This pattern was later incorporated into the React ecosystem as Dan Abramov's [Redux](https://redux.js.org/introduction/getting-started).
 
 Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there wasn't much need for component state anymore.  But Redux introduced 2 new problems.  
 
