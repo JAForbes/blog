@@ -1,13 +1,15 @@
 Hooks and Streams
 =================
 
-[Dan Abramov](https://twitter.com/dan_abramov) wrote an excellent post on his [blog](https://overreacted.io) about making a declarative `setInterval`using React Hooks.
+[Dan Abramov](https://twitter.com/dan_abramov) wrote an excellent [blog post](https://overreacted.io) about making a declarative `setInterval` using React Hooks.
 
 Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/). It's a great read.
 
 I think Hooks are really cool, especially from a technical perspective.  But they are also a leaky abstration?  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine, but I hope to convince you there's a better solution to the same underlying problems.
 
-Hooks received a lot of criticism when first announced, and I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people think Hooks are a good idea I want to explain an alternative approach with all the same advantages and none of the [caveats](https://reactjs.org/docs/hooks-rules.html), but with only 1 requirement you need to learn about streams.
+Hooks received a lot of criticism when first announced, and I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people think Hooks are a good idea I want to explain an alternative approach with all the same advantages and none of the [caveats](https://reactjs.org/docs/hooks-rules.html).
+
+Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative: we'll need to walk through some React history; explore some alternative component interfaces; introduce a very small API surface for streams; and then and only then - compare and constrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
 
 Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like your accessing persistent state within a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
 
@@ -27,11 +29,11 @@ This pattern ended up becoming incorporated by Dan Abramov into the React ecosys
 
 Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there wasn't much need for component state anymore.  But Redux introduced 2 new problems.  
 
-Firstly, it was extremely verbose.  Redux was an interpretation of an FP pattern that relies heavily on union types and pattern matching, which was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you - the JS community wasn't ready for sum types back then (I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands).
+Firstly, it was extremely verbose.  Redux was an interpretation of an functional programming pattern that relies heavily on union types and pattern matching, which was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you - the JS community wasn't ready for sum types back then (I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands).
 
 The other problem with Redux was performance.  Dispatching an action meant the central store would need to be recalculated and then a new state patch would be passed down to every component.  This spawned a bunch of new patterns, like prop memoization and granular redraws of subtrees.  But now we're diffing not just the virtual dom but also the props, and diffing props naively could lead to more issues as reference equality won't detect mutations.
 
-On and on the story goes.  From here we see solutions like Immutable.JS which was greatly inspired by Clojure's persistent data structures.  The promise was you could efficeintly detect if a change had occurred by relying on reference equality by never mutating state and instead patching only the segments that had changed.
+On and on the story goes.  From here we see solutions like Immutable.JS which was greatly inspired by Clojure's persistent data structures.  The promise was you could efficiently detect if a change had occurred by relying on reference equality by never mutating state and instead patching only the segments that had changed.
 
 If we zoom out for a moment we can see a general arc.  We need to react to changes in state (so the UI is updated), but we don't want to react to changes that aren't relevant (so the UI isn't slow).  Ultimately event architectures, component callbacks, prop diffing, redux actions, it's all attempting to solve the same problem.
 
@@ -92,7 +94,7 @@ I'm going to walk through writing a declarative `setInterval` just like Dan's ho
 
 Because of the aforementioned caveats, I'm going to use Mithril - which is very similar to React but allows closure components, and automatically renders after event callbacks fire.
 
-But don't worry, before we starting we'll do a quick introduction / refresher to Mithril, Closure Components and Mithril Streams.
+But don't worry, before we start we'll do a quick introduction / refresher to Mithril, Closure Components and Mithril Streams.
 
 #### Refresher / Introduction
 
@@ -171,11 +173,11 @@ function MyComponent(vnode){
 }
 ```
 
-So we don't need `ref`s to access the dom: the dom node is on `vnode.dom`. This component API design means the framework rarely gets in the way when you need to convert some non-declarative side-effectful work into a declarative component interface.  Mithril is very transparent and extensible.
+We don't need `ref`s to access the dom: the dom node is on `vnode.dom`. This component API design means the framework rarely gets in the way when you need to convert some non-declarative side-effectful work into a declarative component interface.  Mithril is transparent and extensible.
 
 #### Streams
 
-Mithril has a stream module importable as `import('mithril/stream')` it's a very lightweight reactive data store. This is the API.
+Mithril has a stream module importable as `import('mithril/stream')` it's a super lightweight reactive data store. This is the API.
 
 ```js
 import stream from 'mithril/stream'
@@ -204,8 +206,8 @@ You can also finalize a stream which will end the current stream and any depende
 
 // Every stream has a .end stream.  
 // You can be notified when a stream ends
-// by mapping over it, just like any other
-// stream
+// by mapping over it (just like any other
+// stream)
 count.end.map(
   () => console.log('Stop counting')
 )
@@ -270,26 +272,25 @@ function App(){
       
   return {
     onremove: () => delay.end(true),
-    view: () => {
-      return [
-        m('p', 'Count: ' + count() )
-        ,m('label'
-          ,'Delay: '
-          ,m('input', {
-            type: 'number'
-            ,value: delay()
-            ,oninput: e => delay(e.target.value)
-          })
-        )
-      ]
-    }
+    view: () => 
+      <div>
+        <p>Count: {count()}</p>
+        <label>
+          Delay: 
+          <input
+            type="number"
+            value={delay()}
+            oninput={e => delay(e.target.value)}
+          />
+        </label>
+      </div>
   }
 }
 
 m.mount(document.body, App)
 ```
 
-[Live Example](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4hcYgAIJAJxjZJAXklZ8s+VgA6abWACuaasQj1JAVTgwAksJkA3DFAAUwSRmLEZcSawCUwbUlJQMlxKQgAEyVpTw0nXxCQ9084fAiYKAwAT3wsDAAHJxCg9MyspQA+SUinS2IbRntHJ2SvfHoAFQhqAGsKSVLs3wS0IJGgkLliPRlRgNGgyTsIGAB3REl4ysk0PSgoCmLJejksWjsYDa3FKupYDBkGmCbnaoit8Z9tVm1dAyMTKMAIL5Qr+EJhAYZbLRVTqbBOACMAAZUZ9IXQDFJlHDYgjkZ8IbQsbkCk5VHIIjIMKtCQspjM5kdlmsrr5tsgjkcggB6HmSACyxIYxxmULuD3cEAu1VsDigoVoWHy9BE3MkfMk+QwcG8EFGxJkULKMTkCgwaCiGFCjigACMML11VgnBZrHLHP15osfcbsocFr6Nfy9PkIu4YKKjZiRfCsMdRjALjJysYnYHfZ1uj02dsY8QnIqsVsANSSRGST4+vzq9WagBKTHSRsNRZFxFokmIhEjcGociY6v6LoA5PkR-0RwBhYXEDYjyRl-MfI4AXRCPzQm+0qjOxYitGoehwDHwdtoESy-RB+V8lBAllgAPoCB4ADZEAAmNgcECYHB4Pg1C6veQiMMwPBsKuVBQPqPSvqgf5cHgWAQN2MjQPeMzkDwJDEPkcCIHyBj5D0ADmQFKjyqHodAAACiL4Ixb7UWhhAYVA+D8PexBZPk3APv2ED5KI7CcABPA0ex0AALRxlhMg4SAeEEURPIkeRlFYKxtFQHJeJYHRn74MiJk8nGXECCAvH8XgfYYSJUGsEAA)
+[Live Example](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4A9GIAEAAX4APSVgA6aIXGKT1AJxjZJAXkX5tu5WhVgArquIR6ky3BgBJYVoBuGKAApgAExgoDABPVgBKYBVJSTUNCD8DTWIdbG8wqJj6dUlbagBrRJNU9LRojICg4PwsDAAHbwzoipCDAD5JSNLo7upYDC1XRg8vb3i0ku7usadiQZhhn1y8iklm4JW1sInu1gzt8sCQ-CY-arqGrui0tpi+gbdPHzGtsq79rp1iSy1SpZVd8xoKw2OylACCtXqEQysVWh2ChWSpm8ACYAKwABm2sLo1g0hiKWG8WIyMKyGiWiUcLgeI2AcMqknCpK6SzO9Wu+nauIY3kyeOuAGpJABGSRbRrdMl49neLD4HR+LQYADu20mGU+31KnUm9B0WFo7hgiEknPaa2OaD83mSlhgYQokvcEBgKtN5skkuiAB4-BB3K1vd0fbVWgBhWh403AHnENKsH1iMPB31BABGgSDl0m3QAIvDTamQxA0LVLMRi5NiMFajB9EoQGhLFhM1pG1Xuo97fp-PCE53ovRS+XiL2YDc1t4YPhiP0AOYwYj4bsOgG53NibMb31iDNZ4NJ-2BjIAgEqeWGgV+WjUFsifDp2h+daSCG1MKUGi0LC1aDzPB0wwTNyCoJxYGoWwsjwABORB0TYDgmy4PB8GoOABG-YRmB4NgAF0qCgUs8gQFBOBwPAsAgYhCC0aAv2+cgeBIYhajgRAJGsWo8nnNCfzEKiaLoqBpBFfAxIANgE6jaOgfB+C-Gs6zwOBqDo2pRHYcjuBAQTZKgABaQkGK0JiQBYtiOLELieL4rBpKE6AjKRbBpBRfAMQ8sRCXkzClJ01T1M0vDWCAA)
 
 ---
 
@@ -343,7 +344,7 @@ function useInterval({
 }
 ```
 
-A function that takes a stream as input and returns a new stream has a fancy name: a combinator.  Because we're combining streams together to form a new stream.  You can probably imagine writing your own combinators in the same way you write hooks.  But the difference is we're not relying on an ambient global state tracker that is tied to a framework, we're just using a very simple data structure that can be used anywhere, in any framework, in any context.
+A function that takes stream(s) as input and returns a new stream has a fancy name: a stream _combinator_.  Because we're combining streams together to form a new stream.  You can probably imagine writing your own combinators in the same way you can compose hooks.  But the difference is we're not relying on an ambient global state tracker that is tied to a framework, we're just using a very simple data structure that can be used anywhere, in any framework, in any context.
 
 Next we'll look at the usage code in `App`.
 
@@ -382,52 +383,69 @@ Note all our 'model layer' stuff sits in the closure: it is logically grouped.  
 Now for the view code:
 
 ```js
-return [
-  // This is a paragraph tag that renders the current count.
-  m('p', 'Count: ' + count() )
-  
-  // This is a number input that allows us to edit the delay.
-  , m('label'
-    ,'Delay: '
-    ,m('input', {
-      type: 'number'
-      // When the view renders we read the current delay
-      // if it changes, mithril will patch the DOM
-      // if it doesn't, it won't.
-      ,value: delay() 
-      // When the user changes the number, we pass it to 
-      // the `delay` stream.
-      // The `delay` stream is passed to the `useInterval`
-      // function, which will update the `setInterval`
-      // and in turn update our `count`.
-      ,oninput: e => delay(e.target.value)
-    })
-  )
-]
+// This is a paragraph tag that renders the current count.
+// When the view renders we read the current delay 
+// if it changes, mithril will patch the DOM. 
+// When the user changes the number, we pass it to 
+// the `delay` stream. The `delay` stream is passed 
+// to the `useInterval` function, which will update 
+// the `setInterval` and in turn update our `count`.
+<div>
+    <p>Count: {count()}</p>
+    <label>
+        Delay: 
+        <input
+            type="number"
+            value={delay()}
+            oninput={e => delay(e.target.value)}
+        />
+    </label>
+</div>
 ```
 
 Note our view layer is completely decoupled from `useInterval` - it doesn't know it exists, it doesn't need to - we simply read the outputs and write to the inputs.
 
-This is a great aspect of streams: you can define relationships in an external context but share the inputs and outputs with other contexts.  To prove this, let's make our delay input, our count paragraph and our interval model logic different functions.
+This is a great aspect of streams: you can define relationships in an external context but share the inputs and outputs with other contexts.  To prove this, let's make our delay input, our count paragraph and our interval model logic all different functions.
 
 ```js
+const stream = m.stream
+
+function useInterval({delay}){
+  
+  const id = stream()
+  const tick = stream()
+  
+  delay.map(
+    delay => {
+      clearInterval(id())
+      id(setInterval(tick, delay, delay))
+    }
+  )
+  
+  delay.end.map(
+    () => clearInterval(id())  
+  )
+  
+  return tick
+}
+
 // Not a component, just a function
 // that takes a stream as input and returns
 // some virtual dom
 const input = ({ delay }) => 
-  m('input', {
-      type: 'number'
-      ,value: delay()
-      ,oninput: e => delay(e.target.value)
-  })
+  <input
+    type="number"
+    value={delay()}
+    oninput={e => delay(e.target.value)}
+  />
   
 // Again, just a function
 // that takes a stream as input and returns
 // some virtual dom
 const paragraph = ({ count }) => 
-  m('p', 'Count: ' + count() )
+  <p>Count: {count()}</p>
   
-// Also a function
+// Also... a function
 // but this returns some streams
 const model = () => {
   const delay = m.stream(250)
@@ -438,7 +456,6 @@ const model = () => {
   tick.map(() => count( count() + 1 ))
       
   count.map(m.redraw)
-
   return { count, delay }
 }
 
@@ -447,27 +464,30 @@ const App = () => {
   
   return {
     onremove: () => delay.end(true)
-    , view: () => [
-      paragraph({ count })
-      , m('label', 'Delay: ', input({ delay }) )
-    ]
+    , view: () => 
+      <div>
+        {paragraph({ count })}
+        <label>Delay: {input({ delay })}</label>
+      </div>
   }
 }
+
+m.mount(document.body, App)
 ```
 
-[Live Example](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4hcYgAIJAJxjZJAXklZ8s+VgA6abdrABXNNWIR6k-XBgBJYTIBuGKAApgAExhQMAT1YBKYNqSkoGS4lIQrkrSxHLYTr4hYZIm1ADWUepxCWhBIe6eXvhYGAAOTiFB+d5KAHySATlBTdSwGDI2jPaOThHx2U1NvZbEHTBdzimpFJJVXtOzvv1NrCFLeR7e+EyuRaXljUHxtaGt7bYOzr2LuY1rjXLE+jI5k9orOmgA9J+SAHK0UgwoVoWBK9BE014FkBkgMRhM9G032ShAwUmIGFS8EkQMyWBxcEkEDQJX0gLQkQeTzQcCRPzgIJgkjsEBkj0cMxB2iSxNJUmULhmGy8kj8xxCWCcAHJeWSpdMGgMgsQvCUYIhJFK0PosAAjMZSipNCgXfTqoUFeJGoIUeiy4gapmKOqzJwwfAYmQAcxgxHwppgSz8ITpkgAgl6MMTIdCcbDDMZTB9kcRUejMdjcTENASiSSyTiKZIqc9aV96Yzmaz2VBOVojPQJJISm0MF6ZKVCFFBXRDFIxc7go1JVKSvLNQBhWh9jVSyQAamBfaOd2RYagDPwW7jcMTiPLkl1BdTEEJJZp0kreLLSSwtHy3d8x0VwJpUlmUVUeKcACYAKwAAxLEkvYMJ+ajZnEQEho0SSTFEFjWOc3TABa1TBo0ISTLsZRHIOoHEE4S4MEci4AIySIs1pDkEBE4U4qhyK4HYAO5LOe9TEcQ8zCqKby6A2b7hiUJSPs+iSNlIqGzNMBGip+94eFamH3L61L1Ea9ByHedjmnhLrClsFJODEZpLDaVYwCxGr6ZIyDUS2Hbtp2PbTmBGFKpI0wjp4+pQPKUoACLCrOFD2oKH5iuZkgALohO87zaKod7Lq4tDUDqIj4Lq95zMJJS+JQNAgiU0BjHguoYH5RWWLAe40ngP5kYgAFsBwICYDgeD4NQcACMVwjMDwbAxVQUDEqkCAoJwXU8FgECpjI0BFU85A8CQxAlHAiDfIYJSpF6PUgp882LdAAACZH4FdABsJ0LYQS1QPg-BFSqap4HA1BLSUojsDN3AgKdj3QAAtHiK0yGtIAbVtO2fHtB1HVg91nVA4OQVg50-vgAG458eIvf172A19P1-TFrBAA)
+[Live Example](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4A9ACoABAAF+ADylYpEsQB00QuMSnaATjGxSAvEvz7DWDRrABXTcQj0ptuDACSwvQDcMUABTAACYwUBgAnqwAlMAaUlJxUlo6EEEmusQG2P5RiclSjtQA1ukW2blo8YkhYeH4WBgADv6J8TURJgB8UrGV8f3UsBh6now+fv6pORX9-VNuxKMw4wGFRRRS7eEbW1Ez-ayJ+9WhEfhMQfVNLX3xOV1JQyNevgFTe1V9x30GxLZ6lTWGkOaA0YjEUgAcrQdBgkrQsI16CINrxXLCpHYHE5QWhwQVCBgdMQMEV4FI4WVlBg4FIIGhGrZYWg0r9-mg4GCIXAETApN4IHo-n5NgiNPl6YydKZAptTuEpNEHokADySpmtArhRowYxqEBoWxYABGy31mtetl1wXlORBs3o6uIxmAfOM3S2-hg+BJegA5jBiPhLTAovapGJOokuVIAIJ+jD01HoimY+zURz0GPEQnE0nkymZSwU2lOiksqRsgGcvHc3n8wXCqCiqyaejaKSNYYYP16JqEdKyuj2HRK90JPoqxqdADCtBHiB6w4YdpVYmn0drcagPPwe9TWIzOJjxqZBIgtKrHN09apNfyWFoNUHUQevXi+S26Sw5iL2QATAArAADPs+TLtKZhUv4oGbh+7bEhAxTpK4HgvBMwByrUirfPEaxXM09zjhB-jwiO9wANRSAAjFIeyap88EjgR-g-gYQR9gA7vsV49GRDA7PKirAtYbYcjosaNI0L5vnkCF8VsGwQYq35PqEORwZWgbsj0mr0AYj7eDAi5ER68rnCy-iZFa+zxBsAowJxJmvuODFSCqQQQN4Ua3LMPRdn2vb9kO84MDh4Z+e5YSmlAnQACLyouwBOrKX7RKwa7RaEPmRWunneYkIIghoP6PuRQS0NQRoiPgxpPtscZSVElA0AijTQMseDGhgMUtW4sBHu2eAAGzUYg1H-mwHAGlweD4NQcACK1wjMDwbAALpUFA9JFAgKCcDgeBYBAOZ6NALX-OQPAkMQjRwIg4L2I0RR+vNCJiMdp3QDI1H4L9w0fSdhBnVA+D8C1xDatwIBwNQZ2NKI7AHdDn3A9AAC0VIXXoV0gDdd0PWIT0vW9WCA19UCY3+WAyP++DAfTYhUmDS2QzqeCw-DiPrawQA)
 
 ---
 
-#### Combinators Compose
+#### Functions Compose
 
-Recall that `useInterval` is a stream combinator: It takes streams as input and returns streams as output.  Well `model` is a combinator too.  It's just a combinator that ignores (or takes no) input.
+Recall that `useInterval` is a stream combinator: It takes streams as input and returns streams as output.  Well `model` is similar.  It's just a function that ignores (or takes no) input but returns a new stream.
 
-And so we've got a combinator being used to define the logic for another combinator.  That composition can repeat indefinitely.  You can refactor, share and combine stream behaviour as effortlessly as passing a stream to a function that returns new streams.
+So we've got one function being used to define the logic for another function.  That composition can repeat indefinitely.  You can refactor, share and combine stream behaviour as effortlessly as passing a stream to a function that returns new streams.
 
 #### `ref`s & `useEffect`
 
-Here's an excerpt from Dan's blog (seriously go read it) about impedance mismatch between the imperative `setInterval` model and the declarative React model.
+Here's an excerpt from Dan's blog (seriously go read it if you haven't) about impedance mismatch between the imperative `setInterval` model and the declarative React model.
 
 > A React component may be mounted for a while and go through many different states, but its render result describes all of them at once.
 > ```js
@@ -477,7 +497,8 @@ Here's an excerpt from Dan's blog (seriously go read it) about impedance mismatc
 >
 > Hooks let us apply the same declarative approach to effects:
 >
->  ```js // Describes every interval state
+>  ```js 
+>  // Describes every interval state
 >  useInterval(() => {
 >    setCount(count + 1);
 >  }, isRunning ? delay : null);
@@ -485,13 +506,13 @@ Here's an excerpt from Dan's blog (seriously go read it) about impedance mismatc
 >
 > We don’t set the interval, but specify whether it is set and with what delay. Our Hook makes it happen. A continuous process is described in discrete terms.
 >
-> By contrast, setInterval does not describe a process in time — once you set the interval, you can’t change anything about it > except clearing it.
+> By contrast, setInterval does not describe a process in time — once you set the interval, you can’t change anything about it, except clearing it.
 >
 > That’s the mismatch between the React model and the setInterval API.
 
 What Dan is describing is what in FP we call: a functor.
 
-A Functor is defined with [two laws](https://github.com/fantasyland/fantasy-land#functor) - I'll leave that for [another post](https://james-forbes.com/#!/posts/the-perfect-api), but a solid intution on functors is: an interface to some state that isn't directly accessed, but can be transformed into a new functor by mapping over the state.
+A Functor is defined with [two laws](https://github.com/fantasyland/fantasy-land#functor) - I'll leave that for [another post](https://james-forbes.com/#!/posts/the-perfect-api), but a solid intution on functors is: an interface to some state that isn't directly accessed, but can be transformed into a new functor of the same type by mapping over the state.
 
 We can map over streams, we can map over lists, we can map over ... a lot of things.  But we don't tend to think of React components as something we map over.  But here's Dan again...
 
@@ -499,7 +520,7 @@ We can map over streams, we can map over lists, we can map over ... a lot of thi
 
 The exact same thing is true of mapping over a stream:
 
-```
+```js
 const count = m.stream()
 
 count.map(
@@ -510,10 +531,20 @@ count.map(
 
 So are components equivalent to streams?  Not quite, components are a specialization for a particular domain.  They have callbacks and interfaces that are designed specifically for building UI and interacting with the browser's DOM.  But conceptually?  Yep!
 
-- Components have initialization semantics (`scan`).
+- Components have initialization semantics (`stream(initialState)`).
 - Components can retain local state (`stream()`)
-- Components state can be transformed into new representations via render (`stream.map(...)`)
+- Components state can be transformed into new representations via lifecycle methods (`stream.map(...)`)
 - Components can perform logic on teardown (`stream.end.map(...)`)
+
+Think of a component as an object with some hidden state on it, and we visit and transform that state using lifecycle methods (e.g. `render`).  Conceptually, we're mapping over the component state to get back a new component.
+
+Even when we mutate component state within a lifecycle method, our side effect is encapsulated within a transform function.  It's not pure, but it is an extremely similar model to a functor.
+
+And that's a really helpful intuition to have, because it helps us see that we can often replace a component with a stream and vice versa.  
+
+The benefit of using a stream is: it's extremely simple and precise (in a Rich Hickey sense).  The benefit of using a component is: it's specialised to UI domain work.
+
+Knowing when and where these two tools are interchangeable is a similar intuition to know when a Hook and Component are interchangeable.  We should pick whichever tool we feel is best adapted to our given context, but we can only do that if we know about these alternative solutions. 
 
 #### A final goal
 
@@ -556,30 +587,40 @@ const tick = useInterval({ delay: theirDelay })
 
 `stream.merge` just takes a list of streams and gives us a new stream which is a list of values.  The new stream emits when any of the input streams change.
 
-[Live Example](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4hcYgAIJAJxjZJAXklZ8s+VgA6abdrABXNNWIR6k-XBgBJYTIBuGKAApgkgCYwoGAJ6TWASmBtSUlgyXEpCDclaWI5bCd-MIjJE2oAaxj1BKS0ELCPL298LAwABycwkMKfJQA+SSC8kJbqWAwZG0Z7RycoxNyWlogwJ3dPWoBCRWU0fSgoSX9GqqHJfstiLpge5zT0inGiw5rvf0G11lWr5ouCieKmNxLyyuaQxPrw9s7bB2d+ud8rcwmE5MR9DI8vttDdtAB6eGSABytCkGHCtCwZXoIkOvAs6MkBiMJnoCKRxEIGCkxAw6Xgkgx2SwTLg6zQZX06LQ0XBkLQcAp0ixMEkdggMghjncWO0KQgnO5MRcR1qAS+YSwTgA5IqucQdYcmmtUt4yjBEJIdXMsAAjHY61YhCj-fSWtXeRLOyQUej67lWsWKBqnJwwfB0mQAcxgxHwbpgFwCoLQiMkAEFoxhFfjCUziYZjKYdGnKdTafTGcy4ho2RyDUzeZJ+VChWWRThxZLpYs3HKjPQJJIyh0MNGZOVCCrXHRDFINSHQs1tTqykbrQBhWjzq06yQAakx88+dw7GagcFo+BvBZJxfJHbtyqpEHZrcFnbFLPbKSwtEKFVliXE1MUFKRThiVQWScAAmABWAAGC4UjnBgoLUWsEmQ5IhykGRDDQRVowwmC4ndM8QhSKkYElAARB4YlWaCsNUHAYxgJxkFOQ4CLQIi0GjABdfwXgqH0uJ4ltCOIkSvj4gSSIAfk9SQrTmBZVlyXDwNSCAMhiCxrD+XpXFOK0aPoxiU2aMJ9jEpxPiXNDiDGFzPiPABGJYLiGXD5wc1Q5DcScAHcLg-RpjwYE4Hl4mTBL8WFdEHXSMzKMogK+UCUjMuLouIeL+OIvwoIAzxvVs5pItAkJ6Dkf87A9JzQwefAniccik1WQ4JRgUKrRayRkB9UdJwnKdVRcvxfJaQ5Vy8B0oCNHUGKKPcKADVy8qKGalh9ebdWfYhiHoJ13jWQ4fRCVx6DafT0kG4CGgU4inEmV7BIGJKLqGIrFM+FSdQABQwIz9z3AAleB9Bwc7TVm4EhiEsIbjhNA2J3BgnH7ahYZEfA7QA7xDnSsp-EoGgsTKaAdjwO0MCWynLFgB9BTwAAWAB2RBEIAWnggBmXm2A4EBMBwPB8GoOABCp4RmB4NghKoKBFXSBAUE4SWeCwCAqRkaBKchcgeBIYgyjgRBEUMMp0mjaWsXhPWDegAABTz8E9gA2Z39cIQ2oHwfhKeIc1uBAOBqENspRHYbWI5dgPoD5lljZkU2QHNy3rfhW37cdrA-ddqBU9Yt3YPwRCq-hFlg7lsOLTwKOY7joTWCAA)
+[Live Example](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4A9GIAEAAX4APSVgA6aFULjFJGgE4xskgLyL8OvctVowAVzTViEepKtwYASWHaAbhigAKYJIAJjBQGACekqwAlMAqkpJxkuqaEIGGWsS62L5RicmS9tQA1umm2blo8YnBoWH4WBgADr6J8TXhhgB8krGV8f3UsBja7oxePr6pORX9-RBgvkEhHQCEBkZoVlBQklE9rbOSUy7EozDjfoVFFEu1N+1hUTOHrAevfc-Vy3VMgfVNLT68RyXSSQxGHm8fimTyqH0SiV0xCs2kqVxU7xUEkkADlaJoMElaFhGvQRDdeM4CZJrLZ7PQsVJiIQMJpiBgivBJISylhuXAjmhGlYCWg0kiUWg4IytMSYJJPBBtMifEFiWp6BpBcLNEZ-LcOtFQYkADwQIUig7EMKNGAGJQgTZYABG5wdByhVjtwAeOXes3o5p1BgC8oM3V9MHw7O0AHMYMR8J6YHt-ZIxJ0EWhsQBBWMYc0Uqncmk2OwOCzY5msgocrk8zJmfnakXcsWSCWo6XZqRwOUKpUqnaBdW2TWaRrDDCx7RNQjpfV0GyaI3hhJ9E2NToAYVoy8QPSXDD9JrEW6zuagffwN5LtPLDJ7kmdreZEAFnalspwGSyWG7+RYLQNQLnsa69PE+QPOkWAmI22QAEwAKwAAzPPkR66sYvK+GheTjh2NhoOasYwXBf6+JkXqfH0+TMjASoACLfOkBywby9TnPGvjIA8NzaERJEALpRP8zQHMCvHfPxgloLGImggJaDEXJkgAPwGhEB6bNsBwVPhUpshAxTpM4biQhMAQPAe9FMSx0RZvEVxib4IJrphiweXsADUkgAIy7M8sz4cuLmwbogSzgA7s8n49ESy73NJhHKSRkQYioGqGZIOaNI0oGghBRLZVZyWYTJqWqawMHASEOSOR2CaSvsQKSPQuhAZ4MAHm5EbfPgvyUQJKYHDciowFFPVgd0EmSCagQQJ4matbMwCTrOM5zoue4MJEURpocc2hK6UDLYdszMbUB7AEGIr6tB0QHYcp7HSEZ3nSaL7EMQj7nf09CDMZRQhpIvUpSpsa+CsSkQyC+2zfE71-QEMMkSCGkAOQAAoYGZGOSAeGMAErwFYOD409synl9P1oEj-SngtS2zYk7yYmgsFAcuvgjtQZMiPgzrAWENy5Y0USUDQxKNNA5x4M6GAnZLLiwA+Up4AA7AALIgACcbAcI6XB4Pg1BwAIUvCMwPBsEJVBQOaRQICgnA4HgWAQMy2jQJLKLkDwJDEI0cCIBINiNEUsam8SYge170DSH5+BJwAbLHnuEN7UD4PwkvWraeBwNQ3uNKI7Cu9wIBx5n0AALS8r72j+yAgfB6HYjh5H0dYOn8dQPX8FYNICH4Cho9iBxudUPnldFyXZdCawQA)
 
 You could solve this problem so many ways with streams.  We could actually change this behaviour without editing `useInterval` at all.  But I'll leave that as an exercise for the reader.
 
-#### A personal note
+#### A final personal note
 
-Something I've found while working with streams for UI development for the past 5 or 6 years is that I reach for components less often, because streams are simpler and more composable than components.  So I tend to rely on view functions and streams for most UI work.  I tend to have one big top level component for every route that defines some streams, and then everything else is just functions.  There's occasions where I use components - sometimes that interface can be preferable - especially when you need to interact directly with the DOM and do cleanup afterwards.
+Something I've found while working with streams for UI development for the past 5 or 6 years is that I reach for components less often, because streams are simpler and more composable than components.  So I tend to rely on view functions and streams for most UI work.  I tend to have one big top level component for every route that defines some streams, and then everything else is just functions.  There's occasions where I use components - sometimes that interface can be preferable - especially when you need to interact directly with the DOM and do cleanup afterwards.  My estimate is, I reach for components 5-10% of the time, and that's worked really well for me.
 
-So when hooks were announced, my honest initial reaction was, that solves real problems, but they are problems I don't have.  I have closures for local state and I have composable transforms and effects via streams.  I personally think streams are a stronger, more precise abstraction.  I prefer to work with them, but hooks are still an intriguing worthwhile solution to the same problem domain.  It's worth experimenting with both and making up your own mind.
+That may seem a little strange considering how often we're told to use components.  But my view on them is: they're a complicated interface and that leads to complicated code.  Use them when that complexity is warranted, otherwise pick the simplest tool for the job.
+
+When hooks were announced, my honest initial reaction was, that solves real problems, but they are problems I don't have.  I have closures for local state and I have composable transforms and effects via streams.  I personally think streams are a stronger, more precise abstraction.  I prefer to work with them, but hooks are still an intriguing worthwhile solution to the same problem domain.  It's worth experimenting with both and making up your own mind.
 
 Having said that, I've always contended that hooks would never have been invented if React had closures because necessity is the mother of invention, and with closures, there's no _necessity_.
 
-To illustrate my point, I recommend reading this section of Dan's post: (Refs to the rescue)[https://overreacted.io/making-setinterval-declarative-with-react-hooks/#refs-to-the-rescue] and then think about how that entire scenario only occurred because the view context was transient and stateless.  If there was a closure there, you'd just define the hook in the closure context and make use of it in the view, there'd be no invocation counting or need for refs.
+To illustrate my point, I recommend reading this section of Dan's post: [Refs to the rescue](https://overreacted.io/making-setinterval-declarative-with-react-hooks/#refs-to-the-rescue) and then think about how that entire scenario only occurred because the view context was transient and stateless.  If there was a closure there, you'd just define the hook in the closure context and make use of it in the view, there'd be no invocation counting or need for refs.
+
+There'll be questions on twitter/stackoverflow etc about why someone's Hook state is transient, or why a ref being mutated didn't cause the Hook to reinitialize.  There will be issues raised on internal and public bug trackers because the intuition required for the use of refs wasn't internalised.  And ultimately, the refs solution, is only required because React does not have closure components. 
 
 There's this trend of diffing values to determine intent, we diff the DOM, we diff props, we diff refs: It gets the job done, but because it never completely solves the problem unambiguously, it's inelegant.  Closures and streams let us stop inferring what changed and instead _know_ what changed.  There is a little bit to learn initially, but once you've learned how streams work you'll find there's no rules or compromises. Streams are the perfect data structure for reacting to data changes without ambiguity, and even better - they are fun!
 
-Hooks are deeply fascinating, and they are definitely an improvement over prior solutions, but I personally don't think it's worth the trade-offs.  I heartily recommend experimenting with streams in your framework of choice.
+Hooks are deeply fascinating, and they are definitely an improvement over prior solutions, but I personally don't think it's worth the trade-offs.  I heartily recommend experimenting with streams in your framework of choice.  But if streams do not work for you, then I recommend using Hooks over all the other alternatives we've seen in this ecosystem - they are a giant leap.
 
 Mithril's stream module is completely decoupled from Mithril itself.  But if you'd like to use a stream library that is a bit more removed from any given framework, check out [flyd](https://github.com/paldepind/flyd).  
 
 As for other stream libraries, xstream / Rx.JS / most.js are all great but might require a little more time to get up to speed and I personally don't know if it's worth the time investment.  The central reason those frameworks are more involved is because of a distinction between Subjects and Objects, which is a distinction I don't make nor find useful when doing UI programming - but that's a blog post for another day!
 
-Thanks so much for reading - I hope it was interesting and useful to you.
+Thank you so much for reading - I hope it was interesting and useful to you.
 
 If you've got any questions about streams or mithril.js - I recommend jumping in the gitter at https://gitter.im/mithriljs/mithril.js - the community is extremely responsive, friendly and helpful.
 
+I've also written an [Intro to Streams](https://james-forbes.com/#!/posts/intro-to-streams) post that is library agnostic and attempts to convey a helpful mindset when working with side effects and transforms.
+
 You can also reach me via twitter [here](https://twitter.com/jmsfbs).
+
+---
+
+Many thanks again to [Barney Carroll](https://barneycarroll.com/) for donning the editor hat for this post.  I'm extremely grateful for your time and energy.
