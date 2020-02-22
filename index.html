@@ -57,8 +57,10 @@
 			color: #7588d3;
 		}
 
-		[class*=language-] * {
-			font-size: 0.85em;
+		@media (max-width: 600px) {
+			[class*=language-] * {
+				font-size: 11px;
+			}
 		}
 
 		.post {
