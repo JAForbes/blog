@@ -623,4 +623,4 @@ You can also reach me via twitter [here](https://twitter.com/jmsfbs).
 
 ---
 
-Many thanks again to [Barney Carroll](https://barneycarroll.com/) for donning the editor hat for this post.  I'm extremely grateful for your time and energy.
+Many thanks again to [Barney Carroll](https://barneycarroll.com/) for donning the editor hat for this post.  I'm extremely grateful for his insights and time.
