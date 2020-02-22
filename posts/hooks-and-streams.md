@@ -127,7 +127,7 @@ m('input[disabled]',
 
 Or in JSX this:
 
-```jsx
+```js
 <input 
   disabled 
   style={{ color: 'red' }}
