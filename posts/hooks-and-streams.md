@@ -11,7 +11,7 @@ Hooks received a lot of criticism when first announced.  I didn't want to weigh 
 
 Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative, we'll need to: walk through some SPA history; explore some alternative component interfaces; introduce a very small API surface for streams; and then we can compare and contrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
 
-Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like you're accessing persistent state entirely within the scope of a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
+Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like you're accessing persistent state entirely within the scope of a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inference.
 
 By the end of this post I'll have hopefully demonstrated to you that inference isn't required.  But before we can even discuss alternatives we need to see Hooks with fresh eyes and within it's historic context.
 
