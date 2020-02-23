@@ -13,7 +13,7 @@ Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).
 
 Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like you're accessing persistent state entirely within the scope of a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inference.
 
-By the end of this post I'll have hopefully demonstrated to you that inference isn't required.  But before we can even discuss alternatives we need to see Hooks with fresh eyes and within it's historic context.
+By the end of this post I'll have hopefully demonstrated to you that inference isn't required.  But before we can even discuss alternatives we need to see Hooks with fresh eyes and within their historic context.
 
 > 💡 SPA is short for Single Page App.  It refers to applications that do not require a page refresh to navigate to another page in a web application.  I'm using that specific terminology because SPA's have a very unique and interesting history that is separate from UI programming generally.  Statically linked HTML files and 100% server rendered pages are a very different problem domain.  React _can_ be used in these other contexts, but I'm not speaking to that subset of usage.
 
