@@ -89,7 +89,7 @@ function Counter({ name }){
   return () => <>
     <p>Count {count}</p>
     <button onClick={ () => count++ }>Increment</button>
-    <button onClick={ () => count-- }>Increment</button>
+    <button onClick={ () => count-- }>Decrement</button>
   </>
 }
 ```
