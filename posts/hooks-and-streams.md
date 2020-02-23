@@ -132,8 +132,8 @@ In Mithril, we have a concept of a `vnode`.  It's a well-documented structure th
 The above is the resulting data structure from an expression like this:
 
 ```js
-m('input[disabled]', 
-  { style: { color: 'red' }
+m('input[disabled]'
+  , { style: { color: 'red' }
   , oncreate
   , oupdate
   , onremove
