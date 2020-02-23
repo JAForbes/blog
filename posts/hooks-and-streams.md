@@ -17,19 +17,31 @@ Before explaining the alternative, let's imagine why you'd need or want this beh
 
 #### A short history revision
 
+##### The V in MVC
+
 Within the context of React, components were originally modelled after classes.  You'd create a class via `React.createClass`, because each rendered component was the instance of a class, it had state.  You could control this local component state via `this.setState(newState)`. Having local component state allowed you to keep track of input values, validation, anything you wanted.  This paradigm wasn't new at the time, but it wasn't exactly commonplace either.  The React team began evangelizing component-oriented design as "Thinking in React".
 
-After React exploded onto the scene, a lot of other frameworks were born, inspired by React's component oriented design.  But it didn't take long for this pattern to show its limitations on actual projects:  Having state inside components made it difficult for two components to share information reliably. It was seen as bad practice to let another component directly modify another components state, and so the alternative solution was callback-passing: The parent component would pass a function to the child component which would allow the child component to signal to the parent component that the state should be updated to a new value.
+Prior to component oriented design, React was marketed as the "View in Model View Controller" or the "V in MVC" for short.  MVC being the prevailing software architecture for GUI's at the time.  When React was announced the two most popular existing alternatives were Backbone.js and Angular which both used MVC in different ways.  Backbone advocated a more DIY approach, whereas Angular tried to solve most common problems out of the box via directives.  These two frameworks could not be more different but were still working within the same MVC paradigm.  MVC is less commonly advocated for today in the JS ecosystem, but it is still popular in other ecosystems - (I've written about why [here](https://james-forbes.com/#!/posts/backbone-to-mithril)).
 
-For any non trivial app, there ends up being a lot of cross-component communication.  In the past, the common solution was relying on events, but we'd collectively learnt that wasn't a good general solution either: Event oriented UI architectures very quickly led to the same problems as allowing another component to mutate your state; it was very difficult to debug why a change occurred and what ultimately triggered it.
+It was common initially to hear claims that React is a library - not a framework.  Over time, as React solved more common problems directly (without relying on 3rd party libraries) those claims became less common.  Suspense, Hooks and even CRA are all fairly recent major additions that fill the 3rd party void.
 
-So passing callbacks didn't scale, using events was out of the question (though some did try).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture, which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
+After React started advocating for component oriented design, many other component oriented frameworks emerged.  Component oriented design held a lot of promise, but it didn't take long for this pattern to show its limitations on actual projects:  Having state inside components made it difficult for two components to share information reliably. It was seen as bad practice to let another component directly modify another components state, and so the alternative solution was callback-passing where the parent component would pass a function to the child component which would allow the child to signal to the parent that the state should be updated to a new value.
+
+##### Events and Callbacks
+
+Cross-component communication is common for any non trivial app.  In MVC, events were commonly used: One component would emit an event and another component would listen for that event and react to it.  As a community we'd collectively learnt that event oriented architectures eventually leads to the same problems as allowing another component to mutate your state.  It becomes difficult to debug why a change occurred and what ultimately triggered it.
+
+At least when passing callbacks down there was a clear heirarchy and control flow.  If only it weren't so onerous to manually define all these setters to perform very basic behavior composition.
+
+Ultimatey passing callbacks didn't scale and using events was out of the question (though some persisted).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture, which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
 
 This pattern was later incorporated into the React ecosystem as Dan Abramov's [Redux](https://redux.js.org/introduction/getting-started).
 
-Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there wasn't much need for component state anymore.  But Redux introduced 2 new problems.  
+##### Redux - Close But No Cigar
 
-Firstly, it was extremely verbose.  Redux was an interpretation of an functional programming pattern that relies heavily on union types and pattern matching, which was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you - the JS community wasn't ready for sum types back then (I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands).
+Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there as much need for component state anymore.  The simpler control flow seemed to solve all the problems with events and provided much needed structure that was at least repeatable and scalable on larger teams.  But Redux introduced 2 new problems.
+
+Firstly, it was extremely verbose.  Redux was an interpretation of a functional programming pattern that relies heavily on union types and pattern matching, which was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you - the JS community wasn't ready for sum types back then (I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands).
 
 The other problem with Redux was performance.  Dispatching an action meant the central store would need to be recalculated and then a new state patch would be passed down to every component.  This spawned a bunch of new patterns, like prop memoization and granular redraws of subtrees.  But now we're diffing not just the virtual dom but also the props, and diffing props naively could lead to more issues as reference equality won't detect mutations.
 
@@ -41,7 +53,7 @@ But all these solutions rely on inference.  We try to infer what changed by comp
 
 There's a data structure that does exactly what we need, without relying on inference - it's called a stream.
 
-#### A brief aside: Pure Functional Components
+##### Pure Functional Components should have been closures.
 
 Unfortunately, even with a mastery of streams, React's high level API means that we still end up depending on classes or hooks.
 
@@ -74,13 +86,15 @@ function Counter({ name }){
   let count = 0
   return () => <>
     <p>Count {count}</p>
-    <button onClick{ () => count++ }>Increment</button>
-    <button onClick{ () => count-- }>Increment</button>
+    <button onClick={ () => count++ }>Increment</button>
+    <button onClick={ () => count-- }>Increment</button>
   </>
 }
 ```
 
-But uh-oh - another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead, that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
+##### Is setState necessary?
+
+But another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead, that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
 
 > 💡 If that seems wasteful, think why would you ever bind an event listener if not to update some state that would immediately need to be rendered?
 
@@ -237,7 +251,7 @@ When Dan writes about making `useInterval` declarative, we can now see how we'd 
 
 First I'm going to define it using just the stream primitives you've learned so far: get `stream()`, set `stream(newVal)` and map `stream.map(x => f(x))`.
 
-Here's a complete example - you check out the live version and then we'll break it down step by step.
+Here's a complete example - I recommend checking out the live version and then we'll break it down step by step.
 
 ```js
 const stream = m.stream
@@ -611,7 +625,7 @@ Hooks are deeply fascinating, and they are definitely an improvement over prior 
 
 Mithril's stream module is completely decoupled from Mithril itself.  But if you'd like to use a stream library that is a bit more removed from any given framework, check out [flyd](https://github.com/paldepind/flyd).  
 
-As for other stream libraries, xstream / Rx.JS / most.js are all great but might require a little more time to get up to speed and I personally don't know if it's worth the time investment.  The central reason those frameworks are more involved is because of a distinction between Subjects and Objects, which is a distinction I don't make nor find useful when doing UI programming - but that's a blog post for another day!
+As for other stream libraries: there are many great options out there but they might require a little more time to get up to speed.  The central reason those frameworks are more involved is because of a distinction between Subjects and Objects, which is a distinction I don't make nor find useful when doing UI programming - but that's a blog post for another day!
 
 Thank you so much for reading - I hope it was interesting and useful to you.
 
