@@ -558,7 +558,7 @@ Even when we mutate component state within a lifecycle method, our side effect i
 
 And that's a really helpful intuition to have, because it helps us see that we can often replace a component with a stream and vice versa.  
 
-The benefit of using a stream is: it's extremely simple and precise (in a Rich Hickey sense).  The benefit of using a component is: it's specialised to UI domain work.
+The benefit of using a stream is: it's extremely simple and precise ([in a Rich Hickey sense](https://www.youtube.com/watch?v=oytL881p-nQ)).  The benefit of using a component is: it's specialised to UI domain work.
 
 Knowing when and where these two tools are interchangeable is a similar intuition to know when a Hook and Component are interchangeable.  We should pick whichever tool we feel is best adapted to our given context, but we can only do that if we know about these alternative solutions. 
 
