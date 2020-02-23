@@ -575,7 +575,7 @@ function useInterval({ delay }){
   delay.map(
     delay => {
       clearInterval(id())
-      // Only bind setInterval if delay is null
+      // Only bind setInterval if delay isn't null
       if( delay !== null ) {
         id(setInterval(tick, delay, delay))
       }
