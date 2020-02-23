@@ -31,9 +31,9 @@ After React started advocating for component oriented design, many other compone
 
 ##### Events and Callbacks
 
-Cross-component communication is common for any non trivial app.  In MVC, events were commonly used: One component would emit an event and another component would listen for that event and react to it.  As a community we'd collectively learnt that event oriented architectures eventually leads to the same problems as allowing another component to mutate your state.  It becomes difficult to debug why a change occurred and what ultimately triggered it.
+Cross-component communication is common for any non trivial app.  In MVC, events were commonly used: one component would emit an event and another component would listen for that event and react to it.  As a community we'd collectively learnt that event oriented architectures eventually lead to the same problems as allowing another component to mutate your state.  It becomes difficult to debug why a change occurred and what ultimately triggered it.
 
-At least when passing callbacks down there was a clear heirarchy and control flow.  If only it weren't so onerous to manually define all these setters to perform very basic behavior composition.
+At least when passing callbacks down there was a clear hierarchy and control flow.  If only it weren't so onerous to manually define all these setters to perform very basic behavior composition.
 
 Ultimatey passing callbacks didn't scale and using events was out of the question (though some persisted).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture, which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
 
