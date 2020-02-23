@@ -96,9 +96,9 @@ function Counter({ name }){
 
 ##### Is setState necessary?
 
-But another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead, that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
+But another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
 
-> 💡 If that seems wasteful, think why would you ever bind an event listener if not to update some state that would immediately need to be rendered?
+> 💡 If that seems wasteful, just think: why would you ever bind an event listener if not to update some state that would immediately need to be rendered?
 
 Adding this feature negates a lot of the needs for Hooks and in my mind justifies a semver major version change to React. 
 
