@@ -5,11 +5,11 @@ Hooks and Streams
 
 Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/). It's a great read.
 
-I think Hooks are really cool, especially from a technical perspective.  But they are also a bit of a leaky abstration.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine - but I hope to convince you there's a better, simpler solution.
+I think Hooks are really cool, especially from a technical perspective.  But they are also a bit of a leaky abstraction.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine - but I hope to convince you there's a better, simpler solution.
 
 Hooks received a lot of criticism when first announced.  I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people generally think Hooks are a good idea, I wanted to explain an alternative approach with all the same advantages and none of the caveats.
 
-Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative: we'll need to walk through some SPA history; explore some alternative component interfaces; introduce a very small API surface for streams; and then we can compare and contrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
+Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative, we'll need to: walk through some SPA history; explore some alternative component interfaces; introduce a very small API surface for streams; and then we can compare and contrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
 
 Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like your accessing persistent state entirely within the scope of a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
 
