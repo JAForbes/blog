@@ -528,7 +528,7 @@ Here's an excerpt from Dan's blog (seriously go read it if you haven't) about im
 
 What Dan is describing is what in FP we call: a functor.
 
-A Functor is defined with [two laws](https://github.com/fantasyland/fantasy-land#functor) - I'll leave that for [another post](https://james-forbes.com/#!/posts/the-perfect-api), but a solid intuiton on functors is: an interface to some state that isn't directly accessed, but can be transformed into a new functor of the same type by mapping over the state.
+A Functor is defined with [two laws](https://github.com/fantasyland/fantasy-land#functor) - I'll leave that for [another post](https://james-forbes.com/#!/posts/the-perfect-api), but a solid intuiton on functor usage is: an interface to some state that isn't directly accessed, but can be transformed into a new functor of the same type by mapping over the state.
 
 We can map over streams, we can map over lists, we can map over ... a lot of things.  But we don't tend to think of React components as something we map over.  But here's Dan again...
 
