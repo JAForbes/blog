@@ -472,7 +472,7 @@ const model = () => {
   tick.map(() => count( count() + 1 ))
       
   count.map(m.redraw)
-  return { count, delay }
+  return { delay, count }
 }
 
 const App = () => {
