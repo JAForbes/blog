@@ -635,8 +635,10 @@ If you've got any questions about streams or mithril.js - I recommend jumping in
 
 I've also written an [Intro to Streams](https://james-forbes.com/#!/posts/intro-to-streams) post that is library agnostic and attempts to convey a helpful mindset when working with side effects and transforms.
 
-You can also reach me via twitter [here](https://twitter.com/jmsfbs).
+If you have any questions you can reach me via twitter [here](https://twitter.com/jmsfbs).
 
 ---
 
 Many thanks again to [Barney Carroll](https://barneycarroll.com/) for donning the editor hat for this post.  I'm extremely grateful for his insights and time.
+
+And thank you to [Scotty Simpson](https://github.com/CreaturesInUnitards) for his help correcting some additional [typos and punctuation](https://github.com/JAForbes/JAForbes.github.io/pull/35) - this blog post is a much easier read now thank you.
