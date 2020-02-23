@@ -41,7 +41,7 @@ This pattern was later incorporated into the React ecosystem as Dan Abramov's [R
 
 ##### Redux - Close But No Cigar
 
-Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there as much need for component state anymore.  The simpler control flow seemed to solve all the problems with events and provided much needed structure that was at least repeatable and scalable on larger teams.  But Redux introduced 2 new problems.
+Redux allowed large teams to use React without relying on unscalable component callbacks or event architectures.  Because Redux applications were unidirectional (state only travels down, actions only travel up) there was not as much need for component state.  The simpler control flow seemed to solve all the problems with events and provided much needed structure that was at least repeatable and scalable on larger teams.  But Redux introduced 2 new problems.
 
 Firstly, it was extremely verbose.  Redux was an interpretation of a functional programming pattern that relies heavily on union types and pattern matching, which was translated to JS via sprawling switch statements.  Several libraries tried to solve this by generating every possible aspect of Redux from a smaller DSL (without going back to the source to find out this problem was already solved via union types).  This wasn't anyone's fault mind you - the JS community wasn't ready for sum types back then (I think it will still be a while before they're mainstream in JS - maybe after [`match`](https://github.com/tc39/proposal-pattern-matching) lands).
 
