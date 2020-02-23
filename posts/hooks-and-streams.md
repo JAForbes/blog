@@ -5,15 +5,15 @@ Hooks and Streams
 
 Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/). It's a great read.
 
-I think Hooks are really cool, especially from a technical perspective.  But they are also a bit of a leaky abstration.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine - but I hope to convince you there's a better, simpler solution.
+I think Hooks are really cool, especially from a technical perspective.  But they are also a bit of a leaky abstraction.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine - but I hope to convince you there's a better, simpler solution.
 
 Hooks received a lot of criticism when first announced.  I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people generally think Hooks are a good idea, I wanted to explain an alternative approach with all the same advantages and none of the caveats.
 
-Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative: we'll need to walk through some SPA history; explore some alternative component interfaces; introduce a very small API surface for streams; and then we can compare and contrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
+Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative, we'll need to: walk through some SPA history; explore some alternative component interfaces; introduce a very small API surface for streams; and then we can compare and contrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
 
-Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like your accessing persistent state entirely within the scope of a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
+Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like you're accessing persistent state entirely within the scope of a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inference.
 
-By the end of this post I'll have hopefully demonstrated to you that inference isn't required.  But before we can even discuss alternatives we need to see Hooks with fresh eyes and within it's historic context.
+By the end of this post I'll have hopefully demonstrated to you that inference isn't required.  But before we can even discuss alternatives we need to see Hooks with fresh eyes and within their historic context.
 
 > 💡 SPA is short for Single Page App.  It refers to applications that do not require a page refresh to navigate to another page in a web application.  I'm using that specific terminology because SPA's have a very unique and interesting history that is separate from UI programming generally.  Statically linked HTML files and 100% server rendered pages are a very different problem domain.  React _can_ be used in these other contexts, but I'm not speaking to that subset of usage.
 
@@ -21,19 +21,19 @@ By the end of this post I'll have hopefully demonstrated to you that inference i
 
 ##### The V in MVC
 
-Within the context of React, components were originally modelled after classes.  You'd create a class via `React.createClass`, because each rendered component was the instance of a class, it had state.  You could control this local component state via `this.setState(newState)`. Having local component state allowed you to keep track of input values, validation and anything you wanted.  This paradigm wasn't new at the time, but it wasn't exactly commonplace either.
+Within the context of React, components were originally modelled after classes.  You'd create a class via `React.createClass`, and because each rendered component was the instance of a class, it had state.  You could control this local component state via `this.setState(newState)`. Having local component state allowed you to keep track of input values, validation, and anything you wanted.  This paradigm wasn't new at the time, but it wasn't exactly commonplace either.
 
-Prior to component oriented design, React was marketed as the "View in Model View Controller" or the "V in MVC" for short.  MVC was the prevailing software architecture for GUI's at the time and the two most popular existing alternatives to React were MVC frameworks: Backbone.js and Angular.js.  These two frameworks could not be more different but were still working within the same MVC paradigm because at the time it was seen as a structural requirement for an application of any non trivial scope.  React's big selling point was declarative views, this was a huge deal in a world where existing best practices dictated mutating pages via jQuery expressions in response to events firing.
+Prior to component oriented design, React was marketed as the "View in Model View Controller" or the "V in MVC" for short.  MVC was the prevailing software architecture for GUI's at the time and the two most popular existing alternatives to React were MVC frameworks: Backbone.js and Angular.js.  These two frameworks could not be more different but were still working within the same MVC paradigm because at the time it was seen as a structural requirement for an application of any non-trivial scope.  React's big selling point was declarative views; this was a huge deal in a world where existing best practices dictated mutating pages via jQuery expressions in response to events firing.
 
 Just getting the community to accept this small change in thinking was a massive undertaking.  So it's not surprising React didn't push much further for quite a while.  MVC was common in object oriented languages like Java, C# and Ruby.  Writing applications client side in JS was relatively new, so we adopted best practices from existing serverside contexts.  It made complete sense that React wouldn't deviate too far from that OO context, but over time it became clear React had a lot more in common with functional programming paradigms.  The FP community embraced React within their own ecosystems, and FP interpretations of React's declarative views would eventually have major influences upstream.
 
-After React started advocating for component oriented design, many other component oriented frameworks emerged.  These component oriented frameworks often collapsed the MVC layers into a single component layer - which felt simpler.  Component oriented design held a lot of promise, but it didn't take long for this pattern to show its limitations on actual projects:  Having state inside components made it difficult for two components to share information reliably. It was seen as bad practice to let another component directly modify another components state, and so the alternative solution was callback-passing where the parent component would pass a function to the child component which would allow the child to signal to the parent that the state should be updated to a new value.
+After React started advocating for component oriented design, many other component oriented frameworks emerged.  These frameworks often collapsed the MVC layers into a single component layer, which felt simpler.  Component oriented design held a lot of promise, but it didn't take long for this pattern to show its limitations on actual projects:  Having state inside components made it difficult for two components to share information reliably. It was seen as bad practice to let another component directly modify another component's state, and so the alternative solution was callback-passing where the parent component would pass a function to the child component which would allow the child to signal to the parent that the state should be updated to a new value.
 
 ##### Events and Callbacks
 
-Cross-component communication is common for any non trivial app.  In MVC, events were commonly used: One component would emit an event and another component would listen for that event and react to it.  As a community we'd collectively learnt that event oriented architectures eventually leads to the same problems as allowing another component to mutate your state.  It becomes difficult to debug why a change occurred and what ultimately triggered it.
+Cross-component communication is common for any non trivial app.  In MVC, events were commonly used: one component would emit an event and another component would listen for that event and react to it.  As a community we'd collectively learnt that event oriented architectures eventually lead to the same problems as allowing another component to mutate your state.  It becomes difficult to debug why a change occurred and what ultimately triggered it.
 
-At least when passing callbacks down there was a clear heirarchy and control flow.  If only it weren't so onerous to manually define all these setters to perform very basic behavior composition.
+At least when passing callbacks down there was a clear hierarchy and control flow.  If only it weren't so onerous to manually define all these setters to perform very basic behavior composition.
 
 Ultimatey passing callbacks didn't scale and using events was out of the question (though some persisted).  Amongst this chaos, several projects in the functional programming community were working on their own solutions and advocating for their own alternatives.  Probably the most influential was the Elm Architecture, which popularised the idea of stateless views, with a state model that folded a scan of streams into a new state.
 
@@ -71,7 +71,7 @@ function Hello({ name }){
 
 We can't return a function because when React sees a function in a call to `React.createElement` it assumes the result of calling the function will be JSX. It needs to execute that function every time it encounters it.
 
-If instead the design were like this, we could have intermediate state in a component without relying on hooks/classes/redux etc.
+If instead the design were like this, we could have intermediate state in a component without relying on hooks/classes/redux etc.:
 
 ```js
 // What if components were functions
@@ -96,9 +96,9 @@ function Counter({ name }){
 
 ##### Is setState necessary?
 
-But another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead, that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
+But another problem - React would not render after that `onClick` fired.  React only renders a component when it detects the state has changed, but we're not giving React an opportunity to know `count` changes.  [Not all frameworks have this restriction](https://mithril.js.org/autoredraw.html#the-auto-redraw-system).  So let's assume instead that all event listeners interally call `setState({})` in the backing component instance when a JSX bound event is fired.
 
-> 💡 If that seems wasteful, think why would you ever bind an event listener if not to update some state that would immediately need to be rendered?
+> 💡 If that seems wasteful, just think: why would you ever bind an event listener if not to update some state that would immediately need to be rendered?
 
 Adding this feature negates a lot of the needs for Hooks and in my mind justifies a semver major version change to React. 
 
@@ -132,8 +132,8 @@ In Mithril, we have a concept of a `vnode`.  It's a well-documented structure th
 The above is the resulting data structure from an expression like this:
 
 ```js
-m('input[disabled]', 
-  { style: { color: 'red' }
+m('input[disabled]'
+  , { style: { color: 'red' }
   , oncreate
   , oupdate
   , onremove
@@ -156,7 +156,7 @@ Or in JSX this:
 
 You'll notice the vnode has lifecycle methods right there in the view. This is a hugely useful feature, it means we can respond to the changes in an individual dom node without defining a component.
 
-Components have a very similar data representation and one form of component is a function that returns some lifecycle methods. The simplest may look like this:
+Components have a very similar data representation, and one form of component is a function that returns some lifecycle methods. The simplest may look like this:
 
 ```js
 function MyComponent({ attrs }){
@@ -472,7 +472,7 @@ const model = () => {
   tick.map(() => count( count() + 1 ))
       
   count.map(m.redraw)
-  return { count, delay }
+  return { delay, count }
 }
 
 const App = () => {
@@ -558,7 +558,7 @@ Even when we mutate component state within a lifecycle method, our side effect i
 
 And that's a really helpful intuition to have, because it helps us see that we can often replace a component with a stream and vice versa.  
 
-The benefit of using a stream is: it's extremely simple and precise (in a Rich Hickey sense).  The benefit of using a component is: it's specialised to UI domain work.
+The benefit of using a stream is: it's extremely simple and precise ([in a Rich Hickey sense](https://www.youtube.com/watch?v=oytL881p-nQ)).  The benefit of using a component is: it's specialised to UI domain work.
 
 Knowing when and where these two tools are interchangeable is a similar intuition to know when a Hook and Component are interchangeable.  We should pick whichever tool we feel is best adapted to our given context, but we can only do that if we know about these alternative solutions. 
 
@@ -575,7 +575,7 @@ function useInterval({ delay }){
   delay.map(
     delay => {
       clearInterval(id())
-      // Only bind setInterval if delay is null
+      // Only bind setInterval if delay isn't null
       if( delay !== null ) {
         id(setInterval(tick, delay, delay))
       }
@@ -619,7 +619,7 @@ Having said that, I've always contended that hooks would never have been invente
 
 To illustrate my point, I recommend reading this section of Dan's post: [Refs to the rescue](https://overreacted.io/making-setinterval-declarative-with-react-hooks/#refs-to-the-rescue) and then think about how that entire scenario only occurred because the view context was transient and stateless.  If there was a closure there, you'd just define the hook in the closure context and make use of it in the view, there'd be no invocation counting or need for refs.
 
-There'll be questions on twitter/stackoverflow etc about why someone's Hook state is transient, or why a ref being mutated didn't cause the Hook to reinitialize.  There will be issues raised on internal and public bug trackers because the intuition required for the use of refs wasn't internalised.  And ultimately, the refs solution, is only required because React does not have closure components. 
+There'll be questions on twitter/stackoverflow etc about why someone's Hook state is transient, or why a ref being mutated didn't cause the Hook to reinitialize.  There will be issues raised on internal and public bug trackers because the intuition required for the use of refs wasn't internalised.  And ultimately, the refs solution is only required because React does not have closure components. 
 
 There's this trend of diffing values to determine intent, we diff the DOM, we diff props, we diff refs: It gets the job done, but because it never completely solves the problem unambiguously, it's inelegant.  Closures and streams let us stop inferring what changed and instead _know_ what changed.  There is a little bit to learn initially, but once you've learned how streams work you'll find there's no rules or compromises. Streams are the perfect data structure: for reacting to data changes without ambiguity; for cross component communication and for decoupled side effect control flow.  Maybe most importantly they are [simple](https://www.youtube.com/watch?v=oytL881p-nQ) (not easy).
 
