@@ -32,7 +32,7 @@ const style = {
             float: left;
             width: 20em;
             text-align: left;
-            margin: 0em 0.5em;
+            margin: 0.5em;
             vertical-align: bottom;
             height: 8em;
             padding: 1em;
