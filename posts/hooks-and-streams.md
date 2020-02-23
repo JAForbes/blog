@@ -156,7 +156,7 @@ Or in JSX this:
 
 You'll notice the vnode has lifecycle methods right there in the view. This is a hugely useful feature, it means we can respond to the changes in an individual dom node without defining a component.
 
-Components have a very similar data representation and one form of component is a function that returns some lifecycle methods. The simplest may look like this:
+Components have a very similar data representation, and one form of component is a function that returns some lifecycle methods. The simplest may look like this:
 
 ```js
 function MyComponent({ attrs }){
