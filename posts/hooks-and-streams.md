@@ -5,15 +5,19 @@ Hooks and Streams
 
 Check it out [here](https://overreacted.io/making-setinterval-declarative-with-react-hooks/). It's a great read.
 
-I think Hooks are really cool, especially from a technical perspective.  But they are also a leaky abstration.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine, but I hope to convince you there's a better solution to the same underlying problems.
+I think Hooks are really cool, especially from a technical perspective.  But they are also a bit of a leaky abstration.  If you know [the rules of hooks](https://reactjs.org/docs/hooks-rules.html) and understand why they exist you'll likely be fine - but I hope to convince you there's a better, simpler solution.
 
-Hooks received a lot of criticism when first announced, and I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people think Hooks are a good idea I want to explain an alternative approach with all the same advantages and none of the [caveats](https://reactjs.org/docs/hooks-rules.html).
+Hooks received a lot of criticism when first announced.  I didn't want to weigh in on that initial deluge because I think a lot of it was unjustified.  But now that the dust has settled and most people generally think Hooks are a good idea, I wanted to explain an alternative approach with all the same advantages and none of the caveats.
 
-Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative: we'll need to walk through some React history; explore some alternative component interfaces; introduce a very small API surface for streams; and then and only then - compare and constrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
+Unfortunately [simple is not easy](https://www.youtube.com/watch?v=oytL881p-nQ).  To get to the point where we can explain this simple alternative: we'll need to walk through some SPA history; explore some alternative component interfaces; introduce a very small API surface for streams; and then we can compare and constrast with Dan's blog post.  I am confident it is worth your time, but if at any point you feel you need to take a break - please do so.
 
 Hooks usage is beholden to a set of [rules](https://reactjs.org/docs/hooks-rules.html) because it's ultimately a very clever illusion.  Hooks make it seem like your accessing persistent state within a function call - but that's not really possible without some other background mechanics.  In React's case, they infer which state belongs to which function call by counting invocations.  It's more nuanced and complicated than that, but ultimately it's still inferance.
 
-Before explaining the alternative, let's imagine why you'd need or want this behaviour?  Because it turns out to be super useful.
+By the end of this post I'll have demonstrated inference isn't required.  We can know exactly what has changed and still solve all the same problems that Hooks solve.
+
+Before explaining the alternative, let's imagine why you'd need or require hooks (or streams) in the first place?  Because it turns they are a natural consequence of SPA history.
+
+> 💡 SPA is short for Single Page App.  It refers to applications that do not require a page refresh to navigate to another page in an application.  I'm using that specific terminology because SPA's have a very unique and interesting history that is separate from UI programming generally.  Statically linked HTML files and 100% server rendered pages are a very different problem domain.  React _can_ be used in these other contexts, but I'm not speaking to that subset of usage.
 
 #### A short history revision
 
