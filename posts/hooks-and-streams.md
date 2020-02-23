@@ -71,7 +71,7 @@ function Hello({ name }){
 
 We can't return a function because when React sees a function in a call to `React.createElement` it assumes the result of calling the function will be JSX. It needs to execute that function every time it encounters it.
 
-If instead the design were like this, we could have intermediate state in a component without relying on hooks/classes/redux etc.
+If instead the design were like this, we could have intermediate state in a component without relying on hooks/classes/redux etc.:
 
 ```js
 // What if components were functions
