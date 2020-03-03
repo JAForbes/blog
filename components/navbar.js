@@ -7,7 +7,7 @@ const links =
     , ['Listen', 'https://soundcloud.com/peopleofconcept']
     , ['Play', 'https://canyon.itch.io/']
     , ['Parse', 'https://github.com/JAForbes/']
-    , ['Follow', 'https://twitter.com/james_a_forbes']
+    , ['Follow', 'https://twitter.com/jmsfbs']
     ] 
 
 const style = 
