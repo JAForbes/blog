@@ -23,7 +23,7 @@
   "dependencies": {
     "bss": "^1.2.13",
     "marked": "^0.3.9",
-    "mithril": "^1.1.6",
+    "mithril": "^1.1.7",
     "npm-run-all": "^4.1.1",
     "prismjs": "^1.15.0",
     "terser": "^3.8.2"
