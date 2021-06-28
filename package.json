@@ -25,7 +25,7 @@
     "marked": "^0.3.18",
     "mithril": "^1.1.7",
     "npm-run-all": "^4.1.1",
-    "prismjs": "^1.21.0",
+    "prismjs": "^1.24.0",
     "terser": "^3.8.2"
   },
   "devDependencies": {
