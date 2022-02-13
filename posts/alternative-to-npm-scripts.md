@@ -1,5 +1,5 @@
-An alternative to npm scripts 
-=============================
+bash run - an alternative to npm scripts 
+========================================
 
 > This proposal works best for applications where the set of people that build your project are developers, ci, etc.  For node libraries, there are a different set of constraints.  This proposal can still apply for a subset of tasks, but only when you know the environment of the installer (which for node libraries, you can't).
 
