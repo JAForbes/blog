@@ -93,7 +93,10 @@
 		"name": "Self currying function",
 		"path": "posts/selfCurrying.md",
 		"created": "2015-06-08T01:38:58.538Z",
-		"featured": false
+		"featured": false,
+		"updates": [
+			{ "message": "Expanded code example, added addendum", "created": "2022-04-30T00:18:11.983Z" }
+		]
 	},
 	{
 		"name": "Hardcoding is great",
