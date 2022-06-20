@@ -45,6 +45,13 @@ function componentAdapter(Machine){
                 
                 args = [posts]
             }
+
+            let resume = () => {}
+            function pause(){
+                let p = new Promise( resolve => resume = resolve )
+                return p
+            }
+
             while (true) {
                 let next = machine.next(...args)
                 args = []
@@ -97,10 +104,13 @@ function componentAdapter(Machine){
                     )
                 } else if (value.tag == 'popstate') {
                     let listener;
+                    
                     window.addEventListener('popstate', listener = e => {
+                        resume()
                         machine.next(e)
                     })
                     listeners.push(() => window.removeEventListener('popstate', listener))
+                    await pause()
                 }
 
                 if ( next.done ) break;
