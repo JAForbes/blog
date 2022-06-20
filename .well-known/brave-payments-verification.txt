@@ -1,4 +1,0 @@
-This is a Brave Payments publisher verification file.
-
-Domain: james-forbes.com
-Token: bd91f5d897ea55ccec19ff060bdc561d4d8c90b956bc5e1f3711383c5c094cfd
