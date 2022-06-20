@@ -40,7 +40,7 @@ function componentAdapter(Machine){
 
             async function fetchAllPosts(){
                 posts = posts 
-                || await window.fetch('https://james-forbes.com//posts.json')
+                || await window.fetch('https://james-forbes.com/posts.json')
                      .then( x => x.json() )
                 
                 args = [posts]
