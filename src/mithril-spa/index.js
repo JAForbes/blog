@@ -1,5 +1,5 @@
 /* global window */
-import { marked } from 'marked'
+import marked from 'marked'
 import m from 'mithril'
 import main, * as app from '../index.js'
 import Prism from 'prismjs'
@@ -25,12 +25,13 @@ function getSet(map, key, factory){
 }
 
 const components = new Map();
-
+let posts = null;
+        
 function componentAdapter(Machine){
     return function(initialVnode){
         const machine = Machine(initialVnode.attrs)
-        let posts = null;
-        let view = () => null;
+        let view = null;
+        let Generator = function*(){}.constructor
 
         let listeners = []
 
@@ -40,7 +41,7 @@ function componentAdapter(Machine){
 
             async function fetchAllPosts(){
                 posts = posts 
-                || await window.fetch('https://james-forbes.com/posts.json')
+                || await window.fetch(window.location.origin + '/' + 'posts.json')
                      .then( x => x.json() )
                 
                 args = [posts]
@@ -54,6 +55,9 @@ function componentAdapter(Machine){
 
             while (true) {
                 let next = machine.next(...args)
+                let value = next.value
+                if( value == null ) continue;
+                console.log(next, value)
                 args = []
                 if (value.tag == 'getRoute') {
                     let route = parseRoute(window.location.pathname)
@@ -61,12 +65,12 @@ function componentAdapter(Machine){
                     args=[route]
 
                 } else if (value.tag == 'getAllPosts') {
-                    args = [await fetchAllPosts()]
+                     await fetchAllPosts()
                 } else if (value.tag == 'getPostFromRoute' ) {
                     const route = value.value
                     if (!posts) await fetchAllPosts()
 
-                    const post = posts.find(route)
+                    const post = posts.find( x => x.path == 'posts/' + route.value + '.md' )
 
                     args = [post]
                 } else if (value.tag == 'navigateFromEvent') {
@@ -74,34 +78,36 @@ function componentAdapter(Machine){
                     const href = event.target.href
                     window.history.pushState(href)
                 } else if (value.tag == 'getPostMarkdown' ) {
-                    const post = value
-                    const markdown = await window.fetch('https://james-forbes.com/'+post.path)
-                        .then( x => x.json() )
-
+                    const post = value.value
+                    const markdown = await window.fetch(window.location.origin + '/'+post.path)
+                        .then( x => x.text() )
+                    
                     args = [markdown]
                 } else if (value.tag == 'renderMarkdown' ) {
-                    const markdown = value
+                    const markdown = value.value
                     const html = marked(markdown)
 
                     args = [html]
                 } else if (value.tag == 'highlightCodeBlocks') {
-                    const html = value
+                    const html = value.value
                     Prism.highlightAll(html)
 
                     args = [html]
+                    m.redraw()
                 } else if (value.tag == 'getAssetSrc' ) {
-                    args = ['https://james-forbes.com/assets/'+value.value]
+                    args = [window.location.origin + '/assets/'+value.value]
                 } else if (value.tag == 'hyperscript' ) {
-                    view = () => value.visitor(
-                        (tag, ...args) => {
+                    view = () => value.value(
+                        Object.assign((tag, ...args) => {
                             
-                            if( typeof tag instanceof window.Generator ) {    
+                            if( tag instanceof Generator ) {    
                                 tag = getSet(components, tag, componentAdapter)
                             }
 
                             return m(tag, ...args)
-                        }
+                        }, m)
                     )
+                    m.redraw()
                 } else if (value.tag == 'popstate') {
                     let listener;
                     
@@ -123,7 +129,11 @@ function componentAdapter(Machine){
 
         return {
             view(vnode){
-                return view(vnode)
+                if (!view){
+                    return null
+                } else {
+                    return view(vnode)
+                }
             }
             ,onremove(){
                 listeners.forEach( f => f() )

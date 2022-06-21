@@ -31,13 +31,13 @@ export const Action = {
         return { type: 'Action', tag: 'getPostMarkdown', value: post }
     }
     ,renderMarkdown(markdown){
-        return { type: 'Action', tag: 'getPostMarkdown', value: markdown }
+        return { type: 'Action', tag: 'renderMarkdown', value: markdown }
     }
     ,highlightCodeBlocks(html){
         return { type: 'Action', tag: 'highlightCodeBlocks', value: html }
     }
     ,getAssetSrc(asset){
-        return { type: 'Action', tag: 'getAssetSrc', asset }
+        return { type: 'Action', tag: 'getAssetSrc', value: asset }
     }
     ,hyperscript(visitor){
         return { type: 'Action', tag: 'hyperscript', value: visitor }
@@ -54,13 +54,12 @@ function * PostView(){
     const originalHTML = yield Action.renderMarkdown(markdown)
     const highlightedHTML = yield Action.highlightCodeBlocks(originalHTML)
 
-    yield Action.hyperscript( h =>
+    return Action.hyperscript( h =>
         h.trust(highlightedHTML)
     )
 }
-
 function * HomeView(){
-    const src = yield Action.getAssetSrc('img/avatar')
+    const src = yield Action.getAssetSrc('img/bio.jpeg')
     return Action.hyperscript( h =>
         h('.home'
             , h('img', { src })
@@ -95,7 +94,7 @@ export default function * Main(){
     do {
         const route = yield Action.getRoute()
 
-        return Action.hyperscript( h =>
+        yield Action.hyperscript( h =>
             h('.app'
                 , h('nav')
                 , Route.match(route, {
