@@ -1,4 +1,3 @@
-
 export const Route = {
     Home(){
         return { type: 'Route', tag: 'Home' }
@@ -75,8 +74,9 @@ function * PostsList(){
         h('ul.posts-list'
             , posts.map( x => 
                 h('a',
-                    { href: x.path.replace('.md', '')
+                    { href: '/' + x.path.replace('.md', '')
                     , * onclick (e) {
+                        e.preventDefault()
                         yield Action.navigateFromEvent(e)
                     }
                     }
@@ -94,15 +94,17 @@ export default function * Main(){
     do {
         const route = yield Action.getRoute()
 
-        yield Action.hyperscript( h =>
-            h('.app'
-                , h('nav')
+        yield Action.hyperscript( h => {
+
+            return h('.app'
+                ,h('nav', { key: 'nav '})
                 , Route.match(route, {
-                    Post: () => h(PostView)
-                    , Home: () => h(HomeView)
+                    Post: () => h(PostView, { key: 'Posts ' + route.value })
+                    , Home: () => h(HomeView, { key: 'Home' })
                 })
-                , h(PostsList)
+                , h(PostsList, { key: 'postslist' })
             )
-        )
-    } while ( yield Action.popstate() )
+
+        })
+    } while (yield Action.popstate())
 }

@@ -3,6 +3,12 @@ import marked from 'marked'
 import m from 'mithril'
 import main, * as app from '../index.js'
 import Prism from 'prismjs'
+import EventEmitter from 'events'
+import xet from 'xet'
+
+let events = new EventEmitter()
+
+window.history.scrollRestoration = 'manual';
 
 function parseRoute(pathname){
     if ( pathname.startsWith('/posts') ) {
@@ -12,31 +18,16 @@ function parseRoute(pathname){
     }
 }
 
-function getSet(map, key, factory){
-  if(map.has(key))
-     return map.get(key)
-  
-  const value = factory(key, map)
-  
-  map.set(key, value)
-  
-  return value
-}
-
 const components = new Map();
 let posts = null;
-        
+
 function componentAdapter(Machine){
     return function(initialVnode){
         const machine = Machine(initialVnode.attrs)
         let view = null;
         let Generator = function*(){}.constructor
 
-        let listeners = []
-
-
-        async function iterate(){
-            let args = []
+        async function iterate(machine, args=[]){
 
             async function fetchAllPosts(){
                 posts = posts 
@@ -46,19 +37,14 @@ function componentAdapter(Machine){
                 args = [posts]
             }
 
-            let resume = () => {}
-            function pause(){
-                let p = new Promise( resolve => resume = resolve )
-                return p
-            }
-
             while (true) {
                 let next = machine.next(...args)
                 let value = next.value
-                if( value == null ) continue;
-                console.log(next, value)
+                
                 args = []
-                if (value.tag == 'getRoute') {
+                if ( value == null ) {
+                    'noop';
+                } else if (value.tag == 'getRoute') {
                     let route = parseRoute(window.location.pathname)
 
                     args=[route]
@@ -74,13 +60,15 @@ function componentAdapter(Machine){
                     args = [post]
                 } else if (value.tag == 'navigateFromEvent') {
                     const event = value.value
-                    const href = event.target.href
-                    window.history.pushState(href)
+                    const href = event.currentTarget.href
+                    window.history.pushState(null, '', href)
+                    events.emit('popstate')
+                    
                 } else if (value.tag == 'getPostMarkdown' ) {
                     const post = value.value
                     const markdown = await window.fetch(window.location.origin + '/'+post.path)
                         .then( x => x.text() )
-                    
+
                     args = [markdown]
                 } else if (value.tag == 'renderMarkdown' ) {
                     const markdown = value.value
@@ -92,50 +80,63 @@ function componentAdapter(Machine){
                     Prism.highlightAll(html)
 
                     args = [html]
-                    m.redraw()
                 } else if (value.tag == 'getAssetSrc' ) {
                     args = [window.location.origin + '/assets/'+value.value]
                 } else if (value.tag == 'hyperscript' ) {
                     view = () => value.value(
                         Object.assign((tag, ...args) => {
                             
-                            if( tag instanceof Generator ) {    
-                                tag = getSet(components, tag, componentAdapter)
-                            }
+                            tag = tag instanceof Generator ? xet(components, tag, componentAdapter) : tag
+                            
+                            let vnode = m(tag, ...args)
 
-                            return m(tag, ...args)
+                            vnode.attrs = vnode.attrs || {}
+                            
+                            for(let key of Object.keys(vnode.attrs) ) {
+                                if ( vnode.attrs[key] instanceof Generator ) {
+                                    let original = vnode.attrs[key]
+                                    vnode.attrs[key] = (...args) => {
+                                        let it = original(...args)
+                                        return iterate(it)
+                                    }
+                                }
+                            }
+                        
+                            return vnode
                         }, m)
                     )
                     m.redraw()
                 } else if (value.tag == 'popstate') {
-                    let listener;
+
                     
-                    window.addEventListener('popstate', listener = e => {
-                        resume()
-                        machine.next(e)
+                    window.addEventListener('popstate', () => {
+                        events.emit('popstate')
+                    }, { once: true })
+
+                    let playback = {}
+                    playback.pause = new Promise((Y) => {
+                        playback.resume = Y
                     })
-                    listeners.push(() => window.removeEventListener('popstate', listener))
-                    await pause()
+                    events.once('popstate', () => {
+                        args = [true]
+                        playback.resume()
+                    })
+
+                    await playback.pause
+
                 }
 
                 if ( next.done ) break;
             }
 
-            return null    
+            return null
         }
 
-        iterate()
+        iterate(machine)
 
         return {
             view(vnode){
-                if (!view){
-                    return null
-                } else {
-                    return view(vnode)
-                }
-            }
-            ,onremove(){
-                listeners.forEach( f => f() )
+                return view && view(vnode)
             }
         }
     }
