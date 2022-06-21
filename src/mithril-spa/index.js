@@ -18,7 +18,19 @@ function parseRoute(pathname){
     }
 }
 
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0, len = str.length; i < len; i++) {
+        let chr = str.charCodeAt(i);
+        hash = (hash << 5) - hash + chr;
+        // eslint-disable-next-line operator-assignment
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 const components = new Map();
+const sheets = new Map();
 let posts = null;
 
 function componentAdapter(Machine){
@@ -83,27 +95,11 @@ function componentAdapter(Machine){
                 } else if (value.tag == 'getAssetSrc' ) {
                     args = [window.location.origin + '/assets/'+value.value]
                 } else if (value.tag == 'hyperscript' ) {
-                    view = () => value.value(
-                        Object.assign((tag, ...args) => {
-                            
-                            tag = tag instanceof Generator ? xet(components, tag, componentAdapter) : tag
-                            
-                            let vnode = m(tag, ...args)
 
-                            vnode.attrs = vnode.attrs || {}
-                            
-                            for(let key of Object.keys(vnode.attrs) ) {
-                                if ( vnode.attrs[key] instanceof Generator ) {
-                                    let original = vnode.attrs[key]
-                                    vnode.attrs[key] = (...args) => {
-                                        let it = original(...args)
-                                        return iterate(it)
-                                    }
-                                }
-                            }
-                        
-                            return vnode
-                        }, m)
+
+                    view = () => value.value(
+                        h
+                        ,css
                     )
                     m.redraw()
                 } else if (value.tag == 'popstate') {
@@ -130,6 +126,54 @@ function componentAdapter(Machine){
             }
 
             return null
+        }
+
+
+        const h = Object.assign((tag, ...args) => {
+                
+            tag = tag instanceof Generator ? xet(components, tag, componentAdapter) : tag
+            
+            let vnode = m(tag, ...args)
+            vnode.attrs = vnode.attrs || {}
+            
+            for(let key of Object.keys(vnode.attrs) ) {
+                if ( vnode.attrs[key] instanceof Generator ) {
+                    let original = vnode.attrs[key]
+                    vnode.attrs[key] = (...args) => {
+                        let it = original(...args)
+                        return iterate(it)
+                    }
+                }
+            }
+        
+            return vnode
+        }, m)
+
+
+        function css(strings, ...args){
+            
+            const { className } = xet(sheets, strings, () => {
+                const styleSheet = String.raw(strings, ...args);
+                const hash = hashCode(styleSheet)
+                const className = 'css'+hash
+                const updatedStylesheet = styleSheet.replace(/\&/gm, className)
+
+                const style = window.document.createElement('style')
+                style.textContent = updatedStylesheet
+                window.document.head.appendChild(style)
+                
+                return {
+                    hash, stylesheet: updatedStylesheet, className
+                }
+            })
+            
+            return h.fragment({
+                oncreate(vnode){
+                    const parent = vnode.dom.parentNode
+                    parent.classList.add(className)
+                    parent.removeChild(vnode.dom)
+                }
+            }, h('span'))
         }
 
         iterate(machine)

@@ -53,14 +53,33 @@ function * PostView(){
     const originalHTML = yield Action.renderMarkdown(markdown)
     const highlightedHTML = yield Action.highlightCodeBlocks(originalHTML)
 
-    return Action.hyperscript( h =>
-        h.trust(highlightedHTML)
+    return Action.hyperscript( (h, css) =>
+        h('.post'
+            , css`
+                .& h1, .& h2 {
+                    font-weight: 400;
+                    text-align: center;
+                    color: #7588d3;
+                }
+            `
+            , h.trust(highlightedHTML)
+        )
     )
 }
 function * HomeView(){
     const src = yield Action.getAssetSrc('img/bio.jpeg')
-    return Action.hyperscript( h =>
+    return Action.hyperscript( (h, css) =>
         h('.home'
+            , css`
+                .& {
+                    display: grid;
+                    justify-items: center;
+                }
+                .& img {
+                    border-radius: 100%;
+                    max-width: 6em;
+                }
+            `
             , h('img', { src })
             , h('p', 'Interested in any type of design and the individual componentry of calcified ideas.')
         )
@@ -69,22 +88,116 @@ function * HomeView(){
 
 function * PostsList(){
     const posts = yield Action.getAllPosts()
-
-    return Action.hyperscript( h => 
-        h('ul.posts-list'
-            , posts.map( x => 
-                h('a',
-                    { href: '/' + x.path.replace('.md', '')
-                    , * onclick (e) {
-                        e.preventDefault()
-                        yield Action.navigateFromEvent(e)
-                    }
-                    }
-                    , h('li'
-                            ,h('p', x.name)
-                            ,h('i', x.created)
-                        )
+    
+    return Action.hyperscript( h => {
+        const all = posts.map( x => 
+            h('a',
+                { href: '/' + x.path.replace('.md', '')
+                , * onclick (e) {
+                    e.preventDefault()
+                    yield Action.navigateFromEvent(e)
+                }
+                }
+                , h('li'
+                        + (x.featured ? '.featured' : '')
+                        ,h('p', x.name)
+                        ,h('i', x.created)
                     )
+                )
+        )
+
+        let recent = all.slice(0,4)
+        let rest = all.slice(4)
+
+        return h('.posts-list'
+            ,h('.recent'
+                ,h('h4', 'Recent Articles')
+                ,h('ul'
+                    ,recent
+                )
+            )
+            ,h('.rest'
+                ,h('h4', 'Other posts')
+                ,h('ul'
+                    ,rest
+                )
+            )
+        )
+    })
+}
+
+export function * Nav(){
+
+    return Action.hyperscript( (h, css) => 
+        h('nav'
+            , css`
+                .& {
+                    display: grid;
+                    gap: 1em;
+                    justify-content: center;
+                    text-align: center;
+                }
+
+                .& ul {
+                    list-style: none;
+                    display: flex;
+                    gap: 1em;
+                    justify-content: center;
+                    padding: 0em;
+                    margin: 0em;
+                }
+
+                .& a:visited, .& a {
+                    color: black;
+                }
+            `
+            , h('h4', 'James Forbes')
+            , h('ul'
+                , h('li'
+                    ,
+                    h('a'
+                        ,
+                        { href: '/' 
+                        , * onclick (e) {
+                            e.preventDefault()
+                            yield Action.navigateFromEvent(e)
+                        }
+                        }
+                        , 'Explore'
+                    ) 
+                )
+                , h('li'
+                    , h('a'
+                        , 
+                        { href: 'https://soundcloud.com/peopleofconcept' 
+                        }
+                        , 'Listen'
+                    )
+                )
+                , h('li'
+                    , h('a'
+                        , 
+                        { href: 'https://canyon.itch.io/' 
+                        }
+                        , 'Play'
+                    )
+                )
+                , h('li'
+                    , h('a'
+                        , 
+                        { href: 'https://github.com/JAForbes/' 
+                        }
+                        , 'Parse'
+                    )
+                )
+                , h('li'
+                    , h('a'
+                        , 
+                        { href: 'https://twitter.com/jmsfbs' 
+                        }
+                        , 'Follow'
+                    )
+                )
             )
         )
     )
@@ -94,15 +207,29 @@ export default function * Main(){
     do {
         const route = yield Action.getRoute()
 
-        yield Action.hyperscript( h => {
+        yield Action.hyperscript( (h, css) => {
 
             return h('.app'
-                ,h('nav', { key: 'nav '})
-                , Route.match(route, {
-                    Post: () => h(PostView, { key: 'Posts ' + route.value })
-                    , Home: () => h(HomeView, { key: 'Home' })
-                })
-                , h(PostsList, { key: 'postslist' })
+                , css`
+                    .& {
+                        font-family: Helvetica;
+                        display: grid;
+                        gap: 1em;
+                    }
+
+                    .& h1, .& h2, .& h3, .& h4 {
+                        margin: 0px;
+                        padding: 0px;
+                    }
+                `
+                ,[
+                    h(Nav, { key: 'nav'})
+                    , Route.match(route, {
+                        Post: () => h(PostView, { key: 'Posts ' + route.value })
+                        , Home: () => h(HomeView, { key: 'Home' })
+                    })
+                    , h(PostsList, { key: 'postslist' })
+                ]
             )
 
         })
