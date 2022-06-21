@@ -3,7 +3,6 @@ import marked from 'marked'
 import m from 'mithril'
 import main, * as app from '../index.js'
 import Prism from 'prismjs'
-import { value } from 'jsonpath'
 
 function parseRoute(pathname){
     if ( pathname.startsWith('/posts') ) {
