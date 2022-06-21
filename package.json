@@ -6,10 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm-run-all --parallel start:*",
-    "start:serve": "serve -p 3000 -s",
-    "start:watch": " watchify app.js -d -o bundle.min.js --verbose",
-    "dist": "browserify app.js | terser -mc > bundle.min.js"
+    "start": "vite"
   },
   "repository": {
     "type": "git",
