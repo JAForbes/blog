@@ -76,10 +76,16 @@ function * HomeView(){
                 .& {
                     display: grid;
                     justify-items: center;
+                    font-size: 1.2em;
                 }
                 .& img {
                     border-radius: 100%;
                     max-width: 6em;
+                }
+
+                .& p {
+                    max-width: 16.5em;
+                    text-align: center;
                 }
             `
             , h('img', { src })
@@ -229,6 +235,7 @@ export function * Nav(){
                     gap: 1em;
                     justify-content: center;
                     text-align: center;
+                    font-size: 1.2em;
                 }
 
                 .& ul {
@@ -311,6 +318,17 @@ export default function * Main(){
                         --vertical-gap: 4em;
                         gap: var(--vertical-gap) 1em;
                     
+                    }
+
+                    @media (min-width: 30em) {
+                        .& {
+                            grid-template-columns: 50em;
+                            justify-content: center;
+                        }
+
+                        .&.& h1 {
+                            margin-bottom: 2em;
+                        }
                     }
 
                     .& blockquote {
