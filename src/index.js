@@ -32,9 +32,6 @@ export const Action = {
     ,renderMarkdown(markdown){
         return { type: 'Action', tag: 'renderMarkdown', value: markdown }
     }
-    ,highlightCodeBlocks(html){
-        return { type: 'Action', tag: 'highlightCodeBlocks', value: html }
-    }
     ,getAssetSrc(asset){
         return { type: 'Action', tag: 'getAssetSrc', value: asset }
     }
@@ -50,8 +47,7 @@ function * PostView(){
     const route = yield Action.getRoute()
     const post = yield Action.getPostFromRoute(route)
     const markdown = yield Action.getPostMarkdown(post)
-    const originalHTML = yield Action.renderMarkdown(markdown)
-    const highlightedHTML = yield Action.highlightCodeBlocks(originalHTML)
+    const html = yield Action.renderMarkdown(markdown)
 
     return Action.hyperscript( (h, css) =>
         h('.post'
@@ -61,8 +57,13 @@ function * PostView(){
                     text-align: center;
                     color: #7588d3;
                 }
+
+                .& .hljs {
+                    padding: 1em;
+                    border-radius: 0.25em;
+                }
             `
-            , h.trust(highlightedHTML)
+            , h.trust(html)
         )
     )
 }
@@ -89,17 +90,16 @@ function * HomeView(){
 function * PostsList(){
     const posts = yield Action.getAllPosts()
     
-    return Action.hyperscript( h => {
+    return Action.hyperscript( (h, css) => {
         const all = posts.map( x => 
-            h('a',
+            h('a' ,
                 { href: '/' + x.path.replace('.md', '')
                 , * onclick (e) {
                     e.preventDefault()
                     yield Action.navigateFromEvent(e)
                 }
                 }
-                , h('li'
-                        + (x.featured ? '.featured' : '')
+                , h('li.card'+ (x.featured ? '.featured' : '')
                         ,h('p', x.name)
                         ,h('i', x.created)
                     )
@@ -110,13 +110,73 @@ function * PostsList(){
         let rest = all.slice(4)
 
         return h('.posts-list'
-            ,h('.recent'
+            ,css`
+                .& {
+                    display: grid;
+                    gap: 1em 5em;
+                    justify-content: center;
+                    grid-template-columns: minmax(0em, 60em)
+                }
+
+                .& * {
+                    margin: 0em;
+                    box-sizing: border-box;
+                }
+
+                .& a, .& a:visited {
+                    color: black;
+                }
+
+                .& .list {
+                    display: grid;
+                    --gutter: 10em;
+                    grid-template-columns: var(--gutter) 1fr; 
+                    margin-left: calc( var(--gutter) * -1 );
+                }
+
+                .& .list ul {
+                    display: grid;
+                    gap: 1em 3em;
+                    grid-template-columns: 1fr 1fr;
+                    list-style: none;
+                    margin: 0em;
+                    padding: 0em;
+                }
+                
+                .& .card {
+                    display: grid;
+                    gap: 2em;
+                    padding: 2em;
+                    transition: transform 0.5s, background-color 1s;
+                    border: solid 0.1em #DDD;
+                    border-left: solid 0.5em #DDD;
+
+                }
+
+                .& .card.featured:hover {
+                    background-color: rgba(0,0,0,0.9);
+                    transition: transform 0.1s, background-color 0.2s;
+                }
+                .& .card:hover {
+                    backface-visibility: hidden;
+                    transform: scale(1.05);
+                    background-color: rgba(0,0,0,0.05);
+                    transition: transform 0.1s, background-color 1s;
+                }
+
+                .& .card.featured {
+                    color: white;
+                    background-color: black;
+                }
+
+            `
+            ,h('.list.recent'
                 ,h('h4', 'Recent Articles')
                 ,h('ul'
                     ,recent
                 )
             )
-            ,h('.rest'
+            ,h('.list.rest'
                 ,h('h4', 'Other posts')
                 ,h('ul'
                     ,rest
@@ -214,7 +274,10 @@ export default function * Main(){
                     .& {
                         font-family: Helvetica;
                         display: grid;
-                        gap: 1em;
+                        
+                        --vertical-gap: 4em;
+                        gap: var(--vertical-gap) 1em;
+
                     }
 
                     .& h1, .& h2, .& h3, .& h4 {

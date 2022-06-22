@@ -1,10 +1,38 @@
 /* global window */
-import marked from 'marked'
+import * as marked from 'marked'
 import m from 'mithril'
 import main, * as app from '../index.js'
-import Prism from 'prismjs'
+// import Prism from 'prismjs'
 import EventEmitter from 'events'
 import xet from 'xet'
+import highlight from 'highlight.js'
+// import 'highlight.js/styles/an-old-hope.css'
+import 'highlight.js/styles/atom-one-dark.css'
+
+
+// marked.use({
+//     highlight(code, language) {
+//         highlight.highlight(code, { language })
+//     }
+//     ,renderer: new marked.Renderer({
+//         heading(){
+//             return `<h1>hello</h1>`
+//         },
+//         code(...args){
+//             console.log(...args)
+//             return `<code>${args[0]}</code>`
+//         }
+//     })
+// })
+
+// marked.use({
+//     renderer: Object.assign(new marked.Renderer(), {
+//         heading(text, level, _, slugger) {
+//             const slug = slugger.slug(text)
+//             return `<h${level} id="${slug}"><a name="${slug}" href="#${slug}">${text}</a></h${level}>`
+//         }
+//     })
+// })
 
 let events = new EventEmitter()
 
@@ -84,13 +112,23 @@ function componentAdapter(Machine){
                     args = [markdown]
                 } else if (value.tag == 'renderMarkdown' ) {
                     const markdown = value.value
-                    const html = marked(markdown)
+                    const renderer = Object.assign(new marked.Renderer(), {
+                        code(content, lang){
+                            const code = window.document.createElement('code')
+                            const pre = window.document.createElement('pre')
+                            pre.innerHTML = highlight.highlight(content, { language: lang }).value
+                            code.appendChild(pre)
+                            pre.classList.add('hljs', 'language-'+lang)
+                            return code.outerHTML
+                        },
 
-                    args = [html]
-                } else if (value.tag == 'highlightCodeBlocks') {
-                    const html = value.value
-                    Prism.highlightAll(html)
-
+                    })
+                    const html = marked.marked(markdown, { 
+                        renderer
+                    })
+                    
+                    window.highlight = highlight
+                    
                     args = [html]
                 } else if (value.tag == 'getAssetSrc' ) {
                     args = [window.location.origin + '/assets/'+value.value]
