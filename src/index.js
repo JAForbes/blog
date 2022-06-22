@@ -62,6 +62,7 @@ function * PostView(){
                     padding: 1em;
                     border-radius: 0.25em;
                 }
+
             `
             , h.trust(html)
         )
@@ -111,11 +112,15 @@ function * PostsList(){
 
         return h('.posts-list'
             ,css`
-                .& {
-                    display: grid;
-                    gap: 1em 5em;
-                    justify-content: center;
-                    grid-template-columns: minmax(0em, 60em)
+
+                @media (min-width: 23em) {
+
+                    .& {
+                        display: grid;
+                        gap: 1em 5em;
+                        justify-content: center;
+                        grid-template-columns: minmax(0em, 60em)
+                    }
                 }
 
                 .& * {
@@ -127,21 +132,49 @@ function * PostsList(){
                     color: black;
                 }
 
+
                 .& .list {
                     display: grid;
-                    --gutter: 10em;
-                    grid-template-columns: var(--gutter) 1fr; 
-                    margin-left: calc( var(--gutter) * -1 );
                 }
 
-                .& .list ul {
-                    display: grid;
-                    gap: 1em 3em;
-                    grid-template-columns: 1fr 1fr;
-                    list-style: none;
-                    margin: 0em;
-                    padding: 0em;
+                @media ( max-width: 30em ) {
+
+
+                    .& {
+                        gap: 3em 1em;
+                    }
+                    .& .list {
+                        display: grid;
+                        gap: 1em;
+                    }
+
+                    .& .list ul {
+                        display: grid;
+                        gap: 1em 3em;
+                        grid-template-columns: 1fr;
+                        list-style: none;
+                        margin: 0em;
+                        padding: 0em;
+                    }
                 }
+                @media ( min-width: 30em ) {
+                    .& .list {
+                        display: grid;
+                        --gutter: 10em;
+                        grid-template-columns: var(--gutter) 1fr; 
+                        margin-left: calc( var(--gutter) * -1 );
+                    }
+
+                    .& .list ul {
+                        display: grid;
+                        gap: 1em 3em;
+                        grid-template-columns: 1fr 1fr;
+                        list-style: none;
+                        margin: 0em;
+                        padding: 0em;
+                    }
+                }
+
                 
                 .& .card {
                     display: grid;
@@ -277,7 +310,18 @@ export default function * Main(){
                         
                         --vertical-gap: 4em;
                         gap: var(--vertical-gap) 1em;
+                    
+                    }
 
+                    .& blockquote {
+                        margin: 1em;
+                    }
+
+                    @media ( max-width: 30em ) {
+                        .& {
+                            grid-template-columns: 22em;
+                            justify-content: center;
+                        }
                     }
 
                     .& h1, .& h2, .& h3, .& h4 {

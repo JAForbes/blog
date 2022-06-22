@@ -88,8 +88,8 @@ function componentAdapter(Machine){
                     const markdown = value.value
                     const renderer = Object.assign(new marked.Renderer(), {
                         code(content, lang){
-                            const code = window.document.createElement('code')
-                            const pre = window.document.createElement('pre')
+                            const code = window.document.createElement('pre')
+                            const pre = window.document.createElement('code')
                             pre.innerHTML = highlight.highlight(content, { language: lang }).value
                             code.appendChild(pre)
                             pre.classList.add('hljs', 'language-'+lang)
