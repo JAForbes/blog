@@ -5,7 +5,7 @@ import main, * as app from '../index.js'
 // import Prism from 'prismjs'
 import EventEmitter from 'events'
 import xet from 'xet'
-import highlight from 'highlight.js'
+import highlight from 'highlight.js/lib/common'
 import 'highlight.js/styles/atom-one-dark.css'
 
 let events = new EventEmitter()
@@ -90,7 +90,7 @@ function componentAdapter(Machine){
                         code(content, lang){
                             const code = window.document.createElement('pre')
                             const pre = window.document.createElement('code')
-                            pre.innerHTML = highlight.highlight(content, { language: lang }).value
+                            pre.innerHTML = highlight.highlight(content, { language: lang || 'js' }).value
                             code.appendChild(pre)
                             pre.classList.add('hljs', 'language-'+lang)
                             return code.outerHTML
