@@ -25,8 +25,8 @@ export default {
     }
     ,popstate(){
         return { type: 'Action', tag: 'popstate' }
-    },
-    on(predicate){
+    }
+    ,on(predicate){
         return { type: 'Action', tag: 'on', value: predicate }
     }
 }

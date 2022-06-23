@@ -1,5 +1,5 @@
-import Route from './route'
-import Action from './action'
+import Route from './route.js'
+import Action from './action.js'
 
 const v = Action.hyperscript
 
