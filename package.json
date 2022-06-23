@@ -20,22 +20,14 @@
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
-    "bss": "^1.2.13",
     "highlight.js": "^11.5.1",
     "marked": "^4.0.17",
     "mithril": "^2.2.2",
-    "npm-run-all": "^4.1.1",
-    "prismjs": "^1.21.0",
-    "terser": "^3.8.2",
+    "s-js": "^0.4.9",
     "xet": "^2.3.0"
   },
   "devDependencies": {
-    "browserify": "^12.0.1",
-    "conff": "^1.1.0",
     "eslint": "^8.18.0",
-    "node-static": "^0.7.7",
-    "serve": "^10.1.2",
-    "vite": "^2.9.12",
-    "watchify": "^3.7.0"
+    "vite": "^2.9.12"
   }
 }

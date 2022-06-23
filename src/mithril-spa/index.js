@@ -3,28 +3,20 @@ import * as marked from 'marked'
 import m from 'mithril'
 import main, * as app from '../index.js'
 // import Prism from 'prismjs'
-import EventEmitter from 'events'
+
 import xet from 'xet'
 import highlight from 'highlight.js/lib/common'
 import 'highlight.js/styles/atom-one-dark.css'
 import Action from '../action'
+import S from 's-js'
 
-let events = new EventEmitter()
-let actionEvents = new EventEmitter()
-
-let emitAction = actionEvents.emit // for the types
-emitAction = (...args) => {
-    actionEvents.emit('*', ...args)
-    return actionEvents.emit(...args)
-}
+let actionEvents = S.data()
 
 window.history.scrollRestoration = 'manual';
 
 window.addEventListener('popstate', () => {
-    events.emit('popstate')
-    emitAction('popstate', Action.popstate())
+    actionEvents(Action.popstate())
 })
-
 
 function parseRoute(pathname){
     if ( pathname.startsWith('/posts') ) {
@@ -103,7 +95,6 @@ function componentAdapter(Machine){
 
                         args = [post]
                     } else if (value.tag == 'navigateFromEvent') {
-                        console.log('navigate from event')
                         const event = value.value
                         event.preventDefault()
                         const href = event.currentTarget.href
@@ -112,8 +103,7 @@ function componentAdapter(Machine){
                         }
                         console.log(href, window.location.href)
                         window.history.pushState(null, '', href)
-                        events.emit('popstate')
-                        emitAction('popstate', Action.popstate())
+                        actionEvents(Action.popstate())
                         window.scrollTo({ top: 0, behavior: 'auto' })
                     } else if (value.tag == 'getPostMarkdown' ) {
                         const post = value.value
@@ -159,14 +149,18 @@ function componentAdapter(Machine){
                         playback.pause = new Promise((Y) => {
                             playback.resume = Y
                         })
-                        let listener
-                        actionEvents.on('*', listener = (name, x) => {
-                            if(predicate(x)) {
-                                args = [x]
-                                actionEvents.removeListener('*', listener)
-                                playback.resume()
-                            } else {
-                            }
+
+                        S.root(( dispose ) => {
+                            S(() => {
+                                let action = actionEvents()
+                                if ( action ) {
+                                    if(predicate(action)) {
+                                        args = [action]
+                                        playback.resume()
+                                        dispose()
+                                    }
+                                }
+                            })
                         })
 
                         await playback.pause
@@ -174,7 +168,7 @@ function componentAdapter(Machine){
                 }
                 
                 if( isAction){
-                    emitAction(next.value.tag, next.value)
+                    actionEvents(next.value)
                 }
                 if ( next.done ) break;
             }
@@ -266,4 +260,6 @@ function componentAdapter(Machine){
 
 const mithrilMain = componentAdapter(main)
 
-m.mount(window.document.body, mithrilMain)
+S.root(() => {
+    m.mount(window.document.body, mithrilMain)
+})
