@@ -1,55 +1,19 @@
-export const Route = {
-    Home(){
-        return { type: 'Route', tag: 'Home' }
-    }
-    ,Post(slug){
-        return { type: 'Route', tag: 'Post', value: slug }
-    }
-    ,match(route, {Home, Post}){
-        return {
-            Home
-            ,Post
-        }[route.tag](route.value)
-    }
-}
-
-export const Action = {
-    getRoute(){
-        return { type: 'Action', tag: 'getRoute' }
-    }
-    ,getAllPosts(){
-        return { type: 'Action', tag: 'getAllPosts'}
-    }
-    ,getPostFromRoute(route){
-        return { type: 'Action', tag: 'getPostFromRoute', value: route }
-    }
-    ,navigateFromEvent(event){
-        return { type: 'Action', tag: 'navigateFromEvent', value: event }
-    }
-    ,getPostMarkdown(post){
-        return { type: 'Action', tag: 'getPostMarkdown', value: post }
-    }
-    ,renderMarkdown(markdown){
-        return { type: 'Action', tag: 'renderMarkdown', value: markdown }
-    }
-    ,getAssetSrc(asset){
-        return { type: 'Action', tag: 'getAssetSrc', value: asset }
-    }
-    ,hyperscript(visitor){
-        return { type: 'Action', tag: 'hyperscript', value: visitor }
-    }
-    ,popstate(){
-        return { type: 'Action', tag: 'popstate' }
-    }
-}
+import Route from './route'
+import Action from './action'
 
 const v = Action.hyperscript
 
-function * PostView(){
+export { Action, Route }
+
+function * getPostContent(){
     const route = yield Action.getRoute()
     const post = yield Action.getPostFromRoute(route)
     const markdown = yield Action.getPostMarkdown(post)
     const html = yield Action.renderMarkdown(markdown)
+    return html
+}
+function * PostView(){
+    const html = yield * getPostContent()
 
     return v( (h, css) =>
         h('.post'
@@ -101,15 +65,13 @@ function * PostsList(){
     
     return v( (h, css) => {
         const all = posts.map( x => 
-            h('a' ,
-                { href: '/' + x.path.replace('.md', '')
-                , onclick: Action.navigateFromEvent
-                }
+            h.link(
+                { href: '/' + x.path.replace('.md', '') }
                 , h('li.card'+ (x.featured ? '.featured' : '')
-                        ,h('p', x.name)
-                        ,h('i', x.created)
-                    )
+                    ,h('p', x.name)
+                    ,h('i', x.created)
                 )
+            )
         )
 
         let recent = all.slice(0,4)
@@ -262,14 +224,7 @@ export function * Nav(){
             , h('h4', 'James Forbes')
             , h('ul'
                 , h('li'
-                    ,
-                    h('a'
-                        ,
-                        { href: '/' 
-                        , onclick: Action.navigateFromEvent
-                        }
-                        , 'Explore'
-                    ) 
+                    , h.link({ href: '/' }, 'Explore')
                 )
                 , h('li'
                     , h('a'
@@ -308,8 +263,15 @@ export function * Nav(){
     )
 }
 
-export default function * Main(){
+function * on( action, f){
     do {
+        yield * f()
+    } while ( yield action() )
+}
+
+export default function * Main(){
+
+    yield * on( Action.popstate, function * () {
         const route = yield Action.getRoute()
 
         yield v( (h, css) => {
@@ -363,5 +325,5 @@ export default function * Main(){
             )
 
         })
-    } while (yield Action.popstate())
+    })
 }

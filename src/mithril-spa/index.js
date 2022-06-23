@@ -7,6 +7,7 @@ import EventEmitter from 'events'
 import xet from 'xet'
 import highlight from 'highlight.js/lib/common'
 import 'highlight.js/styles/atom-one-dark.css'
+import Action from '../action'
 
 let events = new EventEmitter()
 
@@ -110,7 +111,7 @@ function componentAdapter(Machine){
                     args = [window.location.origin + '/assets/'+value.value]
                 } else if (value.tag == 'hyperscript' ) {
 
-
+                    
                     view = () => value.value(
                         h
                         ,css
@@ -172,6 +173,14 @@ function componentAdapter(Machine){
             return vnode
         }, m)
 
+        h.link = (attrs={}, text) => 
+            h('a'
+                ,
+                { onclick: Action.navigateFromEvent
+                , ...attrs
+                }
+                , text
+            )
 
         function css(strings, ...args){
             
