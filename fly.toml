@@ -13,7 +13,7 @@ processes = []
 
 [[services]]
   http_checks = []
-  internal_port = 8043
+  internal_port = 80
   processes = ["app"]
   protocol = "tcp"
   script_checks = []

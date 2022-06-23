@@ -16,10 +16,9 @@ COPY assets ./dist/assets
 COPY posts ./dist/posts
 COPY posts.json ./dist/posts.json
 
-FROM node:16 as serve
+FROM nginx as serve
+COPY --from=build /app/dist /usr/share/nginx/html
+RUN nginx -T
 
-COPY --from=build /app/dist /srv/http/
-
-WORKDIR /srv/http
-
-CMD ["npx", "serve", "-l", "8043", "--single"]
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
