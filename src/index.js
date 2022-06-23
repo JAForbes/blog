@@ -164,20 +164,29 @@ function * PostsList(){
                     }
                 }
                 @media ( min-width: 30em ) {
+
+                    .& .list ul {
+                        display: grid;
+                        gap: 1em 3em;
+                        grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+                        list-style: none;
+                        margin: 0em;
+                        padding: 0em;
+                    }
+                }
+
+                @media (max-width: 80em) {
+                    .& .list {
+                        gap: 1em;
+                    }
+                }
+
+                @media (min-width: 80em) {
                     .& .list {
                         display: grid;
                         --gutter: 10em;
                         grid-template-columns: var(--gutter) 1fr; 
                         margin-left: calc( var(--gutter) * -1 );
-                    }
-
-                    .& .list ul {
-                        display: grid;
-                        gap: 1em 3em;
-                        grid-template-columns: 1fr 1fr;
-                        list-style: none;
-                        margin: 0em;
-                        padding: 0em;
                     }
                 }
 
@@ -322,7 +331,7 @@ export default function * Main(){
 
                     @media (min-width: 30em) {
                         .& {
-                            grid-template-columns: minmax(0, 50em);
+                            grid-template-columns: minmax(0, 60em);
                             justify-content: center;
                         }
 
