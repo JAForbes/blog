@@ -263,15 +263,17 @@ export function * Nav(){
     )
 }
 
-function * on( action, f){
-    do {
-        yield * f()
-    } while ( yield action() )
+function on(predicate, f){
+    return function * () {
+        do {
+            yield * f()
+        } while ( yield Action.on(predicate) )
+    }
 }
 
 export default function * Main(){
 
-    yield * on( Action.popstate, function * () {
+    yield on( x => x.tag == 'popstate', function * () {
         const route = yield Action.getRoute()
 
         yield v( (h, css) => {

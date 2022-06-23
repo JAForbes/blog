@@ -10,8 +10,21 @@ import 'highlight.js/styles/atom-one-dark.css'
 import Action from '../action'
 
 let events = new EventEmitter()
+let actionEvents = new EventEmitter()
+
+let emitAction = actionEvents.emit // for the types
+emitAction = (...args) => {
+    actionEvents.emit('*', ...args)
+    return actionEvents.emit(...args)
+}
 
 window.history.scrollRestoration = 'manual';
+
+window.addEventListener('popstate', () => {
+    events.emit('popstate')
+    emitAction('popstate', Action.popstate())
+})
+
 
 function parseRoute(pathname){
     if ( pathname.startsWith('/posts') ) {
@@ -38,7 +51,10 @@ let posts = null;
 
 function componentAdapter(Machine){
     return function(initialVnode){
-        const machine = Machine(initialVnode.attrs)
+        const generators = []
+        const machine = Machine.call({},initialVnode.attrs)
+        generators.push(machine)
+
         let view = null;
         let Generator = function*(){}.constructor
 
@@ -57,88 +73,112 @@ function componentAdapter(Machine){
                 let value = next.value
                 
                 args = []
-                if ( value == null ) {
-                    'noop';
-                } else if (value.tag == 'getRoute') {
-                    let route = parseRoute(window.location.pathname)
 
-                    args=[route]
+                let isAction = 
+                    value != null
+                    && value.type == 'Action' && value.tag && value.tag in Action
 
-                } else if (value.tag == 'getAllPosts') {
-                     await fetchAllPosts()
-                } else if (value.tag == 'getPostFromRoute' ) {
-                    const route = value.value
-                    if (!posts) await fetchAllPosts()
+                handleAction: {
 
-                    const post = posts.find( x => x.path == 'posts/' + route.value + '.md' )
+                    if (value == null)  {
+                        'noop';
+                    } else if ( value instanceof Generator ) {
+                        let machine = value()
+                        iterate(machine)
+                        generators.push(machine)
+                        args = [machine]
+                    } else if ( !isAction ) {
+                        'noop';
+                    } else if (value.tag == 'getRoute') {
+                        let route = parseRoute(window.location.pathname)
 
-                    args = [post]
-                } else if (value.tag == 'navigateFromEvent') {
-                    console.log('navigate from event')
-                    const event = value.value
-                    event.preventDefault()
-                    const href = event.currentTarget.href
-                    window.history.pushState(null, '', href)
-                    events.emit('popstate')
-                    window.scrollTo({ top: 0, behavior: 'auto' })
-                } else if (value.tag == 'getPostMarkdown' ) {
-                    const post = value.value
-                    const markdown = await window.fetch(window.location.origin + '/'+post.path)
-                        .then( x => x.text() )
+                        args=[route]
+                    } else if (value.tag == 'getAllPosts') {
+                        await fetchAllPosts()
+                    } else if (value.tag == 'getPostFromRoute' ) {
+                        const route = value.value
+                        if (!posts) await fetchAllPosts()
 
-                    args = [markdown]
-                } else if (value.tag == 'renderMarkdown' ) {
-                    const markdown = value.value
-                    const renderer = Object.assign(new marked.Renderer(), {
-                        code(content, lang){
-                            const code = window.document.createElement('pre')
-                            const pre = window.document.createElement('code')
-                            pre.innerHTML = highlight.highlight(content, { language: lang || 'js' }).value
-                            code.appendChild(pre)
-                            pre.classList.add('hljs', 'language-'+lang)
-                            return code.outerHTML
-                        },
+                        const post = posts.find( x => x.path == 'posts/' + route.value + '.md' )
 
-                    })
-                    const html = marked.marked(markdown, { 
-                        renderer
-                    })
-                    
-                    window.highlight = highlight
-                    
-                    args = [html]
-                } else if (value.tag == 'getAssetSrc' ) {
-                    args = [window.location.origin + '/assets/'+value.value]
-                } else if (value.tag == 'hyperscript' ) {
-
-                    
-                    view = () => value.value(
-                        h
-                        ,css
-                    )
-                    m.redraw()
-                } else if (value.tag == 'popstate') {
-
-                    
-                    window.addEventListener('popstate', () => {
+                        args = [post]
+                    } else if (value.tag == 'navigateFromEvent') {
+                        console.log('navigate from event')
+                        const event = value.value
+                        event.preventDefault()
+                        const href = event.currentTarget.href
+                        if( href == window.location.href){
+                            break handleAction;
+                        }
+                        console.log(href, window.location.href)
+                        window.history.pushState(null, '', href)
                         events.emit('popstate')
-                    }, { once: true })
+                        emitAction('popstate', Action.popstate())
+                        window.scrollTo({ top: 0, behavior: 'auto' })
+                    } else if (value.tag == 'getPostMarkdown' ) {
+                        const post = value.value
+                        const markdown = await window.fetch(window.location.origin + '/'+post.path)
+                            .then( x => x.text() )
 
-                    let playback = {}
-                    playback.pause = new Promise((Y) => {
-                        playback.resume = Y
-                    })
-                    events.once('popstate', () => {
-                        args = [true]
-                        playback.resume()
-                    })
+                        args = [markdown]
+                    } else if (value.tag == 'renderMarkdown' ) {
+                        const markdown = value.value
+                        const renderer = Object.assign(new marked.Renderer(), {
+                            code(content, lang){
+                                const code = window.document.createElement('pre')
+                                const pre = window.document.createElement('code')
+                                pre.innerHTML = highlight.highlight(content, { language: lang || 'js' }).value
+                                code.appendChild(pre)
+                                pre.classList.add('hljs', 'language-'+lang)
+                                return code.outerHTML
+                            },
 
-                    await playback.pause
+                        })
+                        const html = marked.marked(markdown, { 
+                            renderer
+                        })
+                        
+                        window.highlight = highlight
+                        
+                        args = [html]
+                    } else if (value.tag == 'getAssetSrc' ) {
+                        args = [window.location.origin + '/assets/'+value.value]
+                    } else if (value.tag == 'hyperscript' ) {
 
+                        
+                        view = () => value.value(
+                            h
+                            ,css
+                        )
+                        m.redraw()
+                    } else if (value.tag == 'on') {
+
+                        let predicate = value.value
+
+                        let playback = {}
+                        playback.pause = new Promise((Y) => {
+                            playback.resume = Y
+                        })
+                        let listener
+                        actionEvents.on('*', listener = (name, x) => {
+                            if(predicate(x)) {
+                                args = [x]
+                                actionEvents.removeListener('*', listener)
+                                playback.resume()
+                            } else {
+                            }
+                        })
+
+                        await playback.pause
+                    }
                 }
-
+                
+                if( isAction){
+                    emitAction(next.value.tag, next.value)
+                }
                 if ( next.done ) break;
             }
+
 
             return null
         }
@@ -156,6 +196,7 @@ function componentAdapter(Machine){
                     let original = vnode.attrs[key]
                     vnode.attrs[key] = (...args) => {
                         let it = original(...args)
+                        generators.push(it)
                         return iterate(it)
                     }
                 } else if (vnode.attrs[key] instanceof Function ) {
@@ -213,6 +254,11 @@ function componentAdapter(Machine){
         return {
             view(vnode){
                 return view && view(vnode)
+            },
+            onremove(){
+                for( let gen of generators ) {
+                    gen.return()
+                }
             }
         }
     }

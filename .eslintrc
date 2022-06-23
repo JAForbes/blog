@@ -55,9 +55,6 @@
     "array-callback-return": [
       "error"
     ],
-    "complexity": [
-      "warn"
-    ],
     "callback-return": [
       "error"
     ],
