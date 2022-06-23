@@ -43,13 +43,15 @@ export const Action = {
     }
 }
 
+const v = Action.hyperscript
+
 function * PostView(){
     const route = yield Action.getRoute()
     const post = yield Action.getPostFromRoute(route)
     const markdown = yield Action.getPostMarkdown(post)
     const html = yield Action.renderMarkdown(markdown)
 
-    return Action.hyperscript( (h, css) =>
+    return v( (h, css) =>
         h('.post'
             , css`
                 .& h1, .& h2 {
@@ -70,7 +72,7 @@ function * PostView(){
 }
 function * HomeView(){
     const src = yield Action.getAssetSrc('img/bio.jpeg')
-    return Action.hyperscript( (h, css) =>
+    return v( (h, css) =>
         h('.home'
             , css`
                 .& {
@@ -97,14 +99,11 @@ function * HomeView(){
 function * PostsList(){
     const posts = yield Action.getAllPosts()
     
-    return Action.hyperscript( (h, css) => {
+    return v( (h, css) => {
         const all = posts.map( x => 
             h('a' ,
                 { href: '/' + x.path.replace('.md', '')
-                , * onclick (e) {
-                    e.preventDefault()
-                    yield Action.navigateFromEvent(e)
-                }
+                , onclick: Action.navigateFromEvent
                 }
                 , h('li.card'+ (x.featured ? '.featured' : '')
                         ,h('p', x.name)
@@ -236,7 +235,7 @@ function * PostsList(){
 
 export function * Nav(){
 
-    return Action.hyperscript( (h, css) => 
+    return v( (h, css) => 
         h('nav'
             , css`
                 .& {
@@ -267,10 +266,7 @@ export function * Nav(){
                     h('a'
                         ,
                         { href: '/' 
-                        , * onclick (e) {
-                            e.preventDefault()
-                            yield Action.navigateFromEvent(e)
-                        }
+                        , onclick: Action.navigateFromEvent
                         }
                         , 'Explore'
                     ) 
@@ -316,7 +312,7 @@ export default function * Main(){
     do {
         const route = yield Action.getRoute()
 
-        yield Action.hyperscript( (h, css) => {
+        yield v( (h, css) => {
 
             return h('.app'
                 , css`

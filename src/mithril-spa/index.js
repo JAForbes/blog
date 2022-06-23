@@ -73,11 +73,13 @@ function componentAdapter(Machine){
 
                     args = [post]
                 } else if (value.tag == 'navigateFromEvent') {
+                    console.log('navigate from event')
                     const event = value.value
+                    event.preventDefault()
                     const href = event.currentTarget.href
                     window.history.pushState(null, '', href)
                     events.emit('popstate')
-                    
+                    window.scrollTo({ top: 0, behavior: 'auto' })
                 } else if (value.tag == 'getPostMarkdown' ) {
                     const post = value.value
                     const markdown = await window.fetch(window.location.origin + '/'+post.path)
@@ -154,6 +156,15 @@ function componentAdapter(Machine){
                     vnode.attrs[key] = (...args) => {
                         let it = original(...args)
                         return iterate(it)
+                    }
+                } else if (vnode.attrs[key] instanceof Function ) {
+                    let original = vnode.attrs[key]
+                    vnode.attrs[key] = (...args) => {
+                        return iterate({
+                            next(){
+                                return { done: true, value: original(...args) }
+                            }
+                        })
                     }
                 }
             }
