@@ -36,3 +36,11 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
+
+[[statics]]
+  guest_path = "/usr/share/nginx/html/assets"
+  url_prefix = "/assets"
+
+[[statics]]
+  guest_path = "/usr/share/nginx/html/posts"
+  url_prefix = "/posts"
