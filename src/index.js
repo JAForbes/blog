@@ -322,7 +322,7 @@ export default function * Main(){
 
                     @media (min-width: 30em) {
                         .& {
-                            grid-template-columns: 50em;
+                            grid-template-columns: minmax(0, 50em);
                             justify-content: center;
                         }
 
