@@ -1,6 +1,6 @@
-# fly.toml file generated for empty-river-1341 on 2022-06-23T00:11:59+10:00
+# fly.toml file generated for james-forbes on 2022-06-23T22:26:42+10:00
 
-app = "empty-river-1341"
+app = "james-forbes"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
