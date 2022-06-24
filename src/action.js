@@ -14,6 +14,9 @@ export default {
     ,getPostMarkdown(post){
         return { type: 'Action', tag: 'getPostMarkdown', value: post }
     }
+    ,getPostHTML(post){
+        return { type: 'Action', tag: 'getPostHTML', value: post }
+    }
     ,renderMarkdown(markdown){
         return { type: 'Action', tag: 'renderMarkdown', value: markdown }
     }

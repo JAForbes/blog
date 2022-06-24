@@ -5,15 +5,23 @@ const v = Action.hyperscript
 
 export { Action, Route }
 
-function * getPostContent(){
+export function * getPostContentSPA(){
     const route = yield Action.getRoute()
     const post = yield Action.getPostFromRoute(route)
     const markdown = yield Action.getPostMarkdown(post)
     const html = yield Action.renderMarkdown(markdown)
     return html
 }
+
+export function * getPostContentPreRendered(){
+    const route = yield Action.getRoute()
+    const post = yield Action.getPostFromRoute(route)
+    const html = yield Action.getPostHTML(post)
+    return html
+}
+
 function * PostView(){
-    const html = yield * getPostContent()
+    const html = yield * getPostContentPreRendered()
 
     return v( (h, css) =>
         h('.post'

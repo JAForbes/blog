@@ -50,6 +50,11 @@ for (let post of posts ) {
             fs.writeFileSync('./dist/'+post.path+'.html', html)
             return [html]
         }
+        ,getPostHTML(){
+            let [markdown] = handlers.getPostMarkdown(post)
+            let [html] = handlers.renderMarkdown(markdown)
+            return [html]
+        }
         ,getAssetSrc(asset){
             [origin + '/assets/'+asset]
         }
