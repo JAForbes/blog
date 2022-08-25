@@ -64,9 +64,7 @@ function componentAdapter(Machine){
                 let next = machine.next(...args)
                 let value = next.value
                 
-                if ( !next.done ) {
-                    args = []
-                }
+                args = []
 
                 let isAction = 
                     value != null
@@ -113,19 +111,6 @@ function componentAdapter(Machine){
                             .then( x => x.text() )
 
                         args = [markdown]
-                    } else if (value.tag == 'getPostHTML' ) {
-
-                        if ( window.location.hostname === 'localhost' ) {
-                            args = await iterate(app.getPostContentSPA())
-                        } else {
-
-                            const post = value.value
-                            const html = await window.fetch(window.location.origin + '/'+post.path+'.html?raw')
-                                .then( x => x.text() )
-
-                            args = [html]
-                        }
-                        
                     } else if (value.tag == 'renderMarkdown' ) {
                         const markdown = value.value
                         const renderer = Object.assign(new marked.Renderer(), {
@@ -189,7 +174,7 @@ function componentAdapter(Machine){
             }
 
 
-            return args
+            return null
         }
 
 
