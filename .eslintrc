@@ -1,6 +1,7 @@
 {
   "parserOptions": {
-    "ecmaVersion": 2017
+    "ecmaVersion": 2021,
+    "sourceType": "module"
   },
   "env": {
     "node": true,
@@ -54,22 +55,11 @@
     "array-callback-return": [
       "error"
     ],
-    "complexity": [
-      "warn"
-    ],
-    "no-param-reassign": [
-      "warn"
-    ],
     "callback-return": [
       "error"
     ],
     "max-depth": [
       "warn",
-      4
-    ],
-    "max-len": [
-      "warn",
-      80,
       4
     ],
     "consistent-return": 2

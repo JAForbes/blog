@@ -6,6 +6,6 @@
   "prettier.disableLanguages": [
     "javascript"
   ],
-  "editor.autoIndent": false,
+  "editor.autoIndent": "advanced",
   "javascript.format.enable": false
 }
