@@ -20,9 +20,12 @@
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
+    "express": "^4.18.1",
     "highlight.js": "^11.5.1",
+    "history": "^5.3.0",
     "marked": "^4.0.17",
     "mithril": "^2.2.2",
+    "mithril-node-render": "^3.0.2",
     "s-js": "^0.4.9",
     "xet": "^2.3.0"
   },
