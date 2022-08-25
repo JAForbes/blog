@@ -641,4 +641,4 @@ If you have any questions you can reach me via twitter [here](https://twitter.co
 
 Many thanks again to [Barney Carroll](https://barneycarroll.com/) for donning the editor hat for this post.  I'm extremely grateful for his insights and time.
 
-And thank you to [Scotty Simpson](https://github.com/CreaturesInUnitards) for his help correcting some additional [typos and punctuation](https://github.com/JAForbes/JAForbes.github.io/pull/35) - this blog post is a much easier read now thank you.
+And thank you to [Scotty Simpson](https://github.com/CreaturesInUnitards) for his help correcting some additional [typos and punctuation](https://github.com/JAForbes/blog/pull/35) - this blog post is a much easier read now thank you.
