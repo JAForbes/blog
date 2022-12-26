@@ -3,3 +3,4 @@ node_modules
 dist
 src/mithril-ssr/public
 public/feed
+public/posts

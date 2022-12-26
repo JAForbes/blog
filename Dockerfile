@@ -10,16 +10,16 @@ COPY index.html .
 COPY src ./src
 
 COPY assets ./public/assets
-COPY posts ./dist/posts
 COPY posts ./posts
-COPY posts.json ./dist/posts.json
 
 COPY posts.json posts.json
+RUN cp posts.json ./public/posts.json
+RUN cp -r posts ./public/posts
 
 RUN npx vite build --minify false --sourcemap
 
 RUN node src/rss/index.js
-RUN node src/static-build/index.js 
+RUN node src/static-build/index.js
 
 FROM nginx as serve
 COPY --from=build /app/dist /usr/share/nginx/html

@@ -46,8 +46,8 @@ for (let post of posts ) {
                 renderer
             })
 
-            fs.mkdirSync('./dist/posts', { recursive: true })
-            fs.writeFileSync('./dist/'+post.path+'.html', html)
+            fs.mkdirSync('./public/posts', { recursive: true })
+            fs.writeFileSync('./public/'+post.path+'.html', html)
             return [html]
         }
         ,getAssetSrc(asset){
