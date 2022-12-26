@@ -9,20 +9,20 @@ RUN npm ci
 COPY index.html .
 COPY src ./src
 
-COPY assets ./dist/assets
+COPY assets ./public/assets
 COPY posts ./dist/posts
+COPY posts ./posts
 COPY posts.json ./dist/posts.json
 
-RUN cp -r ./dist/* .
-RUN node src/static-build/index.js 
-
-RUN node src/rss/index.js
+COPY posts.json posts.json
 
 RUN npx vite build --minify false --sourcemap
 
+RUN node src/rss/index.js
+RUN node src/static-build/index.js 
+
 FROM nginx as serve
 COPY --from=build /app/dist /usr/share/nginx/html
-RUN nginx -T
-
 COPY nginx.conf /etc/nginx/nginx.conf
+RUN nginx -T
 EXPOSE 80

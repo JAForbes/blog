@@ -16,8 +16,8 @@ const feed = new Feed({
     ,image: 'https://james-forbes.com/assets/img/bio.jpeg'
     ,updated: new Date()
     ,feedLinks: {
-        json: 'https://james-forbes.com/feeds/json'
-        ,atom: 'https://james-forbes.com/feeds/atom'
+        json: 'https://james-forbes.com/feed/json'
+        ,atom: 'https://james-forbes.com/feed/atom'
     }
     ,author
     ,copyright: 'All rights reserved ' + new Date().getFullYear() + ', James Forbes'
