@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
+    "feed": "^4.2.2",
     "highlight.js": "^11.5.1",
     "marked": "^4.0.17",
     "mithril": "^2.2.2",
