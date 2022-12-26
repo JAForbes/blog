@@ -9,8 +9,6 @@ RUN npm ci
 COPY index.html .
 COPY src ./src
 
-RUN node src/rss/index.js
-
 RUN npx vite build --minify false --sourcemap
 RUN ls dist
 
@@ -20,6 +18,8 @@ COPY posts.json ./dist/posts.json
 
 RUN cp -r ./dist/* .
 RUN node src/static-build/index.js 
+
+RUN node src/rss/index.js
 
 FROM nginx as serve
 COPY --from=build /app/dist /usr/share/nginx/html
