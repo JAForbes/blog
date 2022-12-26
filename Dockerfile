@@ -16,9 +16,10 @@ COPY posts.json posts.json
 RUN cp posts.json ./public/posts.json
 RUN cp -r posts ./public/posts
 
+RUN node src/rss/index.js
+
 RUN npx vite build --minify false --sourcemap
 
-RUN node src/rss/index.js
 RUN node src/static-build/index.js
 
 FROM nginx as serve
