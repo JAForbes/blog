@@ -1,4 +1,4 @@
-import main, * as app from '../index.js'
+import main from '../index.js'
 import { Route } from '../index.js';
 import fs from 'fs'
 import * as marked from 'marked'
@@ -14,7 +14,7 @@ function stripHTML(x){
 const Generator = function*(){}.constructor
 for (let post of posts ) {
     let machine = main()
-    let origin = 'https://james-forbes.fly.dev'
+    let origin = 'https://james-forbes.com'
     let handlers = {
         getRoute(){
             return [Route.Post(post.path.slice( 'posts/'.length).slice(0,-2))]
@@ -78,6 +78,9 @@ for (let post of posts ) {
             return []
         }
         ,on(){
+            return []
+        }
+        ,handleOldPathFormat(){
             return []
         }
     }

@@ -246,8 +246,6 @@ Hopefully this post has conveyed the value in that approach.
 
 In a future post I'd like to demonstrate a particular library.  But first I wanted to cleanse our collective palates of the common event focused discourse when talking about streams, observables and so on.
 
-If you have any comments or questions, please feel free to reach out to me on twitter [@james_a_forbes](https://twitter.com/james_a_forbes)
-
 Thank you for your time.  And happy streaming!  
 
 > Many thanks to Fred Daoud (https://github.com/foxdonut) and Barney Carroll (https://github.com/barneycarroll) for their help refining this piece.

@@ -225,5 +225,3 @@ We can embrace unix without having to leave node conventions in the dust.  npm s
 There's room for improvement, we could automatically generate tab completion for bash scripts that use this style.  We could extend this approach in a myriad of ways.  But I think this pattern alone allows us to use `package.json` as just project meta data and move our build logic into it's own file.  Because it's just vanilla bash we can lint it with shellcheck and get benefits like comments and syntax highlighting.
 
 I hope this post has given you some ideas for your own projects.
-
-> If you have any thoughts, questions or comments please feel free to reach out on twitter [@james_a_forbes](https://twitter.com/james_a_forbes)

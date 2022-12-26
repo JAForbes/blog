@@ -7,13 +7,9 @@ The power of m.prop
 > The specific code samples and techniques used do not apply if you are using Mithril 1.0
 >
 > I'll leave this article here for posterity, and when I've got more experience with 1.0 I'll post a follow up.
-> In the interim please feel free to ask questions in the [mithril chatroom](https://gitter.im/lhorie/mithril.js).
+> In the interim please feel free to ask questions in the [mithril chatroom](https://mithril.zulipchat.com/).
 > 
 > Happy Coding - James
-
-
-mithril's elegant model binding solution (and its limitations)
-------------------------------------------------------------
 
 Recently I've been working on a large interactive web app as part of a business I am involved in.
 

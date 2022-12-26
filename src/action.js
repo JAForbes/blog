@@ -29,4 +29,7 @@ export default {
     ,on(predicate){
         return { type: 'Action', tag: 'on', value: predicate }
     }
+    ,handleOldPathFormat(){
+        return { type: 'Action', tag: 'handleOldPathFormat' }
+    }
 }

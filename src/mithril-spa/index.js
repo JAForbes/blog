@@ -81,6 +81,18 @@ function componentAdapter(Machine){
                         args = [machine]
                     } else if ( !isAction ) {
                         'noop';
+                    } else if (value.tag == 'handleOldPathFormat' ) {
+                        ;[window.location.hash]
+                        .filter( x => x.includes('#!/posts') )
+                        .map( x => x.slice(2) )
+                        .map( x => window.location.protocol + '//' + window.location.host + x )
+                        .forEach( x => window.location.href = x )
+
+                        ;[window.location.search]
+                        .filter( x => x.startsWith('?/posts') )
+                        .map( x => x.slice(1) )
+                        .map( x => window.location.protocol + '//' + window.location.host + x )
+                        .forEach( x => window.location.href = x )
                     } else if (value.tag == 'getRoute') {
                         let route = parseRoute(window.location.pathname)
 

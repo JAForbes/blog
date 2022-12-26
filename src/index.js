@@ -15,6 +15,11 @@ function * getPostContent(){
 function * PostView(){
     const html = yield * getPostContent()
 
+    const reachout = 
+        yield Action.renderMarkdown(
+            `If you have any thoughts, questions or comments please feel free to reach out on cohost [here](https://cohost.org/jmsfbs-code)
+        `)
+
     return v( (h, css) =>
         h('.post'
             , css`
@@ -31,6 +36,7 @@ function * PostView(){
 
             `
             , h.trust(html)
+            , h.trust(reachout)
         )
     )
 }
@@ -253,7 +259,7 @@ export function * Nav(){
                 , h('li'
                     , h('a'
                         , 
-                        { href: 'https://twitter.com/jmsfbs' 
+                        { href: 'https://cohost.org/jmsfbs-code'
                         }
                         , 'Follow'
                     )
@@ -273,6 +279,7 @@ function on(predicate, f){
 
 export default function * Main(){
 
+    yield Action.handleOldPathFormat()
     yield on( x => x.tag == 'popstate', function * () {
         const route = yield Action.getRoute()
 

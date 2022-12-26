@@ -3,7 +3,7 @@ Refactoring with Arrays
 
 Recently, I posted a snippet of code on Twitter.  The snippet was mostly received well.  But there were a few people questioning the readability of a pattern I was using.
 
-I've introduced this pattern before in another post [here](http://james-forbes.com/#!/posts/versatility-of-array-methods), but that was in the abstract.  I use this pattern so often I thought I'd take you all on a tour through a "real world" refactoring as a demonstration of its utility.
+I've introduced this pattern before in another post [here](http://james-forbes.com/posts/versatility-of-array-methods), but that was in the abstract.  I use this pattern so often I thought I'd take you all on a tour through a "real world" refactoring as a demonstration of its utility.
 
 I don't always use this pattern, there are situations where I would write a standard ternary.  But when I don't trust the data I'm working with, I think it's beneficial to use an array context to represent the lack of safety and trust.  This is a common pattern in many mainstream languages now.  In _Java_ there is a language level `Option` type.  In almost all FP languages we can find `Option`, `Result`, `Maybe` and other aliases.
 
@@ -308,7 +308,5 @@ I recommend taking some time experimenting with this approach, I can't ever see 
 Unless of course, if TC39 ships the `|>` [pipeline operator](https://github.com/tc39/proposal-pipeline-operator).  😉
 
 Thank you for your time.
-
-If you have any thoughts or questions, please reach out on twitter [@james_a_forbes](https://twitter.com/james_a_forbes)
 
 > I'd like to thank [@barneycarroll](https://twitter.com/barneycarroll) for aiding in the refinement of the original draft of this post.

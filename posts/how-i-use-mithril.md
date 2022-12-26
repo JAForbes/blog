@@ -7,7 +7,7 @@ How I use Mithril
 > The specific code samples and techniques used do not apply if you are using Mithril 1.0
 >
 > I'll leave this article here for posterity, and when I've got more experience with 1.0 I'll post a follow up.
-> In the interim please feel free to ask questions in the [mithril chatroom](https://gitter.im/lhorie/mithril.js).
+> In the interim please feel free to ask questions in the [mithril chatroom](https://mithril.zulipchat.com/).
 > 
 > Happy Coding - James
 
@@ -491,4 +491,4 @@ to approach these problems.  Mithril has smart design assumptions built in, but 
 The upcoming version of mithril will make this even more true.  Mithril's router, rendering, etc are all separate modules that you
 can opt out of at will.
 
-If you found this article interesting, I recommend hanging out in the mithril chat on [gitter](https://gitter.im/lhorie/mithril.js).
+If you found this article interesting, I recommend hanging out in the [mithril chat](https://mithril.zulipchat.com/).

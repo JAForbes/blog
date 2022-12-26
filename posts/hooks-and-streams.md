@@ -631,11 +631,9 @@ As for other stream libraries: there are many great options out there but they m
 
 Thank you so much for reading - I hope it was interesting and useful to you.
 
-If you've got any questions about streams or mithril.js - I recommend jumping in the gitter at https://gitter.im/mithriljs/mithril.js - the community is extremely responsive, friendly and helpful.
+If you've got any questions about streams or mithril.js - I recommend jumping in the [chat](https://mithril.zulipchat.com) - the community is extremely responsive, friendly and helpful.
 
 I've also written an [Intro to Streams](https://james-forbes.com/#!/posts/intro-to-streams) post that is library agnostic and attempts to convey a helpful mindset when working with side effects and transforms.
-
-If you have any questions you can reach me via twitter [here](https://twitter.com/jmsfbs).
 
 ---
 

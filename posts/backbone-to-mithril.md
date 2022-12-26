@@ -7,7 +7,7 @@ The Road from Backbone to Mithril
 > The specific code samples and techniques used do not apply if you are using Mithril 1.0
 >
 > I'll leave this article here for posterity, and when I've got more experience with 1.0 I'll post a follow up.
-> In the interim please feel free to ask questions in the [mithril chatroom](https://gitter.im/lhorie/mithril.js).
+> In the interim please feel free to ask questions in the [mithril chatroom](https://mithril.zulipchat.com/).
 > 
 > Happy Coding - James
 
@@ -515,7 +515,7 @@ Even then, mithril's opt out API is nicer than any other framework.  And you can
 Mithril (and virtual doms in general) make extremely complex view code trivial, things like occlusion culling, conditional list rendering, dynamic styles, are all declarative and easy to read/edit.  You will have less bugs, and a faster app.
 
 I encourage you to experiment with it yourself (and turn on paint rectangles in your dev tools).  You'll be pleasantly suprised.
-If you have any performance issues, jump into the [gitter](https://gitter.im/lhorie/mithril.js).
+If you have any performance issues, jump into the [chat](https://mithril.zulipchat.com/).
 
 A lot of our instincts about app development in JS are not specific to a particular framework.  What separates mithril from the pack is its focus on Javascript's semantics and characteristics, instead of framework domain specific languages and techniques.
 If you know how to write fast JS, you already know how to use mithril.

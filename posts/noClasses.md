@@ -83,17 +83,17 @@ And that seems appealing, at first glance.  But the first is syntactically clean
 
 >You'll probably find you can use a generic library (e.g. _) to do all the transforms you need if you are using a plain array or hash.
 >
->James Forbes (@james_a_forbes) [October 21, 2014](https://twitter.com/james_a_forbes/status/524437730378252288)
+>James Forbes (@jmsfbs) [October 21, 2014](https://twitter.com/jmsfbs/status/524437730378252288)
 
 
 >And, why does every library want to be dependency free? Now there'll be 5 different implementations/namespace of map().
 >
->James Forbes (@james_a_forbes) [October 21, 2014](https://twitter.com/james_a_forbes/status/524440308931522560)
+>James Forbes (@jmsfbs) [October 21, 2014](https://twitter.com/jmsfbs/status/524440308931522560)
 
 
 >Why create your own inheritance system for a library that has nothing to do with classes?
 >
->James Forbes (@james_a_forbes) [October 21, 2014](https://twitter.com/james_a_forbes/status/524440800575254528)
+>James Forbes (@jmsfbs) [October 21, 2014](https://twitter.com/jmsfbs/status/524440800575254528)
 
 We can solve the syntactic mess by making use of a `compose` function, available in underscore,lodash,ramda, etc
 
