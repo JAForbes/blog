@@ -1,4 +1,4 @@
-import main from '../index.js'
+import main, { cohostMarkdown } from '../index.js'
 import { Route } from '../index.js';
 import fs from 'fs'
 import * as marked from 'marked'
@@ -46,8 +46,10 @@ for (let post of posts ) {
                 renderer
             })
 
-            fs.mkdirSync('./public/posts', { recursive: true })
-            fs.writeFileSync('./public/'+post.path+'.html', html)
+            if ( markdown != cohostMarkdown ) {
+                fs.mkdirSync('./public/posts', { recursive: true })
+                fs.writeFileSync('./public/'+post.path+'.html', html)
+            }
             return [html]
         }
         ,getAssetSrc(asset){
