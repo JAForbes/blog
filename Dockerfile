@@ -23,6 +23,7 @@ RUN npx vite build --minify false --sourcemap
 RUN node src/static-build/index.js
 
 FROM nginx as serve
+COPY --from=build /app/public /usr/share/nginx/html
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN nginx -T
