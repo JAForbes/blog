@@ -12,13 +12,12 @@ function * getPostContent(){
     const html = yield Action.renderMarkdown(markdown)
     return html
 }
+export const cohostMarkdown = `If you have any thoughts, questions or comments please feel free to reach out on cohost [here](https://cohost.org/jmsfbs-code)`
 function * PostView(){
     const html = yield * getPostContent()
 
     const reachout = 
-        yield Action.renderMarkdown(
-            `If you have any thoughts, questions or comments please feel free to reach out on cohost [here](https://cohost.org/jmsfbs-code)
-        `)
+        yield Action.renderMarkdown(cohostMarkdown)
 
     return v( (h, css) =>
         h('.post'
