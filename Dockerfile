@@ -7,20 +7,14 @@ COPY package.json package-lock.json /app/
 RUN npm ci
 
 COPY index.html .
-COPY src ./src
+COPY ./src ./src
 
-COPY assets ./public/assets
-COPY posts ./posts
-
-COPY posts.json posts.json
-RUN cp posts.json ./public/posts.json
-RUN cp -r posts ./public/posts
+COPY ./public ./public
 
 RUN node src/rss/index.js
-
-RUN npx vite build --minify false --sourcemap
-
 RUN node src/static-build/index.js
+RUN npx vite build --minify false --sourcemap
+RUN wget https://cohost.org/jmsfbs-code/rss/public.json -O ./public/feed/cohost.json
 
 FROM caddy:2.6.2-alpine as serve
 COPY --from=build /app/public /usr/share/caddy
