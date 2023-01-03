@@ -12,6 +12,7 @@ function stripHTML(x){
     return L.parseHTML(`<body><markdown>${x}</markdown></body>`).document.querySelector('markdown').textContent
 }
 const Generator = function*(){}.constructor
+global.renderMarkdown = true
 for (let post of posts ) {
     let machine = main()
     let origin = 'https://james-forbes.com'
@@ -35,6 +36,9 @@ for (let post of posts ) {
         }
         ,getPostMarkdown(){
             return [fs.readFileSync('./public/' + post.path, 'utf8')]
+        }
+        ,getPostHTML(){
+            return ['']
         }
         ,renderMarkdown(markdown){
             const renderer = Object.assign(new marked.Renderer(), {

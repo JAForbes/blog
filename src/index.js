@@ -6,11 +6,18 @@ const v = Action.hyperscript
 export { Action, Route }
 
 function * getPostContent(){
-    const route = yield Action.getRoute()
-    const post = yield Action.getPostFromRoute(route)
-    const markdown = yield Action.getPostMarkdown(post)
-    const html = yield Action.renderMarkdown(markdown)
-    return html
+    if ( typeof global != 'undefined' && global.renderMarkdown ) {
+        const route = yield Action.getRoute()
+        const post = yield Action.getPostFromRoute(route)
+        const markdown = yield Action.getPostMarkdown(post)
+        const html = yield Action.renderMarkdown(markdown)
+        return html
+    } else {
+        const route = yield Action.getRoute()
+        const post = yield Action.getPostFromRoute(route)
+        const html = yield Action.getPostHTML(post)
+        return html
+    }
 }
 export const cohostMarkdown = `If you have any thoughts, questions or comments please feel free to reach out on cohost [here](https://cohost.org/jmsfbs-code)`
 

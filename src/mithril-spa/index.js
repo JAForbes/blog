@@ -126,6 +126,12 @@ function componentAdapter(Machine){
                             .then( x => x.text() )
 
                         args = [markdown]
+                    } else if ( value.tag == 'getPostHTML' ) {
+                        const post = value.value
+                        const html = await window.fetch(window.location.origin + '/'+post.path+'.html')
+                            .then( x => x.text() )
+
+                        args = [html]
                     } else if (value.tag == 'renderMarkdown' ) {
                         const markdown = value.value
                         const renderer = Object.assign(new marked.Renderer(), {
