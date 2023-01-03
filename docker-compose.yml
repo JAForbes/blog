@@ -1,0 +1,16 @@
+services:
+  serve:
+    image: caddy:2.6.2-alpine
+    volumes:
+      - ./dist:/usr/share/caddy
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 3000:80
+  build:
+    image: node:18-alpine
+    user: node
+    init: true
+    working_dir: $PWD
+    command: sh -c 'npm install && npx vite build --watch'
+    volumes:
+      - .:/$PWD
