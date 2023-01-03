@@ -1,7 +1,7 @@
 import { Feed } from 'feed'
 import fs from 'node:fs'
 
-const posts = JSON.parse(fs.readFileSync('posts.json'))
+const posts = JSON.parse(fs.readFileSync('./public/posts.json'))
 const href = 'https://james-forbes.com'
 const author = {
     name: 'James Forbes'

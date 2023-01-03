@@ -6,7 +6,7 @@ import * as L from 'linkedom'
 import hljs from 'highlight.js'
 import m from 'mithril'
 
-const posts = JSON.parse(fs.readFileSync('./posts.json'));
+const posts = JSON.parse(fs.readFileSync('./public/posts.json'));
 
 function stripHTML(x){
     return L.parseHTML(`<body><markdown>${x}</markdown></body>`).document.querySelector('markdown').textContent
@@ -29,7 +29,7 @@ for (let post of posts ) {
             return []
         }
         ,getPostMarkdown(){
-            return [fs.readFileSync('./' + post.path, 'utf8')]
+            return [fs.readFileSync('./public/' + post.path, 'utf8')]
         }
         ,renderMarkdown(markdown){
             const renderer = Object.assign(new marked.Renderer(), {
@@ -47,7 +47,6 @@ for (let post of posts ) {
             })
 
             if ( markdown != cohostMarkdown ) {
-                fs.mkdirSync('./public/posts', { recursive: true })
                 fs.writeFileSync('./public/'+post.path+'.html', html)
             }
             return [html]
