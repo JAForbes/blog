@@ -2,7 +2,8 @@ name: Fly Deploy
 on:
   push:
     branches: [ master ]
-
+  schedule:
+      - cron:  '* 6 * * *'
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 jobs:
