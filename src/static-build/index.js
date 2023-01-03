@@ -22,6 +22,11 @@ for (let post of posts ) {
         ,getAllPosts(){
             return [[]]
         }
+        ,getCohostFeed(){
+            return [{
+                items: []
+            }]
+        }
         ,getPostFromRoute(){
             return [post]
         }
