@@ -4,3 +4,4 @@ dist
 src/mithril-ssr/public
 public/feed
 *.md.html
+cohost.json
