@@ -12,7 +12,7 @@ services:
     working_dir: $PWD
     user: node
     init: true
-    command: sh -c 'npm install && npx vite build --watch'
+    command: sh -c 'npm install && npx vite build --watch --sourcemap'
     volumes:
       - .:/$PWD
 

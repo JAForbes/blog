@@ -11,6 +11,12 @@ const posts = JSON.parse(fs.readFileSync('./public/posts.json'));
 function stripHTML(x){
     return L.parseHTML(`<body><markdown>${x}</markdown></body>`).document.querySelector('markdown').textContent
 }
+
+// todo-james this is inconsistent, hit bugs in safari
+// for exported coroutines where their constructor was simply `Function`
+// value?.prototype?.constructor === function*(){}.prototype.constructor
+// seems to always work, and is spec'd so maybe use that, for now this only
+// runs in node so probably fine.
 const Generator = function*(){}.constructor
 global.renderMarkdown = true
 for (let post of posts ) {
