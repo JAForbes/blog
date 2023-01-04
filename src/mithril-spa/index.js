@@ -48,8 +48,6 @@ function componentAdapter(Machine){
         generators.push(machine)
 
         let view = null;
-        let Generator = function*(){}.constructor
-
         async function iterate(machine, args=[]){
 
             async function fetchAllPosts(){
@@ -74,7 +72,9 @@ function componentAdapter(Machine){
 
                     if (value == null)  {
                         'noop';
-                    } else if ( value instanceof Generator ) {
+                    } else if (
+                        value?.prototype?.constructor === function*(){}.prototype.constructor
+                    ) {
                         let machine = value()
                         iterate(machine)
                         generators.push(machine)
@@ -201,13 +201,18 @@ function componentAdapter(Machine){
 
         const h = Object.assign((tag, ...args) => {
                 
-            tag = tag instanceof Generator ? xet(components, tag, componentAdapter) : tag
-            
+            tag = 
+                function * (){}.prototype.constructor === tag?.prototype?.constructor 
+                    ? xet(components, tag, componentAdapter) 
+                    : tag
+
             let vnode = m(tag, ...args)
             vnode.attrs = vnode.attrs || {}
             
             for(let key of Object.keys(vnode.attrs) ) {
-                if ( vnode.attrs[key] instanceof Generator ) {
+                if ( 
+                    vnode.attrs[key]?.prototype?.constructor === function*(){}.prototype.constructor 
+                ) {
                     let original = vnode.attrs[key]
                     vnode.attrs[key] = (...args) => {
                         let it = original(...args)
@@ -269,8 +274,8 @@ function componentAdapter(Machine){
         return {
             view(vnode){
                 return view && view(vnode)
-            },
-            onremove(){
+            }
+            ,onremove(){
                 for( let gen of generators ) {
                     gen.return()
                 }
