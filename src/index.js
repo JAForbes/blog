@@ -176,7 +176,7 @@ function * CohostList(){
                     gap: 0.3em;
                 }
             `
-            , h('h4', 'From cohost')
+            , h('h4', 'From Cohost')
             , h('ul.cohost-posts.list'
                 , feed.items
                     .filter( x => x.title)
@@ -191,6 +191,124 @@ function * CohostList(){
                                     .slice(0,3)
                                     .map( x => h('li', `#${x}`) )
                                 )
+                            )
+                        )
+                )
+            )
+        )
+    )
+}
+
+function * RSS(){
+
+    return v( (h, css) => 
+        h('.rss'
+            , css`
+                .& {
+                    display: grid;
+                    --theme: black;
+                }
+
+                @media (max-width: 80em) {
+                    .& {
+                        gap: 1em;
+                    }
+                }
+
+                @media (min-width: 80em) {
+                    .& {
+                        display: grid;
+                        --gutter: 10em;
+                        grid-template-columns: var(--gutter) 1fr; 
+                        margin-left: calc( var(--gutter) * -1 );
+                    }
+                }
+
+                .& ul {
+                    padding: 0em;
+                    list-style: none;
+                }
+
+                .& .card {
+                    display: grid;
+                    gap: 1em;
+                    padding: 1em;
+                    border: solid 1px var(--theme);
+                    border-left: solid 0.5em var(--theme);
+                }
+
+                .& p {
+                    margin: 0em;
+                }
+
+                .& a:visited, .& a {
+                    color: black;
+                    text-decoration: none;
+                }
+
+                .& .list {
+                    display: grid;
+                }
+
+                .& .card {
+                    transform: scale(1);
+                    transition: transform 0.5s, background-color 1s;
+                }
+
+                .& .card:hover {
+                    transform: scale(1.05);
+                    transition: transform 0.1s, background-color 0.2s;
+                }
+
+                @media ( max-width: 30em ) {
+                    .& {
+                        gap: 3em 1em;
+                    }
+                    .& .list {
+                        display: grid;
+                        gap: 1em;
+                    }
+
+                    .& .list {
+                        display: grid;
+                        gap: 1em 3em;
+                        grid-template-columns: 1fr;
+                        list-style: none;
+                        margin: 0em;
+                        padding: 0em;
+                    }
+                }
+                @media ( min-width: 30em ) {
+
+                    .& .list {
+                        display: grid;
+                        gap: 1em 3em;
+                        grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+                        list-style: none;
+                        margin: 0em;
+                        padding: 0em;
+                    }
+                }
+
+                .& .date {
+                    font-size: 0.8em;
+                }
+            `
+            , h('h4', 'Feeds')
+            , h('ul.rss-posts.list'
+                , [
+
+                    { url: '/feed/atom', title: 'Atom' }
+                    ,{ url: '/feed/json', title: 'JSON' }
+                    ,{ url: '/feed/rss', title: 'RSS' }
+                ]
+                    .filter( x => x.title)
+                    .slice(0,9)
+                    .map(
+                        x => h('a'
+                            , { href: x.url }
+                            , h('li.card'
+                                , h('p.title', x.title ) 
                             )
                         )
                 )
@@ -465,22 +583,10 @@ export default function * Main(){
                     })
                     , h(PostsList, { key: 'postslist' })
                     , h(CohostList, { key: 'cohostlist' })
-                    , footer(h)
+                    , h(RSS, { key: 'rsslist' })
                 ]
             )
 
         })
     })
-}
-
-function footer(h){
-    return h('footer'
-        , { key: 'footer' } 
-        ,h('a'
-            , { href: '/feed/atom', title: 'RSS Atom Feed' }
-            , h.trust(`
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
-            `)
-        )
-    )
 }
