@@ -487,7 +487,7 @@ export function * Nav(){
                 , h('li'
                     , h('a'
                         , 
-                        { href: 'https://soundcloud.com/peopleofconcept' 
+                        { href: 'https://jmsfbs.bandcamp.com' 
                         }
                         , 'Listen'
                     )
