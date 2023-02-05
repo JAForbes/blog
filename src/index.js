@@ -487,7 +487,7 @@ export function * Nav(){
                 , h('li'
                     , h('a'
                         , 
-                        { href: 'https://jmsfbs.bandcamp.com' 
+                        { href: 'https://jmsfbs.com' 
                         }
                         , 'Listen'
                     )
