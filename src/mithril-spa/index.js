@@ -1,4 +1,5 @@
 /* global window */
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 import * as marked from 'marked'
 import m from 'mithril'
 import main, * as app from '../index.js'
@@ -152,6 +153,14 @@ function componentAdapter(Machine){
                         window.highlight = highlight
                         
                         args = [html]
+                    } else if (value.tag === 'renderMermaid') {
+                        args = [
+                            () => import('https://esm.sh/mermaid@10.8.0').then( ({ default: mermaid }) => {
+                                mermaid.initialize()
+                                mermaid.run()
+                                Array.from(window.document.querySelectorAll('.mermaid')).forEach( x => x.style.opacity = 1 )
+                            })
+                        ]
                     } else if (value.tag == 'getAssetSrc' ) {
                         args = [window.location.origin + '/assets/'+value.value]
                     } else if (value.tag == 'hyperscript' ) {

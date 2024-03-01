@@ -4,6 +4,7 @@ services:
     volumes:
       - ./dist:/usr/share/caddy
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./public:/usr/share/caddy/
     ports:
       - 3000:80
 

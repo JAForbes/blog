@@ -27,6 +27,8 @@ function * PostView(){
     const reachout = 
         yield Action.renderMarkdown(cohostMarkdown)
 
+    const activateMermaid = yield Action.renderMermaid()
+
     return v( (h, css) =>
         h('.post'
             , css`
@@ -42,6 +44,9 @@ function * PostView(){
                 }
 
             `
+            , h('span', {
+                oncreate: activateMermaid
+            })
             , h.trust(html)
             , h.trust(reachout)
         )

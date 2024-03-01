@@ -37,5 +37,8 @@ export default {
     }
     ,handleOldPathFormat(){
         return { type: 'Action', tag: 'handleOldPathFormat' }
+    },
+    renderMermaid(){
+        return { type: 'Action', tag: 'renderMermaid' }
     }
 }

@@ -50,7 +50,12 @@ for (let post of posts ) {
             const renderer = Object.assign(new marked.Renderer(), {
                 code(content, lang){
 
+                    if (lang === 'mermaid') {
+                        return `<code><pre class="mermaid" style="opacity: 0; transition: opacity 0.5s;">${content}</pre></code>`
+                    }
+
                     lang = lang || 'js'
+
                     let html = hljs.highlight(stripHTML(content), { language: lang || 'js' }).value
 
                     return `<code><pre class="hljs language-${lang}">${html}</pre></code>`
