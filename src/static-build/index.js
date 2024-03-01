@@ -51,7 +51,7 @@ for (let post of posts ) {
                 code(content, lang){
 
                     if (lang === 'mermaid') {
-                        return `<code><pre class="mermaid" style="opacity: 0; transition: opacity 0.5s;">${content}</pre></code>`
+                        return `<code><pre class="mermaid" style="opacity: 0; transition: opacity 0.5s;">${stripHTML(content)}</pre></code>`
                     }
 
                     lang = lang || 'js'

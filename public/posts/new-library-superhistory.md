@@ -68,7 +68,9 @@ After you've created an instance, let's say you routed to the settings page:
 superhistory.go('/settings')
 ```
 
-Now we may mount a `Settings` component, and give it access to the history API.  But wouldn't it be logical to prefix any route commands it makes with `/settings`, so if routes to `/theme/darkmode` the browser actually routes to `/settings/theme/darkmode`.
+Now we may want a `Settings` component to have access to the history API.  We can give it a new history instance that prefixes any route commands it makes with `/settings`.
+
+If the component navigates to `/theme/darkmode` the browser actually navigates to `/settings/theme/darkmode`.
 
 Easy:
 
@@ -99,8 +101,8 @@ Wherever we are in the app, we shouldn't need to know if we are dealing with the
 For example, if you want to render an anchor tag, both instances have a `preview` method that will render the fully qualified url (not just the path), taking into account any prefixes along the way from cascaded nested history's.
 
 ```typescript
-`<a href="${themeHistory.preview()}">Change colour Palette</a>`
-// `<a href="https://example.com/settings/theme/palette">Change colour Palette</a>`
+h('a', { href: themeHistory.preview() }, 'Change Color Palette')
+// h('a', { href: "https://example.com/settings/theme/palette" }, 'Change Color Palette')
 ```
 
 ### Not a router
