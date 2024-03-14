@@ -7,9 +7,9 @@ And why it might be important to remove gamification from our online social inte
 
 ## Cohost?  What is that?
 
-Cohost is a tiny little social media website that is owned and operated by its development team.  It also deliberately avoids metrics and gamification.  Cohost doesn't care if you keep scrolling.
+Cohost is a comparitively tiny social media website that is owned and operated by its development team.  It also deliberately avoids metrics and gamification.  Cohost doesn't care if you keep scrolling.  Actually they do care, they want you to stop scrolling.
 
-The fact cohost is operated as a co-op directly informs the product design, and that gives me a lot of confidence in its long term sustainability despite its relatively smaller size.
+The fact Cohost is operated as a co-op directly informs the product design, and that gives me a lot of confidence in its long term sustainability despite its relatively smaller size.
 
 ## Financial Viability
 
@@ -17,9 +17,9 @@ The fact cohost is operated as a co-op directly informs the product design, and 
 
 The business model? well its early days but apparently it is two pronged.  The first is the good old patreon-like subscription model.  The bet is people will pay to use the website because it is different to every other social space and has a higher probability of staying that way because of how it is structured.
 
-They call this "Cohost Plus" but the "Plus" implies unlocking some kind of extra functionality.  While it does do that its really there not to activate new functionality but just for as a way for the community to keep the site they like running.  Its $5 a month.  It is a way to convert community good will into revenue.  Which means Cohost is incentivized to maintain community good will.
+They call this "Cohost Plus" but the "Plus" implies unlocking some kind of extra functionality.  While it does do that its really there as a way for the community to keep the site they like running.  Its $5 a month.  It is a way to convert community good will into revenue.  Which means Cohost is incentivized to maintain community good will.
 
-Their conversion rate is 17% (which is comparitvely very high [apparently](https://cohost.org/staff/post/1690393-h1-2023-financial-up)) but also not high enough to sustain them.  This model is no longer new for things like Podcasts but it new for running a social media website.  Time will tell if the good will is persistent.
+Their conversion rate is 17% (which is pretty high) but also not high enough to sustain them.  This model is no longer new but it new for running a social media website.  Time will tell if the good will is persistent.
 
 ### User subscriptions
 
@@ -62,7 +62,7 @@ As I said, tags are important on cohost.  They are great way to build communitie
 
 Bookmark a few tags and you instantly have a vibrant feed without having to follow a ton of people.
 
-You will immediately notice a lot of Cohost users are furries that are really into anime.  If that's not your thing, that's ok you can mute tags.  Definitely mute tags that bother you.  There's no algorithm here learning your behaviours you need to cultivate your own experience (ugh work!).
+You will immediately notice a lot of posts talking about stuff you are not interested in at all.  That's ok you can mute tags.  Definitely mute tags that bother you.  There's no algorithm learning your behaviours - you need to cultivate your own experience (ugh work!).
 
 Some of the tags I follow:
 
@@ -75,8 +75,6 @@ Some of the tags I follow:
 - `#bird`
 
 Bookmarked tags and muted tags are kind of the antithesis of eachother, you expand your scope with a bookmarked tag and reduce it again by muting some subset. 
-
-E.g. My `#bird` feed has no furries in it, so its just people posting photos of birds.  It isn't hard to tune your experience, we don't need algorithms for this.
 
 ### Following "Inbox"
 
@@ -148,8 +146,8 @@ I think it'd be cool if there was a welcome experience that helped you pick some
 
 ## In Conclusion
 
-If you've tried it out and immediately checked out I recommend giving it another try.  But be aware you need to put in a little effort upfront curating your feed.  You also may feel you need a dopamine hit that you aren't getting from other sites.  Be conscious of that and push past it.  When you're bored, that's a good thing, close the tab and go do something else.  You don't need to death scroll, you won't miss out on anything.
+If you've tried it out and immediately decided it wasn't for you I recommend giving it another try.  But be aware you need to put in a little effort upfront curating your feed.  You also may feel you need a dopamine hit that you aren't getting from other sites.  Be conscious of that and push past it.  When you're bored, that's a good thing, close the tab and go do something else.  You don't need to death scroll, you won't miss out on anything.
 
-I'd far prefer Cohost to be sucessful than even Mastodon.  Decentralizing doesn't actually solve any of the problems of social media.  Cohost's model actually has a legitimate chance of creating a social network that isn't predatory.
+It may be that what cohost is missing is someone like you posting about exactly what you're interested in.
 
-If you're not left leaning, if you like sports, or reality tv shows.  Please join.  Help make this beautiful little corner of the internet viable just by being you.
+I'd far prefer Cohost to be sucessful than even Mastodon.  Decentralizing doesn't actually solve any of the problems of social media.  Cohost's model actually has a legitimate chance of creating a social network that isn't predatory and they are off to a good start, they have momentum.
