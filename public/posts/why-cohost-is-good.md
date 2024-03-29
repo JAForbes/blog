@@ -3,13 +3,15 @@ Why Cohost is Good
 
 And why it might be important to remove gamification from our online social interactions.
 
-> Note there's no screenshots here, this is a big wall of text.  I've meaning to post something like this for a while and wall of text is all I can manage right now.  Sorry.
+> Note there's no screenshots here, this is a big wall of text.  I've been meaning to post something like this for a while and wall of text is all I can manage right now.  Sorry.
 
 ## Cohost?  What is that?
 
-Cohost is a comparitively tiny social media website that is owned and operated by its development team.  It also deliberately avoids metrics and gamification.  Cohost doesn't care if you keep scrolling.  Actually they do care, they want you to stop scrolling.
+Cohost is a comparitively tiny social media website that is owned and operated by its development team.  It also deliberately avoids metrics and gamification.  Cohost doesn't care if you keep scrolling.  Actually they do care, they want you to *stop* scrolling.
 
 The fact Cohost is operated as a co-op directly informs the product design, and that gives me a lot of confidence in its long term sustainability despite its relatively smaller size.
+
+Although by avoiding investors and non-worker equity, Cohost has a significant financial challenge to overcome before it can reach that long term target.
 
 ## Financial Viability
 
@@ -25,7 +27,7 @@ Their conversion rate is 17% (which is pretty high) but also not high enough to 
 
 The second prong (🦐) is user subscriptions.  Cohost followers can subscribe to paid posts for a user they like.  So maybe there's a podcast you like, and they post their podcasts on Cohost, you can pay that user $5 / month and Cohost will take some kind of small cut.
 
-There are other avenues to, they are about to launch tipping.  You could tip an artist for example on their platform and they'll take a small cut.
+There are other avenues as well.  They are about to launch tipping.  You could tip an artist for example on their platform and they'll take a small cut.
 
 I really like how open they are about their business model, they have financial updates, they walk through the challenges in a lot of detail.
 
@@ -47,14 +49,14 @@ Here's some examples of avoiding gamification / metrics
 - You cannot see if a post has been liked at all, by anybody
 - You can "like" something, but no-one can see you liked it except you and the poster.
 - There's no full text search.  You can only search for tags.  This was deliberate to avoid abuse campaigns.  But it also makes tags actually used and useful. (More on tags later)
-- You can see how many people commented but you have to actually click into the comment thread to read it, and comments aren't posts, you can't broadcast them to your feed.  This means the comment thread is more of a conversation between you and the poster, not you trying to show your feed how clever you are.
+- You can see how many people commented but you have to actually click into the comment thread to read it, and comments aren't posts, you can't broadcast them to your feed.  This means the comment thread is more of a conversation between you and the poster and not you just showing your feed how clever you are.
 - Your profile does not show who follows you, or how many people follow you
 - There's no infinite scroll, you explicitly click "Next page"
 - There's no "trending" section
 
-All these decisions are deliberate.  It makes the site less addictive.  You don't post something to earn likes, you post it to post it.
+All these decisions are deliberate.  It makes the site less addictive.  You don't post something to earn likes, you post it to... post it.
 
-But they aren't really features, more anti features, let's talk features.
+They aren't really features, more anti features, let's talk features.
 
 ### Bookmarked Tags
 
@@ -62,19 +64,11 @@ As I said, tags are important on cohost.  They are great way to build communitie
 
 Bookmark a few tags and you instantly have a vibrant feed without having to follow a ton of people.
 
-You will immediately notice a lot of posts talking about stuff you are not interested in at all.  That's ok you can mute tags.  Definitely mute tags that bother you.  There's no algorithm learning your behaviours - you need to cultivate your own experience (ugh work!).
+You will notice a lot of posts talking about stuff you are not interested in at all.  That's okay because you can mute tags.  Definitely mute tags that bother you.  There's no algorithm learning your behaviours - you need to cultivate your own experience (ugh work!).
 
-Some of the tags I follow:
+Bookmarked tags and muted tags work in concert, you expand your scope with a bookmarked tag and reduce it again by muting some subset. 
 
-- `#music`, `#Music Production`, `#reaper`
-- `#gamedev`, `#gamedesign`, `#indiegames`, `#ludum dare`
-- `#electronics`
-- `#irish`
-- `#ambient`
-- `#film`
-- `#bird`
-
-Bookmarked tags and muted tags are kind of the antithesis of eachother, you expand your scope with a bookmarked tag and reduce it again by muting some subset. 
+Bookmarked tags remind me a little of using Dweetdeck.  This is one aggregated feed of all your favourite tags, so it isn't multi columned like Tweetdeck.  But it feels similar in that you curate your own experience by deciding explicitly what you want to see.  It is arguably less accessible to have to do that initial setup but that is an interesting UX design problem that feels solvable.
 
 ### Following "Inbox"
 
@@ -82,23 +76,19 @@ Have you ever had this problem where you follow someone who posts all the time a
 
 Well Cohost has a great little feature that works a bit like an RSS reader or an email inbox.  This feature is pretty new but I already use this more than the main feed.
 
-There's two panes, on the left is the people you follow sorted by who posted last (you can change that).  On the right is the posts for that user.  This simple UI makes it very simple to quickly click in and out of different users post history.
+There's two panes.  The left pane is for the people you follow (sorted by who posted last).  The right pane is the posts for that user.  This simple UI makes it very simple to quickly click in and out of different user's post history.
 
-Yes on twitter etc you could go to the users profile, but you would never do that and its also nowhere near as easy to navigate.  You'd have to somehow know which users posted last, and maintain a mental list of which users you need to catch up on.
+On twitter you could go to the users profile to see their posts. But that is nowhere near as easy to navigate.  You'd have to somehow know which users posted last and then maintain a mental list of which users you need to catch up on.
 
 This is a way more relaxing experience.  You never feel like you are behind or that you will lose a post to time.  It is so easy to scroll down the left pane to a user and then catch up on the three posts they did in that month.
 
-I think this is actually pretty revolutionary.  Other social networks could easily do this, but it makes no sense for them to do that.  They want the feed to be as dynamic as possible, to feel like if you step away you will miss out on something.  There is a deliberate attack on the chronological feed.  not just because targeted advertising wants to guide you towards particular decisions but because you can catch up on a chronological feed.  When you feel you have "caught up" you get bored of scrolling and walk away.
+I think this small UI design is actually pretty revolutionary.  Other social networks could easily do this, but it makes no sense for them to do that.  They want the feed to be as dynamic as possible, to feel like if you step away you will miss out on something.  There is a deliberate attack on the chronological feed - not just because targeted advertising wants to guide you towards particular decisions - but because you can catch up on a chronological feed.  When you feel you have "caught up" you get bored of scrolling and walk away.
 
 If I was a shareholder of twitter, I don't want you to get bored and walk away, I want you to keep looking at ads so that maybe the website could be profitable one day.
 
 If I work as part of a co-op with subscription payments, I don't care if you go enjoy your day after catching up on your friends posts.  Go do that.
 
-### Markdown
-
-Any time I try to use Markdown in a textbox and I can't I get so sad.  Just finished a contract where I was using MS Teams, their weird pseudo Markdown WYSIWIG editor still gives me nightmares.
-
-I think this feature (and others) shows trust in the userbase.  It is ok to have features some users really care about that might initially cause friction for others when you are on a subscription model.  You want to reward those users that are most likely to become subscribers, the enthusiasts.  So things like Markdown get prioritized.
+I like that simple UI changes can have a momentous impact on users wellbeing.  It is so easy to forget that when working in the web space commercially.
 
 ### CSS crimes
 
@@ -109,6 +99,7 @@ Maybe this could lead to phishing scams, I really hope not.
 How does the business model relate to this?  Other sites want you to post as quickly as possible and throw that content into the void to generate revenue.  They definitely don't want you spending hours creating some elaborate CSS instead of looking at ads or posting quickly.
 
 They also want posts to be consumed quickly, posts should be fungible.  The last thing you want to do is make any particular post snap you out of doom scroll hypnosis and want to go and learn CSS or do something creative.
+
 
 ### RSS Feed
 
