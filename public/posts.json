@@ -1,5 +1,11 @@
 [
 	{
+		"name": "Why cohost is good",
+		"path": "posts/why-cohost-is-good.md",
+		"created": "2024-04-06",
+		"featured": false
+	},
+	{
 		"name": "New library: superhistory",
 		"path": "posts/new-library-superhistory.md",
 		"created": "2024-01-01",

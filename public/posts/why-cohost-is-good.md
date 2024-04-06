@@ -7,11 +7,17 @@ And why it might be important to remove gamification from our online social inte
 
 ## Cohost?  What is that?
 
-Cohost is a comparitively tiny social media website that is owned and operated by its development team.  It also deliberately avoids metrics and gamification.  Cohost doesn't care if you keep scrolling.  Actually they do care, they want you to *stop* scrolling.
+Cohost is a comparatively tiny social media website that is owned and operated by its development team.  It also deliberately avoids metrics and gamification.  Cohost doesn't care if you keep scrolling.  Actually they do care, they want you to *stop* scrolling.
 
-The fact Cohost is operated as a co-op directly informs the product design, and that gives me a lot of confidence in its long term sustainability despite its relatively smaller size.
+I feel that the fact Cohost is operated as a co-op directly informs the product design, and that gives me a lot of confidence in its long term sustainability provided it can get overcome its current short term financial challenges.
 
-Although by avoiding investors and non-worker equity, Cohost has a significant financial challenge to overcome before it can reach that long term target.
+By avoiding investors and non-worker equity Cohost has a significant financial challenge to overcome before it can reach long term sustainability.
+
+Conversely I don't have a lot of faith in the long term sustainability of other social networks that only focus on the technical challenges of decentralization.  Centralization was never the problem.  Centralization can be incredibly efficient and simple.  The problem was always a conflict of interests between the users, the workers and the owners.  By collapsing owners and workers into a single category it is possible to still have conflict but workers have an interest in long term sustainability in a way that owners simply don't.  Investors see products as interchangable and fungible assets, whereas workers naturally are more invested in the stability of their own income stream.
+
+In this post I am going to explore some of my thoughts on Cohost as product, the interesting features it has, and how those features relate to its business model and ultimate market fit.
+
+Another goal of this post is to potentially intrigue users to give it a go who otherwise wouldn't.  I think Cohost is a great place for different groups to make their own little non-predatory corner of the internet.  It may also be a great place to run small online businesses in the future.
 
 ## Financial Viability
 
@@ -21,7 +27,7 @@ The business model? well its early days but apparently it is two pronged.  The f
 
 They call this "Cohost Plus" but the "Plus" implies unlocking some kind of extra functionality.  While it does do that its really there as a way for the community to keep the site they like running.  Its $5 a month.  It is a way to convert community good will into revenue.  Which means Cohost is incentivized to maintain community good will.
 
-Their conversion rate is 17% (which is pretty high) but also not high enough to sustain them.  This model is no longer new but it new for running a social media website.  Time will tell if the good will is persistent.
+Their conversion rate is 17% (which is pretty high) but also not high enough to sustain them.  This model is no longer new but it is new for running a social media website.  Time will tell if the good will is persistent.
 
 ### User subscriptions
 
@@ -56,7 +62,11 @@ Here's some examples of avoiding gamification / metrics
 
 All these decisions are deliberate.  It makes the site less addictive.  You don't post something to earn likes, you post it to... post it.
 
-They aren't really features, more anti features, let's talk features.
+You don't think a post is important because it has 500 retweets, you think a post is important because it says something that you think matters.
+
+They aren't really features, more anti features, but they are radical in this era.
+
+But let's talk about actual features.
 
 ### Bookmarked Tags
 
@@ -68,7 +78,7 @@ You will notice a lot of posts talking about stuff you are not interested in at 
 
 Bookmarked tags and muted tags work in concert, you expand your scope with a bookmarked tag and reduce it again by muting some subset. 
 
-Bookmarked tags remind me a little of using Dweetdeck.  This is one aggregated feed of all your favourite tags, so it isn't multi columned like Tweetdeck.  But it feels similar in that you curate your own experience by deciding explicitly what you want to see.  It is arguably less accessible to have to do that initial setup but that is an interesting UX design problem that feels solvable.
+Bookmarked tags remind me a little of using Tweetdeck.  This is one aggregated feed of all your favourite tags, so it isn't multi columned like Tweetdeck.  But it feels similar in that you curate your own experience by deciding explicitly what you want to see.  It is arguably less accessible to have to do that initial setup but that is an interesting UX design problem that feels solvable.
 
 ### Following "Inbox"
 
@@ -88,7 +98,7 @@ If I was a shareholder of twitter, I don't want you to get bored and walk away, 
 
 If I work as part of a co-op with subscription payments, I don't care if you go enjoy your day after catching up on your friends posts.  Go do that.
 
-I like that simple UI changes can have a momentous impact on users wellbeing.  It is so easy to forget that when working in the web space commercially.
+I like that simple UI changes can have a momentous impact on user's wellbeing.  It is so easy to forget that when working in the web space commercially.  The UX decisions we make can actually impact peoples lives for the better.
 
 ### CSS crimes
 
@@ -100,22 +110,21 @@ How does the business model relate to this?  Other sites want you to post as qui
 
 They also want posts to be consumed quickly, posts should be fungible.  The last thing you want to do is make any particular post snap you out of doom scroll hypnosis and want to go and learn CSS or do something creative.
 
-
 ### RSS Feed
 
 Every Cohost profile automatically has an RSS feed, [here's mine](https://cohost.org/jmsfbs/rss/public.json).
 
-> Sidenote I'd love if Cohost could also become an RSS reader.  Do it.
+> Sidenote I'd love if Cohost could also become an RSS reader.
 
 Why would a site that profits from ad revenue want you to be able to read content off site?  Hey maybe that's why Google reader died 🤫
 
 ## Why Cohost is interesting?
 
-Cohost reminds me of Tumblr many years ago.  Its vibrant and creative.  The community has a sense of humour.  There a lot less dunking and bitterness because ultimately the site doesn't reward that behaviour.  You can write posts as long as you want, you can use CSS.  When I was on Tumblr many many years ago people used it for their band pages, for their online shops, as little zines or community newsletters.  There was a stark difference between Tumblr and other social networks, they always felt so sterile.
+Cohost reminds me of Tumblr many years ago.  Its vibrant and creative.  The community has a sense of humour.  There a lot less dunking and bitterness because ultimately the site doesn't reward that behaviour.  You can write posts as long as you want, you can use CSS.  When I was on Tumblr many many years ago people used it for their band pages, for their online shops, as little zines or community newsletters.  There was a stark difference between Tumblr and other social networks that always felt so sterile.
 
 I think Cohost will continue to grow but unlike Tumblr I don't think it will ever be [sold to the lowest bidder](https://www.wired.co.uk/article/tumblr-sold-to-wordpress).
 
-Tumblr self owned itself continually (much like Twitter) because it had to appease advertisers and shareholders.  When you have to appease shareholders the product and company direction is never stable.  You always have to grow and grow.But Cohost has acknowledged in their financial updates that growth is important for now but also increases maintenance and moderation costs.  Growth is a trade off.
+Tumblr self owned itself continually (much like Twitter) because it had to appease advertisers and shareholders.  When you have to appease shareholders the product and company direction is never stable.  You always have to grow and grow.  But Cohost has acknowledged in their financial updates that growth is important for now but also increases maintenance and moderation costs.  Growth is a trade off.
 
 It is completely within the realm of possibility that Cohost grows to the size it needs to be and then stops.   And once it reaches that sustainable tipping point it will likely survive at that size for a long time.  Because it can.  Both the users and the worker/owners would be fine with that as long as it is sustainable.
 
@@ -131,14 +140,32 @@ I can imagine a lot of users signing up and immediately feeling its not for them
 
 In order for Cohost to be sustainable it likely needs to reach out to that audience and provide features and content that that audience expects and enjoys.  That may happen organically but if it doesn't it could be Cohost's achilles heel.
 
-For me, I'm a bit of a normy but I'm also a left wing tech worker and a nerd.  So I get by just fine reading about music production or game dev.
+For me, I'm a bit of a normy but I'm also a left wing tech worker and a nerd.  So I get by just fine reading about [music production](https://cohost.org/rc/tagged/Music%20production), or [star wars](https://cohost.org/rc/tagged/star%20wars), or [game dev](https://cohost.org/rc/tagged/game%20dev).
 
-I think it'd be cool if there was a welcome experience that helped you pick some tags to follow and some tags to mute.  And probably a good idea to drop the maroon.
+I think it'd be cool if there was a welcome experience that helped users pick some tags to follow and some tags to mute.  Spotify does this when you sign up, it gets you to click on artists / genres you are interested in to help seed its algorithm.  But Cohost could instead just seed the users tag list.
 
-## In Conclusion
+I think this problem is solvable.
 
-If you've tried it out and immediately decided it wasn't for you I recommend giving it another try.  But be aware you need to put in a little effort upfront curating your feed.  You also may feel you need a dopamine hit that you aren't getting from other sites.  Be conscious of that and push past it.  When you're bored, that's a good thing, close the tab and go do something else.  You don't need to death scroll, you won't miss out on anything.
+## What kind of internet do we want?
 
-It may be that what cohost is missing is someone like you posting about exactly what you're interested in.
+I was born in the late 80s.  I'm young enough to have always been surrounded by computers and computing, but I am also old enough to have seen the rise of the web, mobile computing, social media and now AI.
 
-I'd far prefer Cohost to be sucessful than even Mastodon.  Decentralizing doesn't actually solve any of the problems of social media.  Cohost's model actually has a legitimate chance of creating a social network that isn't predatory and they are off to a good start, they have momentum.
+I used to be genuinely excited about the possibilities of twitter - the global town square.  Through twitter I got to see first hand, on the ground footage of world events that would never be aired on mainstream news networks.  Twitter helped me contextualise world events and learn about all kinds of amazing things that just wouldn't never have been part of my world otherwise.  Twitter instilled in me a healthy distrust of corporate media.
+
+A lot of the reason twitter was good wasn't sheer good will, it was that twitter just wasn't as good at juicing their users attention for revenue as their competitors.
+
+Twitter grew up in era of cheap money where investors were happy to make long term bets on non profitable businesses providing they were seeing user growth.  That era is over and consequently we've seen it transform into what we have today.  You will struggle to find funding for any business at the moment let alone for long term bets that are bleeding cash.
+
+When I log in to X, I have 20 notifications, always tweets that aren't directed at me, but simply tweets I "might be interested in".  The platform is desperate for me to care, and I don't, I can't.  I see it for what it is.
+
+Facebook was never good at doing what Twitter did well, but it was good at turning a profit, by harvesting your attention and often redirecting and rewiring your own thought and behaviour patterns to get that extra 20 minutes of ad revenue.
+
+But Facebook has been usurped by Instagram and TikTok, and now it seems every social network has some variation of TikTok's video shorts.  As AI becomes more powerful these tools will become better and better at predicting exactly what you need to see to stay on the feed.
+
+And consequently what you need to see to stay on the feed is almost never some information or content that makes you stop and reflect, or engage in the real world.  These algorithms want every minute of your life.  These companies have no remorse.  
+
+So what kind of internet do we want?
+
+I don't think Mastodon is the way forward.  I also don't think just making things decentralized or open source solves the fundamental problems of our current social media age.  We need to focus on ownership and power structures.  We need to analyze capital flows and form new structures that are immune to short term financial speculation.  The impulse to de-centralize technology as a solution for reducing corruption is politically naivete.
+
+I'm not sure if Cohost is the answer.  It might be destined to fail and become forgotten.  But it is completely within the realm of possibility that it grows organically and sustainably and can continue to be a counterpoint, a beacon.  Much like American's who refer to European social democracies when discussion Medicare for All.  Slim chance anything will change, but the chances are even slimmer when there is no visible alternative.
