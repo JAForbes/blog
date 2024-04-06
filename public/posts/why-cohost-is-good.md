@@ -166,6 +166,6 @@ And consequently what you need to see to stay on the feed is almost never some i
 
 So what kind of internet do we want?
 
-I don't think Mastodon is the way forward.  I also don't think just making things decentralized or open source solves the fundamental problems of our current social media age.  We need to focus on ownership and power structures.  We need to analyze capital flows and form new structures that are immune to short term financial speculation.  The impulse to de-centralize technology as a solution for reducing corruption is politically naivete.
+I don't think Mastodon is the way forward.  I also don't think just making things decentralized or open source solves the fundamental problems of our current social media age.  We need to focus on ownership and power structures.  We need to analyze capital flows and form new structures that are immune to short term financial speculation.  The impulse to de-centralize technology as a solution for reducing corruption is political naivete.
 
 I'm not sure if Cohost is the answer.  It might be destined to fail and become forgotten.  But it is completely within the realm of possibility that it grows organically and sustainably and can continue to be a counterpoint, a beacon.  Much like American's who refer to European social democracies when discussion Medicare for All.  Slim chance anything will change, but the chances are even slimmer when there is no visible alternative.
