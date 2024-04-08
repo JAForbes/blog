@@ -1,5 +1,11 @@
 [
 	{
+		"name": "Why we need static stream graphs",
+		"path": "posts/why-we-need-static-stream-graphs.md",
+		"featured": true,
+		"created": "2024-04-07"
+	},
+	{
 		"name": "Why cohost is good",
 		"path": "posts/why-cohost-is-good.md",
 		"created": "2024-04-06",
