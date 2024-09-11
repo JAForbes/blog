@@ -1,6 +1,8 @@
 Why Cohost is Good
 ==================
 
+> Unfortunately Cohost is no longer a thing.  But it is still a really fascinating case study on multiple fronts.  It was extremely well received by its userbase, and ultimately the team just suffered from burn out and lack of funding.  It will be interesting what future projects learn from Cohost.
+
 And why it might be important to remove gamification from our online social interactions.
 
 > Note there's no screenshots here, this is a big wall of text.  I've been meaning to post something like this for a while and wall of text is all I can manage right now.  Sorry.

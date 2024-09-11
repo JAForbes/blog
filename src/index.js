@@ -19,13 +19,9 @@ function * getPostContent(){
         return html
     }
 }
-export const cohostMarkdown = `If you have any thoughts, questions or comments please feel free to reach out on cohost [here](https://cohost.org/jmsfbs-code)`
 
 function * PostView(){
     const html = yield * getPostContent()
-
-    const reachout = 
-        yield Action.renderMarkdown(cohostMarkdown)
 
     const activateMermaid = yield Action.renderMermaid()
 
@@ -48,7 +44,6 @@ function * PostView(){
                 oncreate: activateMermaid
             })
             , h.trust(html)
-            , h.trust(reachout)
         )
     )
 }
@@ -74,132 +69,6 @@ function * HomeView(){
             `
             , h('img', { src })
             , h('p', 'Interested in any type of design and the individual componentry of calcified ideas.')
-        )
-    )
-}
-
-function * CohostList(){
-
-    const feed = yield Action.getCohostFeed()
-    
-    return v( (h, css) => 
-        h('.cohost'
-            , css`
-                .& {
-                    display: grid;
-                    --cohost-color: rgb(103 26 61);
-                }
-
-                @media (max-width: 80em) {
-                    .& {
-                        gap: 1em;
-                    }
-                }
-
-                @media (min-width: 80em) {
-                    .& {
-                        display: grid;
-                        --gutter: 10em;
-                        grid-template-columns: var(--gutter) 1fr; 
-                        margin-left: calc( var(--gutter) * -1 );
-                    }
-                }
-
-                .& ul {
-                    padding: 0em;
-                    list-style: none;
-                }
-                .& .card {
-                    display: grid;
-                    gap: 1em;
-                    padding: 2em;
-                    border: solid 1px var(--cohost-color);
-                    border-left: solid 0.5em var(--cohost-color);
-                }
-
-                .& p {
-                    margin: 0em;
-                }
-
-                .& a:visited, .& a {
-                    color: black;
-                    text-decoration: none;
-                }
-
-                .& .list {
-                    display: grid;
-                }
-
-                .& .card {
-                    transform: scale(1);
-                    transition: transform 0.5s, background-color 1s;
-                }
-
-                .& .card:hover {
-                    transform: scale(1.05);
-                    transition: transform 0.1s, background-color 0.2s;
-                }
-
-                @media ( max-width: 30em ) {
-                    .& {
-                        gap: 3em 1em;
-                    }
-                    .& .list {
-                        display: grid;
-                        gap: 1em;
-                    }
-
-                    .& .list {
-                        display: grid;
-                        gap: 1em 3em;
-                        grid-template-columns: 1fr;
-                        list-style: none;
-                        margin: 0em;
-                        padding: 0em;
-                    }
-                }
-                @media ( min-width: 30em ) {
-
-                    .& .list {
-                        display: grid;
-                        gap: 1em 3em;
-                        grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-                        list-style: none;
-                        margin: 0em;
-                        padding: 0em;
-                    }
-                }
-
-                .& .date {
-                    font-size: 0.8em;
-                }
-                .& .tags {
-                    font-size: 0.8em;
-                    display: grid;
-                    grid-auto-flow: column;
-                    justify-content: start;
-                    gap: 0.3em;
-                }
-            `
-            , h('h4', 'From Cohost')
-            , h('ul.cohost-posts.list'
-                , feed.items
-                    .filter( x => x.title)
-                    .slice(0,9)
-                    .map(
-                        x => h('a'
-                            , { href: x.url }
-                            , h('li.card'
-                                , h('p.title', x.title ) 
-                                , h('i.date', new Date(x.date_modified).toISOString().slice(0,10) )
-                                , h('ul.tags', x.tags
-                                    .slice(0,3)
-                                    .map( x => h('li', `#${x}`) )
-                                )
-                            )
-                        )
-                )
-            )
         )
     )
 }
@@ -516,7 +385,7 @@ export function * Nav(){
                 , h('li'
                     , h('a'
                         , 
-                        { href: 'https://cohost.org/jmsfbs-code'
+                        { href: 'https://x.com/jmsfbs'
                         }
                         , 'Follow'
                     )
@@ -587,7 +456,6 @@ export default function * Main(){
                         , Home: () => h(HomeView, { key: 'Home' })
                     })
                     , h(PostsList, { key: 'postslist' })
-                    , h(CohostList, { key: 'cohostlist' })
                     , h(RSS, { key: 'rsslist' })
                 ]
             )

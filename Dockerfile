@@ -19,5 +19,4 @@ FROM caddy:2.6.2-alpine as serve
 COPY --from=build /app/public /usr/share/caddy
 COPY --from=build /app/dist /usr/share/caddy
 COPY ./Caddyfile /etc/caddy/Caddyfile
-ADD https://cohost.org/jmsfbs-code/rss/public.json /usr/share/caddy/feed/cohost.json
 EXPOSE 80

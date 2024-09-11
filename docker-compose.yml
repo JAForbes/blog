@@ -34,10 +34,3 @@ services:
     command: sh -c 'npm install && node --watch src/rss/index.js'
     volumes:
       - .:/$PWD
-
-  cohost-feed:
-    image: alpine:3.17.0
-    command: watch -n 60 wget https://cohost.org/jmsfbs-code/rss/public.json -O cohost.json
-    working_dir: $PWD/public/feed
-    volumes:
-      - .:/$PWD

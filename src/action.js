@@ -5,9 +5,6 @@ export default {
     ,getAllPosts(){
         return { type: 'Action', tag: 'getAllPosts'}
     }
-    ,getCohostFeed(){
-        return { type: 'Action', tag: 'getCohostFeed'}
-    }
     ,getPostFromRoute(route){
         return { type: 'Action', tag: 'getPostFromRoute', value: route }
     }

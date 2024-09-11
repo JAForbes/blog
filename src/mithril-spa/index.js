@@ -100,9 +100,6 @@ function componentAdapter(Machine){
                         args=[route]
                     } else if (value.tag == 'getAllPosts') {
                         await fetchAllPosts()
-                    } else if ( value.tag == 'getCohostFeed') {
-                        const feed = await fetch('/feed/cohost.json').then( x => x.json() )
-                        args = [feed]
                     } else if (value.tag == 'getPostFromRoute' ) {
                         const route = value.value
                         if (!posts) await fetchAllPosts()

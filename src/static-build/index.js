@@ -1,5 +1,4 @@
-import main, { cohostMarkdown } from '../index.js'
-import { Route } from '../index.js';
+import main, { Route } from '../index.js';
 import fs from 'fs'
 import * as marked from 'marked'
 import * as L from 'linkedom'
@@ -28,11 +27,6 @@ for (let post of posts ) {
         }
         ,getAllPosts(){
             return [[]]
-        }
-        ,getCohostFeed(){
-            return [{
-                items: []
-            }]
         }
         ,getPostFromRoute(){
             return [post]
@@ -66,7 +60,7 @@ for (let post of posts ) {
                 renderer
             })
 
-            if ( markdown != cohostMarkdown ) {
+            if ( markdown ) {
                 fs.writeFileSync('./public/'+post.path+'.html', html)
             }
             return [html]
