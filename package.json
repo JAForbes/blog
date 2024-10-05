@@ -1,36 +1,21 @@
 {
-  "name": "jaorbes.github.io",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "name": "james-forbes-com",
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "vite",
-    "deploy": "flyctl deploy"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/JAForbes/JAForbes.github.io"
-  },
-  "author": "JAForbes",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JAForbes/JAForbes.github.io/issues"
-  },
-  "homepage": "https://github.com/JAForbes/JAForbes.github.io",
   "dependencies": {
+    "@astrojs/check": "^0.9.3",
+    "@astrojs/rss": "^4.0.7",
+    "astro": "^4.15.10",
     "feed": "^4.2.2",
-    "highlight.js": "^11.5.1",
-    "marked": "^4.0.17",
-    "mermaid": "^10.8.0",
-    "mithril": "^2.2.2",
-    "s-js": "^0.4.9",
-    "xet": "^2.3.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.18.0",
-    "linkedom": "^0.14.12",
-    "vite": "^2.9.16"
+    "markdown-it": "^14.1.0",
+    "mermaid": "^11.3.0",
+    "typescript": "^5.6.2"
   }
 }

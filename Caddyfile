@@ -1,10 +1,22 @@
-http:// {
+{
+	auto_https off
+	servers {
+		trusted_proxies static private_ranges
+	}
+	log {
+		level INFO
+		format console
+	}
+}
 
-    header /posts/* {
-        Cache-Control: "no-cache, no-store, must-revalidate"
-    }
-    root * /usr/share/caddy
-    encode gzip
-    try_files {path} /index.html
-    file_server
+http://james-forbes.com:8080 {
+	handle /index.html {
+		respond "Hello"
+	}
+	handle /* {
+		root * /srv
+		encode gzip
+		try_files {path} {path}/index.html
+		file_server
+	}
 }

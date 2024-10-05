@@ -1,0 +1,239 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = (await getCollection('posts', x => !x.data.archived)).sort( (a,b) => b.data.created.getTime() - a.data.created.getTime() )
+---
+<style>
+.posts-list {
+    @media (min-width: 23em) {
+        & {
+            display: grid;
+            gap: 1em 5em;
+            justify-content: center;
+            grid-template-columns: minmax(0em, 60em);
+        }
+    }
+
+    & * {
+        margin: 0em;
+        box-sizing: border-box;
+    }
+
+    & a, & a:visited {
+        color: black;
+        text-decoration: none;
+    }
+
+
+    & .list {
+        display: grid;
+    }
+
+    @media ( max-width: 30em ) {
+        & {
+            gap: 3em 1em;
+        }
+        & .list {
+            display: grid;
+            gap: 1em;
+        }
+    
+        & .list ul {
+            display: grid;
+            gap: 1em 3em;
+            grid-template-columns: 1fr;
+            list-style: none;
+            margin: 0em;
+            padding: 0em;
+        }
+    }
+    @media ( min-width: 30em ) {
+
+        & .list ul {
+            display: grid;
+            gap: 1em 3em;
+            grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+            list-style: none;
+            margin: 0em;
+            padding: 0em;
+        }
+    }
+
+    @media (max-width: 80em) {
+        & .list {
+            gap: 1em;
+        }
+    }
+
+    @media (min-width: 80em) {
+        & .list {
+            display: grid;
+            --gutter: 10em;
+            grid-template-columns: var(--gutter) 1fr; 
+            margin-left: calc( var(--gutter) * -1 );
+        }
+    }
+
+
+    & .card {
+        display: grid;
+        gap: 2em;
+        padding: 2em;
+        transition: transform 0.5s, background-color 1s;
+        border: solid 0.1em #DDD;
+        border-left: solid 0.5em #DDD;
+    }
+
+    & .card.featured:hover {
+        background-color: rgba(0,0,0,0.9);
+        transition: transform 0.1s, background-color 0.2s;
+    }
+    & .card:hover {
+        backface-visibility: hidden;
+        transform: scale(1.05);
+        background-color: rgba(0,0,0,0.05);
+        transition: transform 0.1s, background-color 1s;
+    }
+
+    & .card.featured {
+        color: white;
+        background-color: black;
+    }
+}
+
+.rss {
+    
+    display: grid;
+    --theme: black;
+    h4 {
+        margin: 0em;
+    }
+
+    @media (max-width: 80em) {
+        & {
+            gap: 1em;
+        }
+    }
+
+    @media (min-width: 80em) {
+        & {
+            display: grid;
+            --gutter: 10em;
+            grid-template-columns: var(--gutter) 1fr; 
+            margin-left: calc( var(--gutter) * -1 );
+        }
+    }
+
+    & ul {
+        padding: 0em;
+        list-style: none;
+    }
+
+    & .card {
+        display: grid;
+        gap: 1em;
+        padding: 1em;
+        border: solid 1px var(--theme);
+        border-left: solid 0.5em var(--theme);
+    }
+
+    & p {
+        margin: 0em;
+    }
+
+    & a:visited, & a {
+        color: black;
+        text-decoration: none;
+    }
+
+    & .list {
+        display: grid;
+    }
+
+    & .card {
+        transform: scale(1);
+        transition: transform 0.5s, background-color 1s;
+    }
+
+    & .card:hover {
+        transform: scale(1.05);
+        transition: transform 0.1s, background-color 0.2s;
+    }
+
+    @media ( max-width: 30em ) {
+        & {
+            gap: 3em 1em;
+        }
+        & .list {
+            display: grid;
+            gap: 1em;
+        }
+
+        & .list {
+            display: grid;
+            gap: 1em 3em;
+            grid-template-columns: 1fr;
+            list-style: none;
+            margin: 0em;
+            padding: 0em;
+        }
+    }
+    @media ( min-width: 30em ) {
+
+        & .list {
+            display: grid;
+            gap: 1em 3em;
+            grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+            list-style: none;
+            margin: 0em;
+            padding: 0em;
+        }
+    }
+
+    & .date {
+        font-size: 0.8em;
+    }
+}
+</style>
+
+<div class="posts-list">
+    <div class="list recent">
+        <h4>Featured articles</h4>
+        <ul>
+            {allPosts.slice(0,4).map( x => 
+                <a href={`/posts/${x.slug}`}>
+                    <li class:list={['card', x.data.featured && 'featured' ]}>
+                        <p>{x.data.title}</p>
+                        <i>{x.data.created.toISOString().slice(0,10)}</i>
+                    </li>
+                </a>
+            )}
+        </ul>
+    </div>
+    <div class="list rest">
+        <h4>Featured articles</h4>
+        <ul>
+            {allPosts.slice(4).map( x => 
+                <a href={`/posts/${x.slug}`}>
+                    <li class:list={['card', x.data.featured && 'featured' ]}>
+                        <p>{x.data.title}</p>
+                        <i>{x.data.created.toISOString().slice(0,10)}</i>
+                    </li>
+                </a>
+            )}
+        </ul>
+    </div>
+</div>
+<div class="rss">
+    <h4>Feeds</h4>
+    <ul class="rss-posts list">
+        <a href="/feed/atom">
+            <li class="card">Atom</li>
+        </a>
+        <a href="/feed/json">
+            <li class="card">JSON</li>
+        </a>
+        <a href="/feed/rss">
+            <li class="card">RSS</li>
+        </a>
+    </ul>
+</div>
