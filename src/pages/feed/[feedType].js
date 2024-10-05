@@ -41,13 +41,6 @@ for( let post of posts.slice(0,1) ) {
     })
 }
 
- 
-// fs.mkdirSync('public/feed', { recursive: true })
-  
-// fs.writeFileSync('public/feed/rss', )
-// fs.writeFileSync('public/feed/json', feed.json1())
-// fs.writeFileSync('public/feed/atom', feed.atom1())
-
 export function GET(context) {
 
     const [body, contentType] = context.params.feedType === 'rss'

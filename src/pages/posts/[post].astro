@@ -13,10 +13,8 @@ const entry = await getEntry('posts', Astro.params.post)
 const { Content, headings } = await render(entry)
 
 export async function getStaticPaths() {
-	console.log('static paths')
 	const allPosts = (await getCollection('posts', x => !x.data.archived))
-	console.log()
-	return  allPosts.map( x => x.slug ).map( x => ({ params: { post: x }}) );
+	return allPosts.map( x => x.slug ).map( x => ({ params: { post: x }}) );
 }
 
 ---
