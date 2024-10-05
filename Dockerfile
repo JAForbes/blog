@@ -1,22 +1,14 @@
-FROM node:16 as build
-
-WORKDIR /app
-
-COPY package.json package-lock.json /app/
-
+FROM node:20-alpine AS build
+WORKDIR /usr/src/app/
+COPY package-lock.json package.json ./
 RUN npm ci
 
-COPY index.html .
-COPY ./src ./src
+COPY src ./src
+COPY public ./public 
+COPY astro.config.mjs ./
+RUN npm run build
 
-COPY ./public ./public
+FROM caddy:2.6.4-alpine AS serve
 
-RUN node src/rss/index.js
-RUN node src/static-build/index.js
-RUN npx vite build --minify false --sourcemap
-
-FROM caddy:2.6.2-alpine as serve
-COPY --from=build /app/public /usr/share/caddy
-COPY --from=build /app/dist /usr/share/caddy
-COPY ./Caddyfile /etc/caddy/Caddyfile
-EXPOSE 80
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /usr/src/app/dist /srv
