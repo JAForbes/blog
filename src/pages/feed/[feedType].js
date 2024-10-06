@@ -27,7 +27,7 @@ const feed = new Feed({
 })
 
 
-for( let post of posts.slice(0,1) ) {
+for( let post of posts ) {
   
     feed.addItem({
         title: post.data.title

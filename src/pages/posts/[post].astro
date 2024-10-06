@@ -5,12 +5,9 @@ import Nav from "../../components/Nav.astro";
 import { render, getEntry } from "astro:content";
 import PostList from '../../components/PostList.astro';
 
-const allPosts = (await getCollection('posts', x => !x.data.archived))
-const post = allPosts.find( x => x.slug === Astro.params.post)!
-
 const entry = await getEntry('posts', Astro.params.post)
 
-const { Content, headings } = await render(entry)
+const { Content } = await render(entry)
 
 export async function getStaticPaths() {
 	const allPosts = (await getCollection('posts', x => !x.data.archived))
