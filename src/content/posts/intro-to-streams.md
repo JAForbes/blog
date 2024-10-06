@@ -217,7 +217,7 @@ source duration
 source currentPosition
 
 relation percentageComplete = 
-	currentPosition / duration
+	(currentPosition / duration) * 100
 
 relation completionUI = 
 	'<div style="width: '+percentageComplete+'%;"></div>'
