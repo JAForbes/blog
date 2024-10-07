@@ -4,6 +4,10 @@ subtitle: Not really...
 created: 2017-07-20
 featured: false
 archived: false
+tags:
+  - FP
+  - silly
+  - monads
 ---
 
 What isn't a Monad?  And why doesn't it matter?

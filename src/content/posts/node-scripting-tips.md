@@ -4,6 +4,12 @@ subtitle: These days, probably just use zx
 created: 2020-02-02
 featured: false
 archived: false
+tags:
+  - scripting
+  - ops
+  - protip
+  - node.js
+
 ---
 
 Using node.js as a scripting language.

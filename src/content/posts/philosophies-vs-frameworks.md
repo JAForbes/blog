@@ -7,6 +7,11 @@ archived: false
 updated: [
     { "message": "Expanded code example, added addendum", "created": "2022-04-30T00:18:11.983Z" }
 ]
+tags:
+    - cycle.js
+    - mithril.js
+    - ramda.js
+    - rant
 ---
 
 I've recently been quite excited by the thought of creating _philosophies_ as opposed to _libraries_ or _frameworks_.  

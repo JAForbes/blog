@@ -4,6 +4,11 @@ subtitle: A small nestable wrapper around the history API
 created: 2024-01-01
 featured: false
 archived: false
+tags:
+    - routing
+    - programming
+    - library
+    - js
 ---
 
 I've recently been pretty active creating little micro libs as I wanted to have some small self contained, well tested atoms that I could stick together to give me confidence in a larger system.

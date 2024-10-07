@@ -4,6 +4,11 @@ subtitle: Imagine if JS had a keyword for reactive variables
 created: 2017-11-04
 featured: true
 archived: false
+tags:
+  - TC39
+  - language
+  - Streams
+  - FRP
 ---
 
 Streams go by many names and representations.  You might hear terms like Observables, Facts, Channels, Behaviours (and even Iterators / Generators).  From conversations I've had with many developers, it seems the fundamental power in the abstraction is often replaced with an obsession with the particular implementation instead of the reason for the implementation.

@@ -4,6 +4,11 @@ subtitle: Seeing what all the fuss is about
 created: 2024-10-06T01:48:09.233Z
 featured: false
 archived: false
+tags:
+    - astro.js
+    - blogging
+    - meta
+    - programming
 ---
 
 I often use my own blog as a way to try out ideas and frameworks.  Recently [someone in the mithril chat](https://mithril.zulipchat.com/#narrow/stream/324076-general/topic/astro-mithril.20package.20now.20supports.20Astro.20v4.2Ex) mentioned they liked Astro for SSG.  They had made a mithril package for astro's "Framework Island" feature.

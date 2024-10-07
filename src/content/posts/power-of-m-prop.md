@@ -4,6 +4,11 @@ subtitle: RIP
 featured: false
 created: 2016-01-08
 archived: false
+tags:
+  - JS
+  - programming
+  - mithril.js
+  - UI
 ---
 
 > Please be aware this post was written when Mithril 0.2x was state of the art.

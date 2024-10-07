@@ -4,6 +4,11 @@ subtitle: A life lived in fear and all that stuff...
 created: 2016-10-24
 featured: false
 archived: false
+tags:
+  - FP
+  - JS
+  - functional programming
+  - programming
 ---
 
 This post is directed at anyone who is interested in the Fantasy Land specification but perhaps feels unqualified to discuss it or engage with the community.  Functional Programming is for everyone, and so is Fantasy Land.  Fantasy Land is for the JS community to build upon when designing libraries, frameworks and the language itself.  Fantasy Land benefits as both a community and a specification from the participation of every developer, from every discipline.  

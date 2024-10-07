@@ -4,6 +4,12 @@ subtitle: Or why it was good...
 created: 2024-04-06
 featured: false
 archived: false
+tags:
+    - capitalism
+    - cohost
+    - social media
+    - worker coop
+    - internet
 ---
 
 > Unfortunately Cohost is no longer a thing.  But it is still a really fascinating case study on multiple fronts.  It was extremely well received by its userbase, and ultimately the team just suffered from burn out and lack of funding.  It will be interesting what future projects learn from Cohost.

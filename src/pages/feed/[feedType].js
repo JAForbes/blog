@@ -36,7 +36,7 @@ for( let post of posts ) {
         , author: [
             author
         ]
-        , content: parser.render(post.body)
+        , content: parser.render(post.body.split('\n').slice(0,20)+'\n\n Continued...')
         , date: new Date(post.data.created)
     })
 }

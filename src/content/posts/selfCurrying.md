@@ -4,6 +4,11 @@ subtitle: A fun exercise
 created: 2015-06-08T01:38:58.538Z
 archived: false
 featured: false
+tags:
+  - FP
+  - JS
+  - programming
+  - functional programming
 ---
 
 Manually specifying the behaviour of your function given the nature of its received arguments.

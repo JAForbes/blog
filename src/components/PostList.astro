@@ -1,9 +1,15 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 export interface Props {
-    skip?: string
+    predicate?: (x: CollectionEntry<'posts'>) => boolean
 }
-const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.props.skip != x.slug)).sort( (a,b) => b.data.created.getTime() - a.data.created.getTime() )
+const allPosts = 
+    (await getCollection('posts', x => {
+        return !x.data.archived && (Astro.props.predicate?.(x) ?? true)
+    }))
+    .sort( (a,b) => b.data.created.getTime() - a.data.created.getTime()  )
+
 
 ---
 <style>
@@ -53,6 +59,38 @@ const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.pr
     background-color: var(--card-background-color-featured);
 }
 
+.tags {
+    justify-self: start;
+    display: flex;
+    list-style: none;
+    padding: 0em;
+    margin: 0em;
+    gap: 0.5em 0.5em;
+    flex-wrap: wrap;
+    align-items: center;
+    transition: opacity 1s;
+
+    &:hover li:not(li:hover) {
+        opacity: 0.2;
+    }
+    
+    li {
+        border: solid 1px currentColor;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        font-size: 0.8em;
+        opacity: 0.7;
+        transition: transform 0.1s, opacity 0.5s;
+    }
+
+    li:hover {
+        backface-visibility: hidden;
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+}
+
 
 .posts-list {
     display: grid;
@@ -72,11 +110,6 @@ const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.pr
         box-sizing: border-box;
     }
 
-    & a, & a:visited {
-        color: var(--link-color);
-        text-decoration: none;
-    }
-
 
     & .list {
         display: grid;
@@ -91,7 +124,7 @@ const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.pr
             gap: 1em;
         }
     
-        & .list ul {
+        & .list > ul {
             display: grid;
             gap: 1em 3em;
             grid-template-columns: 1fr;
@@ -102,7 +135,7 @@ const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.pr
     }
     @media ( min-width: 30em ) {
 
-        & .list ul {
+        & .list > ul {
             display: grid;
             gap: 1em 3em;
             grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
@@ -164,6 +197,7 @@ const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.pr
         display: grid;
     }
 
+    
   
 
     @media ( max-width: 30em ) {
@@ -207,30 +241,38 @@ const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.pr
         <h4>Recent articles</h4>
         <ul>
             {allPosts.slice(0,4).map( x => 
-                <a href={`/posts/${x.slug}`}>
+                
                     <li class:list={['card', x.data.featured && 'featured' ]}>
-                        <p class="title">{x.data.title}</p>
+                        <a href={`/posts/${x.slug}`}><p class="title">{x.data.title}</p></a>
                         {x.data.subtitle && <p class="subtitle">{x.data.subtitle}</p>}
-                        <i>{new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(x.data.created)}</i>
+                        <p>
+                            <i>{new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(x.data.created)}</i>
+                            <ul class="tags">{x.data.tags?.slice(0,4).map( x =>  <a href={`/tags/${x}`}><li>{x}</li></a>)}</ul>
+                        </p>
                     </li>
-                </a>
+                
             )}
         </ul>
     </div>
-    <div class="list rest">
-        <h4>Previous articles</h4>
-        <ul>
-            {allPosts.slice(4).map( x => 
-                <a href={`/posts/${x.slug}`}>
+    {
+        allPosts.length > 4 && <div class="list rest">
+            <h4>Previous articles</h4>
+            <ul>
+                {allPosts.slice(4).map( x => 
+                    
                     <li class:list={['card', x.data.featured && 'featured' ]}>
-                        <p class="title">{x.data.title}</p>
+                        <a href={`/posts/${x.slug}`}><p class="title">{x.data.title}</p></a>
                         {x.data.subtitle && <p class="subtitle">{x.data.subtitle}</p>}
-                        <i>{new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(x.data.created)}</i>
+                        <p>
+                            <i>{new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(x.data.created)}</i>
+                            <ul class="tags">{x.data.tags?.slice(0,4).map( x =>  <a href={`/tags/${x}`}><li>{x}</li></a>)}</ul>
+                        </p>
                     </li>
-                </a>
-            )}
-        </ul>
-    </div>
+                    
+                )}
+            </ul>
+        </div>
+    }
 </div>
 <div class="rss">
     <h4>Feeds</h4>

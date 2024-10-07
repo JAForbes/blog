@@ -4,6 +4,11 @@ subtitle: A very serious deep dive into partial application
 created: 2014-11-12T11:18:49.210Z
 featured: false
 archived: false
+tags:
+  - silly
+  - programming
+  - FP
+  - JS
 ---
 
 For the sake of this discussion, all functions are now aeroplanes.

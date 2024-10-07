@@ -4,6 +4,12 @@ subtitle: Or at least, how I used mithril
 created: 2016-04-21
 featured: false
 archived: false
+tags:
+  - mithril.js
+  - programming
+  - closures
+  - javascript
+  - FP
 ---
 
 > Please be aware this post was written when Mithril 0.2x was state of the art.

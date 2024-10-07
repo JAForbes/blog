@@ -4,6 +4,12 @@ subtitle: Scraping the web FP style
 created: 2015-01-08T02:38:59.976Z
 featured: true
 archived: false
+tags:
+  - FP
+  - JS
+  - programming
+  - functional programming
+  - ramda.js
 ---
 
 General Practicality of Ramda and Functional Techniques

@@ -1,9 +1,13 @@
 ---
-title: "bash run - an alternative to npm scripts"
+title: "bash run: an alternative to npm scripts"
 subtitle: Again, these days probably just use zx
 created: 2017-11-09
 featured: true
 archived: false
+tags:
+  - bash
+  - ops
+  - scripting
 ---
 
 > This proposal works best for applications where the set of people that build your project are developers, ci, etc.  For node libraries, there are a different set of constraints.  This proposal can still apply for a subset of tasks, but only when you know the environment of the installer (which for node libraries, you can't).

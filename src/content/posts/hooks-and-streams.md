@@ -4,6 +4,15 @@ subtitle: Skip the "rules of hooks"
 created: 2020-02-22T01:03:26.420Z
 featured: true
 archived: false
+tags:
+  - react.js
+  - hooks
+  - FRP
+  - FP
+  - Streams
+  - programming
+  
+
 ---
 
 [Dan Abramov](https://twitter.com/dan_abramov) wrote an excellent [blog post](https://overreacted.io) about making a declarative `setInterval` using React Hooks.

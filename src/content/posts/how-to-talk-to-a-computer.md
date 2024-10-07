@@ -4,6 +4,11 @@ subtitle: You can save a lot of time by working in the REPL
 created: 2016-09-11
 featured: false
 archived: false
+tags:
+  - ops
+  - FP
+  - programming
+  - dates
 ---
 
 How to work within the REPL

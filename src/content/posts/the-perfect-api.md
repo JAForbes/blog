@@ -4,6 +4,11 @@ subtitle: Intro to Monads, Functor and Algebraic types.
 created: 2016-05-13
 archived: false
 featured: true
+tags:
+  - FP
+  - JS
+  - programming
+  - functional programming
 ---
 
 Imagine for a second that everything had the same interface.  Everything.

@@ -4,6 +4,11 @@ subtitle: You can filter pretty much any data type...
 featured: false
 archived: false
 created: 2017-01-25
+tags:
+  - FP
+  - JS
+  - programming
+  - functional programming
 ---
 
 Have you ever written code like this before?

@@ -4,6 +4,14 @@ subtitle: Sometimes you have to look back to move forward.
 created: 2016-05-02
 featured: true
 archived: false
+tags:
+  - backbone.js
+  - mithril.js
+  - React.js
+  - closures
+  - FP
+  - history
+  - programming
 ---
 
 > Please be aware this post was written when Mithril 0.2x was state of the art.

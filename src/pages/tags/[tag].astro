@@ -6,17 +6,15 @@ import { render, getEntry } from "astro:content";
 import Nav from '../../components/Nav.astro';
 import PostList from '../../components/PostList.astro';
 
-const entry = await getEntry('posts', Astro.params.post)
-
-const { Content } = await render(entry)
 
 export async function getStaticPaths() {
-	const allPosts = (await getCollection('posts', x => !x.data.archived))
-	return allPosts.map( x => x.slug ).map( x => ({ params: { post: x }}) );
+	const allTags = (await getCollection('posts', x => !x.data.archived)).flatMap( x => x.data.tags ?? [])
+    
+    return [...new Set(allTags)].map( x => ({ params: { tag: x }}) )
 }
 
 ---
-<Layout title={entry.data.title}>
+<Layout title={Astro.params.tag}>
 	<style is:global>
 		h1, h2, h3, h4, h5, h6 {
 			margin: 0em;
@@ -129,16 +127,11 @@ export async function getStaticPaths() {
 	<Nav />
 	<div class="post">
 		<header>
-			<h1>{entry.data.title}</h1>
-			<h4 class="postdate">Posted on {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(entry.data.created)}</h4>
-			<ul class="tags">
-				{entry.data.tags?.map( x => <a href={"/tags/" + x}><li>{x}</li></a>)}
-			</ul>
+			<h1>{Astro.params.tag}</h1>
 		</header>
-		<Content />
 	</div>
 	<script is:inline type="module">
 		await import('https://esm.sh/mermaid@11.3.0')
 	</script>
-	<PostList predicate={x => x.slug != entry.slug} />
+	<PostList predicate={x => x.data.tags?.length! > 0 && x.data.tags!.includes(Astro.params.tag)!! } />
 </Layout>

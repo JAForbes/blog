@@ -4,6 +4,11 @@ subtitle: Safely parse JSON, with array methods?
 created: 2017-01-25
 featured: false
 archived: false
+tags:
+  - FP
+  - JS
+  - programming
+  - functional programming
 ---
 
 **Using array methods to replace conditionals, null checks and exception handling.**
