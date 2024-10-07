@@ -13,7 +13,7 @@ html {
 	--card-highlight-shadow: -13px 16px 13px -20px hsl(var(--hue), 92.1%, 49.4%) inset;
 }
 
-.mermaid {
+.post .mermaid {
 	background-color: white;
 }
 
