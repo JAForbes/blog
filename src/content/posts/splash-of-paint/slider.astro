@@ -1,0 +1,7 @@
+<p>Drag this around to change the theme:</p>
+<input id="cool" type="range" value="0" min="0" max="360"/>
+<script>
+document.getElementById('cool')!.addEventListener('input', e => {
+    document.body.parentElement!.style.setProperty('--hue', (e.target as HTMLInputElement).value)
+})
+</script>

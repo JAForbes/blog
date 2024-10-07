@@ -36,7 +36,7 @@ for( let post of posts ) {
         , author: [
             author
         ]
-        , content: parser.render(post.body.split('\n').slice(0,20)+'\n\n Continued...')
+        , content: parser.render(post.body.split('\n').slice(0,20)+`\n\n [Continued...](https://james-forbes.com/posts/${post.slug})`)
         , date: new Date(post.data.created)
     })
 }

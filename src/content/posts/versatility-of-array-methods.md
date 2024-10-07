@@ -19,7 +19,7 @@ But Javascript has just enough building blocks to get by without pulling in addi
 
 But what I'd like to focus on in this post, is seeing these existing Array methods in a new light, as a replacement for if statements.
 
-#### Dessert First
+### Dessert First
 
 By the end of this article you are going to be able to convert this code:
 
@@ -58,8 +58,7 @@ const results = f(list)
 
 We are going to replace a lot of tedious spaghetti code with small isolated functions that build upon functionality already present in Javascript Array methods.
 
-Operations that may not succeed
--------------------------------
+### Operations that may not succeed
 
 ```js
 function divide(a, b){
@@ -312,8 +311,7 @@ f(['{"A":2}'] ) //=> [50]
 
 ```
 
-Strategies for handling invalid values for your business logic
---------------------------------------------------------------
+#### Strategies for handling invalid values for your business logic
 
 ```js
 const divide = a => b => a / b
@@ -358,8 +356,7 @@ NonZeroNumber(0)
   .map( divide(100) ) //=> []
 ```
 
-BONUS ROUND: Multiple parallel conditionals
--------------------------------------------
+### BONUS ROUND: Multiple parallel conditionals
 
 Have you ever seen logic like this before?
 
@@ -448,8 +445,7 @@ With our `flatMap` and `get` function becomes:
   .find( Boolean )
 ```
 
-A simpler language
-------------------
+### A simpler language
 
 Even if your not 100% sold on using Array methods to avoid `for` loops, `if` statements, exceptions, unwanted values and more.  I hope I've made the case that Array methods are versatile, and perhaps next time you have some complex logic involving possibly `null` values and functions that may throw exceptions, you might give a thought to the humble Javascript `Array`, the little object that could.
 

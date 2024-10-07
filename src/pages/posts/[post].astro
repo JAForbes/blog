@@ -5,6 +5,7 @@ import { getCollection } from "astro:content";
 import { render, getEntry } from "astro:content";
 import Nav from '../../components/Nav.astro';
 import PostList from '../../components/PostList.astro';
+import Thanks from '../../components/thanks.md';
 
 const entry = await getEntry('posts', Astro.params.post)
 
@@ -22,12 +23,12 @@ export async function getStaticPaths() {
 			margin: 0em;
 		}
 		.post {
-			margin-bottom: 4em;
 			h1, h2 {
 				font-weight: 400;
 				text-align: center;
 				color: var(--link-color);
 			}
+
 			header {
 				margin-bottom: 2em;
 				display: grid;
@@ -87,7 +88,7 @@ export async function getStaticPaths() {
 				letter-spacing: 0.4px;
 				line-height: 1.7em;
 				font-family: sans-serif;
-				color: hsl(var(--hue), 100%, 93%);
+				color: hsl(var(--hue), 100%, 95%);
 			}
 	
 			pre.astro-code {
@@ -136,6 +137,8 @@ export async function getStaticPaths() {
 			</ul>
 		</header>
 		<Content />
+		<hr/>
+		<Thanks />
 	</div>
 	<script is:inline type="module">
 		await import('https://esm.sh/mermaid@11.3.0')

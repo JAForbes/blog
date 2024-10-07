@@ -1,0 +1,28 @@
+---
+
+
+---
+<button id="cooler">Click to toggle</button>
+
+<script>
+let coolerEnabled: AbortController | null = null
+document.getElementById('cooler')!.addEventListener('click', () => {
+    if (!coolerEnabled) {
+        const ctrl = new AbortController()
+        coolerEnabled = ctrl
+        window.addEventListener('mousemove', e => {
+            let ratio = ((e.clientX / window.innerWidth) + (e.clientY / window.innerHeight) ) /2
+            
+            document.body.parentElement!.style.setProperty('--hue', Math.floor(360 * ratio).toString())
+        }, { signal: ctrl.signal })
+        window.addEventListener('touchmove', e => {
+            let ratio = ((e.touches[0].clientX / window.innerWidth) + (e.touches[0].clientY / window.innerHeight) ) /2
+            
+            document.body.parentElement!.style.setProperty('--hue', Math.floor(360 * ratio).toString())
+        }, {signal: ctrl.signal })
+    } else {
+        coolerEnabled.abort()
+        coolerEnabled = null
+    }
+})
+</script>

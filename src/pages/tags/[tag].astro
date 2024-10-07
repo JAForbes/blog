@@ -9,25 +9,24 @@ import PostList from '../../components/PostList.astro';
 
 export async function getStaticPaths() {
 	const allTags = (await getCollection('posts', x => !x.data.archived)).flatMap( x => x.data.tags ?? [])
-    
-    return [...new Set(allTags)].map( x => ({ params: { tag: x }}) )
+	
+	return [...new Set(allTags)].map( x => ({ params: { tag: x }}) )
 }
 
 ---
 <Layout title={Astro.params.tag}>
-	<style is:global>
+	<style>
 		h1, h2, h3, h4, h5, h6 {
 			margin: 0em;
 		}
 		.post {
-			margin-bottom: 4em;
+			
 			h1, h2 {
 				font-weight: 400;
 				text-align: center;
 				color: var(--link-color);
 			}
 			header {
-				margin-bottom: 2em;
 				display: grid;
 				grid-template-rows: max-content max-content max-content;
 				grid-template-columns: minmax(0em, 40em);
@@ -127,7 +126,7 @@ export async function getStaticPaths() {
 	<Nav />
 	<div class="post">
 		<header>
-			<h1>{Astro.params.tag}</h1>
+			<h1>#{Astro.params.tag}</h1>
 		</header>
 	</div>
 	<script is:inline type="module">

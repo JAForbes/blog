@@ -4,7 +4,7 @@ html {
 	/* zoe: --hue: 211, background-color: #1a002e */
 	background: linear-gradient(hsl(var(--hue), 100%, 9%), 8%, hsl(var(--hue), 100%, 3%));
 	color: hsl(var(--hue), 100%, 95%);
-	--link-color: hsl(var(--hue), 100%, 95%);
+	--link-color: hsl(var(--hue), 100%, 75%);
 	--card-background-color: hsl(var(--hue), 58%, 6%);
 	--card-background-color-featured: hsl(var(--hue), 55.2%, 13.1%);
 	--border-color: hsl(var(--hue), 82%, 83%);
@@ -46,6 +46,6 @@ body > * {
 
 @media (min-width: 1000px) {
 	body {
-		gap: 4em;
+		gap: 2em;
 	}
 }
