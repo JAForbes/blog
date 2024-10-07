@@ -2,7 +2,7 @@
 title: A better LeafletJS
 created: 2014-10-29T11:12:06.740Z
 featured: false
-archived: false
+archived: true
 ---
 
 I've been using LeafletJS a lot while writing the secret project I mentioned earlier.  And because Leaflet insists to encapsulate data in its homemade class system, I had to spend a lot of time and energy hacking Leaflet to let me draw to a map without handing it any of my data.

@@ -1,5 +1,6 @@
 ---
 title: Why cohost is good
+subtitle: Or why it was good...
 created: 2024-04-06
 featured: false
 archived: false

@@ -1,5 +1,6 @@
 ---
 title: Trying out Astro
+subtitle: Seeing what all the fuss is about
 created: 2024-10-06T01:48:09.233Z
 featured: false
 archived: false

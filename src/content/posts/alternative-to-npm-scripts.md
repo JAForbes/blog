@@ -1,5 +1,6 @@
 ---
 title: "bash run - an alternative to npm scripts"
+subtitle: Again, these days probably just use zx
 created: 2017-11-09
 featured: true
 archived: false

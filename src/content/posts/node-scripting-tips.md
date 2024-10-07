@@ -1,5 +1,6 @@
 ---
 title: "Node scripting: Tips and tricks"
+subtitle: These days, probably just use zx
 created: 2020-02-02
 featured: false
 archived: false

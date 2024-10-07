@@ -1,0 +1,47 @@
+html {
+	/* --hue: 274; */
+	--hue: 200;
+	/* zoe: --hue: 211, background-color: #1a002e */
+	background: linear-gradient(hsl(var(--hue), 100%, 9%), 8%, hsl(var(--hue), 100%, 3%));
+	color: hsl(var(--hue), 100%, 95%);
+	--link-color: hsl(var(--hue), 100%, 95%);
+	--card-background-color: hsl(var(--hue), 58%, 6%);
+	--card-background-color-featured: hsl(var(--hue), 55.2%, 13.1%);
+	--border-color: hsl(var(--hue), 82%, 83%);
+	--card-border-color: var(--border-color);
+	--card-border-color-featured: var(--border-color);
+	--card-highlight-shadow: -13px 16px 13px -20px hsl(var(--hue), 92.1%, 49.4%) inset;
+}
+
+.mermaid {
+	background-color: white;
+}
+
+
+& a:visited, & a {
+	color: var(--link-color);
+	text-decoration: none;
+}
+
+h2, h3, h4, h5, h6 {
+	text-transform: uppercase;
+	font-weight: 100;
+}
+
+body {
+	display: grid;
+	grid-template-columns: minmax(0, 60em);
+	justify-content: center;
+	font-family: Helvetica;
+	margin: 0em;
+}
+
+body > * {
+	padding: 1em;
+}
+
+@media (min-width: 1000px) {
+	body {
+		gap: 4em;
+	}
+}

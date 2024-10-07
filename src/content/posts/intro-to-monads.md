@@ -1,5 +1,6 @@
 ---
 title: Intro to Monads
+subtitle: Not really...
 created: 2017-07-20
 featured: false
 archived: false

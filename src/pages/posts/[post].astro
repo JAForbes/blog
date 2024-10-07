@@ -1,8 +1,9 @@
 ---
-
+import '../../styles/theme.css'
+import Layout from '../../layouts/main.astro'
 import { getCollection } from "astro:content";
-import Nav from "../../components/Nav.astro";
 import { render, getEntry } from "astro:content";
+import Nav from '../../components/Nav.astro';
 import PostList from '../../components/PostList.astro';
 
 const entry = await getEntry('posts', Astro.params.post)
@@ -15,82 +16,75 @@ export async function getStaticPaths() {
 }
 
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="generator" content={Astro.generator} />
-	<title>James Forbes</title>
-</head>
-<style is:global>
-	body {
-		display: grid;
-		grid-template-columns: minmax(0, 60em);
-		justify-content: center;
-		font-family: Helvetica;
-		gap: 4em;
-	}
-	h1, h2, h3, h4, h5, h6 {
-		margin: 0em;
-	}
-	.post {
-		margin-bottom: 4em;
-		h1, h2 {
-			font-weight: 400;
-			text-align: center;
-			color: #7588d3;
+<Layout title={entry.data.title}>
+	<style is:global>
+		h1, h2, h3, h4, h5, h6 {
+			margin: 0em;
 		}
-		h1 {
-			margin-bottom: 2em;
+		.post {
+			margin-bottom: 4em;
+			h1, h2 {
+				font-weight: 400;
+				text-align: center;
+				color: var(--link-color);
+			}
+			h1 {
+				margin-bottom: 2em;
+			}
+			h2, h3, h4, h5, h6 {
+				margin: 1em 0em;
+			}
+			
+			blockquote {
+				margin: 1em;
+			}
+	
+			p {
+				margin: 1em 0em;
+				letter-spacing: 0.4px;
+				line-height: 1.7em;
+				font-family: sans-serif;
+				color: hsl(var(--hue), 100%, 93%);
+			}
+	
+			pre.astro-code {
+				padding: 1em;
+				  border-radius: 0.25em;
+	
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+	
+			:not(pre) code {
+				border-radius: 0.25em;
+				background-color: #585858;
+				padding: 0.1em 0.2em;
+				color: white;
+			}
+	
+			.mermaid {
+				opacity: 0;
+				transition: opacity 1s;
+			}
+	
+			.mermaid[data-processed] {
+				opacity: 1;
+			}
+	
+			
+			a, a:visited {
+				color: var(--link-color);
+			}
+	
 		}
-		h2, h3, h4, h5, h6 {
-			margin: 1em 0em;
-		}
-		
-		blockquote {
-			margin: 1em;
-		}
-
-		p {
-			margin: 1em 0em;
-		}
-
-		pre.astro-code {
-			padding: 1em;
-  			border-radius: 0.25em;
-
-			white-space: pre-wrap;
-			word-wrap: break-word;
-		}
-
-		:not(pre) code {
-			border-radius: 0.25em;
-			background-color: #585858;
-			padding: 0.1em 0.2em;
-			color: white;
-		}
-
-		.mermaid {
-			opacity: 0;
-			transition: opacity 1s;
-		}
-
-		.mermaid[data-processed] {
-			opacity: 1;
-		}
-	}
-</style>
-<body>
+	</style>
 	<Nav />
 	<div class="post">
 		<h1>{entry.data.title}</h1>
 		<Content />
 	</div>
-	<PostList />
 	<script is:inline type="module">
 		await import('https://esm.sh/mermaid@11.3.0')
 	</script>
-</body>
-</html>
+	<PostList skip={entry.slug} />
+</Layout>

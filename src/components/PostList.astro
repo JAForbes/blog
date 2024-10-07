@@ -1,15 +1,69 @@
 ---
 import { getCollection } from "astro:content";
-const allPosts = (await getCollection('posts', x => !x.data.archived)).sort( (a,b) => b.data.created.getTime() - a.data.created.getTime() )
+export interface Props {
+    skip?: string
+}
+const allPosts = (await getCollection('posts', x => !x.data.archived && Astro.props.skip != x.slug)).sort( (a,b) => b.data.created.getTime() - a.data.created.getTime() )
+
 ---
 <style>
+    
+
+.card {
+    display: grid;
+    gap: 1em;
+    padding: 2em;
+    transition: transform 0.5s, background-color 1s;
+    background-color: var(--card-background-color);
+    box-shadow: var(--card-highlight-shadow);
+    border-radius: 1.5em;
+}
+.card:has(.subtitle) {
+    gap: 1em;
+}
+
+.card .subtitle {
+    opacity: 0.5;
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+.card.featured:hover {
+    transition: transform 0.1s, background-color 0.2s;
+}
+.card:hover {
+    backface-visibility: hidden;
+    transform: scale(1.05);
+    background-color: var(--card-background-color-featured, rgba(0,0,0,0.05));
+    transition: transform 0.1s, background-color 1s;
+}
+
+.card {
+    transform: scale(1);
+    transition: transform 0.5s, background-color 1s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.card.featured {
+    color: var(--card-color-featured);
+    background-color: var(--card-background-color-featured);
+}
+
+
 .posts-list {
+    display: grid;
+    gap: 1em;
     @media (min-width: 23em) {
         & {
             display: grid;
             gap: 1em 5em;
             justify-content: center;
             grid-template-columns: minmax(0em, 60em);
+            gap: 4em;
         }
     }
 
@@ -19,7 +73,7 @@ const allPosts = (await getCollection('posts', x => !x.data.archived)).sort( (a,
     }
 
     & a, & a:visited {
-        color: black;
+        color: var(--link-color);
         text-decoration: none;
     }
 
@@ -73,37 +127,11 @@ const allPosts = (await getCollection('posts', x => !x.data.archived)).sort( (a,
         }
     }
 
-
-    & .card {
-        display: grid;
-        gap: 2em;
-        padding: 2em;
-        transition: transform 0.5s, background-color 1s;
-        border: solid 0.1em #DDD;
-        border-left: solid 0.5em #DDD;
-    }
-
-    & .card.featured:hover {
-        background-color: rgba(0,0,0,0.9);
-        transition: transform 0.1s, background-color 0.2s;
-    }
-    & .card:hover {
-        backface-visibility: hidden;
-        transform: scale(1.05);
-        background-color: rgba(0,0,0,0.05);
-        transition: transform 0.1s, background-color 1s;
-    }
-
-    & .card.featured {
-        color: white;
-        background-color: black;
-    }
 }
 
 .rss {
     
     display: grid;
-    --theme: black;
     h4 {
         margin: 0em;
     }
@@ -128,36 +156,15 @@ const allPosts = (await getCollection('posts', x => !x.data.archived)).sort( (a,
         list-style: none;
     }
 
-    & .card {
-        display: grid;
-        gap: 1em;
-        padding: 1em;
-        border: solid 1px var(--theme);
-        border-left: solid 0.5em var(--theme);
-    }
-
     & p {
         margin: 0em;
-    }
-
-    & a:visited, & a {
-        color: black;
-        text-decoration: none;
     }
 
     & .list {
         display: grid;
     }
 
-    & .card {
-        transform: scale(1);
-        transition: transform 0.5s, background-color 1s;
-    }
-
-    & .card:hover {
-        transform: scale(1.05);
-        transition: transform 0.1s, background-color 0.2s;
-    }
+  
 
     @media ( max-width: 30em ) {
         & {
@@ -197,26 +204,28 @@ const allPosts = (await getCollection('posts', x => !x.data.archived)).sort( (a,
 
 <div class="posts-list">
     <div class="list recent">
-        <h4>Featured articles</h4>
+        <h4>Recent articles</h4>
         <ul>
             {allPosts.slice(0,4).map( x => 
                 <a href={`/posts/${x.slug}`}>
                     <li class:list={['card', x.data.featured && 'featured' ]}>
-                        <p>{x.data.title}</p>
-                        <i>{x.data.created.toISOString().slice(0,10)}</i>
+                        <p class="title">{x.data.title}</p>
+                        {x.data.subtitle && <p class="subtitle">{x.data.subtitle}</p>}
+                        <i>{new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(x.data.created)}</i>
                     </li>
                 </a>
             )}
         </ul>
     </div>
     <div class="list rest">
-        <h4>Featured articles</h4>
+        <h4>Previous articles</h4>
         <ul>
             {allPosts.slice(4).map( x => 
                 <a href={`/posts/${x.slug}`}>
                     <li class:list={['card', x.data.featured && 'featured' ]}>
-                        <p>{x.data.title}</p>
-                        <i>{x.data.created.toISOString().slice(0,10)}</i>
+                        <p class="title">{x.data.title}</p>
+                        {x.data.subtitle && <p class="subtitle">{x.data.subtitle}</p>}
+                        <i>{new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(x.data.created)}</i>
                     </li>
                 </a>
             )}

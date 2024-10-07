@@ -1,5 +1,6 @@
 ---
 title: The Perfect API
+subtitle: Intro to Monads, Functor and Algebraic types.
 created: 2016-05-13
 archived: false
 featured: true

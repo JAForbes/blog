@@ -1,5 +1,6 @@
 ---
 title: "A practical Ramda example: Scraping"
+subtitle: Scraping the web FP style
 created: 2015-01-08T02:38:59.976Z
 featured: true
 archived: false

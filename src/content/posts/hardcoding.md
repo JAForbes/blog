@@ -1,5 +1,6 @@
 ---
 title: Hardcoding is great
+subtitle: DRY after you've WET
 created: 2015-01-31T03:37:30.456Z
 featured: false
 archived: false

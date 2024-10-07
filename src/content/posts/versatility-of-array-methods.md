@@ -1,5 +1,6 @@
 ---
 title: The versatility of Array methods
+subtitle: Safely parse JSON, with array methods?
 created: 2017-01-25
 featured: false
 archived: false

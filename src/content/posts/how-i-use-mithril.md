@@ -1,5 +1,6 @@
 ---
 title: How I use mithril
+subtitle: Or at least, how I used mithril
 created: 2016-04-21
 featured: false
 archived: false

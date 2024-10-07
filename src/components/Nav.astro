@@ -3,35 +3,142 @@
 
 <nav>
   <style>
+    
     nav {
       display: grid;
       gap: 1em;
-      justify-content: center;
-      text-align: center;
       font-size: 1.2em;
+      position: relative;
+      padding: 1em;
 
-      ul {
-        list-style: none;
-        display: flex;
-        gap: 1em;
-        justify-content: center;
-        padding: 0em;
-        margin: 0em;
+      display: grid;
+      grid-template-columns: auto auto;
+      
+      justify-content: space-between;
+      align-items: baseline;
+
+      
+      
+    }
+    * {
+      margin: 0em;
+      padding: 0em;
+      box-sizing: border-box;
+    }
+
+    :has(grid-area: blurb) {
+      color: green;
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      gap: 1em;
+      padding: 0em;
+      margin: 0em;
+      position: relative;
+      left: -8px;
+    }
+    li {
+
+      a {
+        color: var(--link-color);
+        text-decoration: none;
       }
-      li {
+    }
+    img {
+      border-radius: 100%;
+      border: solid 0.25em var(--border-color);
+      height: 100%;
+      box-shadow: 0px 0px 28px -6px hsl(var(--hue), 47%, 49%);
+      transform: rotate(-5deg);
+    }
+    
+    ul:has(.explore) {
+      font-size: 0.9em;
+    }
+    .explore {
+      display: none;
+    }
+    
+    .avatar {
+      display: grid;
+      /* grid-column: content-center / content-end;
+      grid-row: start / end; */
+      justify-content: end;
+      justify-items: end;
+      align-content: center;
+      align-self: normal;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .blurb {
+      grid-column: content-start / content-center;
+      grid-row: center-end / end;
+      z-index: -1;
+      background-color: hsl(var(--hue), 100%, 12%);
+      padding: 1em;
+      border-radius: 0em 0em 2.5em 1em;
+      box-shadow: -21px -6px 13px -20px hsl(var(--hue), 92.1%, 49.4%) inset;
+    }
 
-        a {
-          color: black;
-        }
+    .blurb, .avatar {
+      display: none;
+    }
+    @media (min-width: 1000px) {
+
+      nav {
+
+        max-height: 10em;
+        grid-template-columns: 
+          [left-gutter-start] 3em [left-gutter-end content-start] 2fr [content-center] 1fr [content-end right-gutter-start] 3em [right-gutter-end];
+        grid-template-rows: [start] 1em [center-start] 1em [center-end] 1fr [end];
+      }
+      
+      .avatar, .blurb {
+        display: block;
+      }
+      .avatar {
+        grid-column: content-center / gutter-end;
+        grid-row: start / end;
+        justify-self: end;
+      }
+      a:has(h4) {
+        grid-column: left-gutter-start / content-center;
+        grid-row: start / center-start;
+      }
+      ul {
+        grid-column: left-gutter-start / content-center;
+        grid-row: center-start / center-end;
+      }
+      .nav-bg {
+        background-color: black;
+        min-width: 100%;
+        min-height: 5.5em;
+        position: absolute;
+        top: 0px;
+        z-index: -1;
+        border-radius: 0.25em;
+        transform: skewX(-22deg) scaleX(1.1);
+        box-shadow: 0px 7px 10px 3px hsl(var(--hue), 100%, 6%);
+      }
+      .explore {
+        display: unset;
       }
     }
   </style>
-  <h4>James Forbes</h4>
+  <a href="/"><h4>James Forbes</h4></a>
   <ul>
-    <li><a href="/">Explore</a></li>
-    <li><a href="https://jmsfbs.com">Listen</a></li>
-    <li><a href="https://canyon.itch.io/">Play</a></li>
-    <li><a href="https://github.com/JAForbes/">Parse</a></li>
-    <li><a href="https://x.com/jmsfbs">Follow</a></li>
+    <li class="explore"><a href="/">🚶Explore</a></li>
+    <li class="listen"><a href="https://jmsfbs.com">🎸Listen</a></li>
+    <li class="play"><a href="https://canyon.itch.io/">🕹️Play</a></li>
+    <li class="parse"><a href="https://github.com/JAForbes/">🤖Parse</a></li>
+    <li class="follow"><a href="https://x.com/jmsfbs">🤝Follow</a></li>
   </ul>
+  <div class="avatar">
+    <img src="/assets/img/bio.jpeg" onload="document.querySelector('.avatar').style.opacity = 1">
+  </div>
+  
+  <p class="blurb">Interested in any type of design and the individual componentry of calcified ideas.</p>
+  <div class="nav-bg"></div>
 </nav>

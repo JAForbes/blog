@@ -1,5 +1,6 @@
 ---
 title: Intro to Streams
+subtitle: Imagine if JS had a keyword for reactive variables
 created: 2017-11-04
 featured: true
 archived: false

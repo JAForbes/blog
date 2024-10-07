@@ -1,5 +1,6 @@
 ---
 title: "New library: superhistory"
+subtitle: A small nestable wrapper around the history API
 created: 2024-01-01
 featured: false
 archived: false

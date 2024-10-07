@@ -1,0 +1,23 @@
+---
+import '../styles/theme.css'
+export interface Props {
+    title?: string
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="generator" content={Astro.generator} />
+	<title>{Astro.props.title ?? 'James Forbes'}</title>
+</head>
+<body>
+	<slot></slot>
+	<script>
+		let date = new Date().getDate();
+		document.body.parentElement?.style.setProperty('--hue', String(180 + Math.floor((date / 31) * 100)))
+	</script>
+</body>
+</html>

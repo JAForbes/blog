@@ -1,5 +1,6 @@
 ---
 title: The road from Backbone to Mithril
+subtitle: Sometimes you have to look back to move forward.
 created: 2016-05-02
 featured: true
 archived: false

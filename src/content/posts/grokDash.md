@@ -1,5 +1,6 @@
 ---
 title: Grokking Lodash
+subtitle: Peeking under the hood of Lodash
 created: 2014-11-22T08:56:20.959Z
 featured: false
 archived: false

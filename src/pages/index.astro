@@ -1,29 +1,9 @@
 ---
-import Header from "../components/Header.astro";
+import Layout from '../layouts/main.astro'
 import Nav from "../components/Nav.astro";
 import PostList from "../components/PostList.astro";
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="generator" content={Astro.generator} />
-	<title>James Forbes</title>
-</head>
-<body>
-	<style>
-		body {
-			display: grid;
-			grid-template-columns: minmax(0, 60em);
-			justify-content: center;
-			font-family: Helvetica;
-			gap: 4em;
-		}
-	</style>
+<Layout>
 	<Nav />
-	<Header />
 	<PostList />
-</body>
-</html>
+</Layout>

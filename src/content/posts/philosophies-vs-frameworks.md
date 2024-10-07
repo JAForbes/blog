@@ -1,5 +1,6 @@
 ---
 title: Philosophies.  Not Frameworks.
+subtitle: Ship ideas, not code.
 created: 2015-06-08T01:38:58.538Z
 featured: false
 archived: false

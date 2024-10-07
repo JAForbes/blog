@@ -1,5 +1,6 @@
 ---
 title: The power of m.prop
+subtitle: RIP
 featured: false
 created: 2016-01-08
 archived: false

@@ -1,5 +1,6 @@
 ---
 title: Self currying function
+subtitle: A fun exercise
 created: 2015-06-08T01:38:58.538Z
 archived: false
 featured: false

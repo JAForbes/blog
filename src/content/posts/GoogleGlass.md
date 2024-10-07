@@ -1,7 +1,7 @@
 ---
 title: "Google Glass"
 created: 2014-08-03T23:52:20Z
-archived: false
+archived: true
 featured: false
 ---
 

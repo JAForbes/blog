@@ -1,5 +1,6 @@
 ---
 title: Currying vs Hurrying
+subtitle: A very serious deep dive into partial application
 created: 2014-11-12T11:18:49.210Z
 featured: false
 archived: false
