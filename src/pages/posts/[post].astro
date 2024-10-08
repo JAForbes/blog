@@ -23,11 +23,26 @@ export async function getStaticPaths() {
 			margin: 0em;
 		}
 		.post {
+			display: grid;
+			gap: 1em;
 			h1, h2 {
 				font-weight: 400;
 				text-align: center;
 				color: var(--link-color);
 			}
+
+			iframe.youtube {
+				max-width: 300px;
+			}
+
+			@media (min-width: 1000px) {
+
+				iframe.youtube {
+					max-width: unset;
+				}
+			}
+
+			
 
 			header {
 				margin-bottom: 2em;
@@ -137,8 +152,8 @@ export async function getStaticPaths() {
 			</ul>
 		</header>
 		<Content />
-		<hr/>
 		<Thanks />
+		{entry.data.tags?.includes('from:cohost') ? <p>This post originally appeared on Cohost which has now shutdown.  You can read about why Cohost was good <a href="/posts/why-cohost-is-good">here</a>.</p> : null}
 	</div>
 	<script is:inline type="module">
 		await import('https://esm.sh/mermaid@11.3.0')

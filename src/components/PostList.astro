@@ -15,6 +15,14 @@ const allPosts =
 <style>
     
 
+.card.from-cohost {
+  --hue: 333;
+  background-color: hsl(333, 56%, 26%);
+  box-shadow: 83254f;
+  --card-highlight-shadow: -10px 12px 15px -14px hsl(var(--hue), 86.1%, 82%) inset;
+  color: white;
+  --link-color: white;
+}
 .card {
     display: grid;
     gap: 1em;
@@ -24,6 +32,7 @@ const allPosts =
     box-shadow: var(--card-highlight-shadow);
     border-radius: 1.5em;
 }
+
 .card:has(.subtitle) {
     gap: 1em;
 }
@@ -40,9 +49,12 @@ const allPosts =
 .card:hover {
     backface-visibility: hidden;
     transform: scale(1.05);
-    background-color: var(--card-background-color-featured, rgba(0,0,0,0.05));
+    
     transition: transform 0.1s, background-color 1s;
 }
+.card:not(.from-cohost):hover {
+    background-color: var(--card-background-color-featured, rgba(0,0,0,0.05));
+} 
 
 .card {
     transform: scale(1);
@@ -260,7 +272,7 @@ const allPosts =
             <ul>
                 {allPosts.slice(4).map( x => 
                     
-                    <li class:list={['card', x.data.featured && 'featured' ]}>
+                    <li class:list={['card', x.data.featured && 'featured', x.data.tags?.includes('from:cohost') && 'from-cohost']}>
                         <a href={`/posts/${x.slug}`}><p class="title">{x.data.title}</p></a>
                         {x.data.subtitle && <p class="subtitle">{x.data.subtitle}</p>}
                         <p>

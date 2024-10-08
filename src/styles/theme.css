@@ -38,6 +38,7 @@ body {
 	justify-content: center;
 	font-family: Helvetica;
 	margin: 0em;
+	min-height: 100dvh;
 }
 
 body > * {
